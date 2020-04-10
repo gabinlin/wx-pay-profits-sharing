@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,8 +87,8 @@ public class BuilderDTOUtils {
         tables.forEach(table -> {
             List<DTO> list = getDtos(table);
 
-            boolean request = table.parent().parent().text().contains("请求");
-            boolean response = table.parent().parent().text().contains("返回参数");
+            boolean request = table.parent().parent().text().startsWith("请求参数");
+            boolean response = table.parent().parent().text().startsWith("返回参数");
             if (!request && !response) {
                 return;
             }
@@ -176,6 +177,9 @@ public class BuilderDTOUtils {
 
     private List<DTO> getDtos(Element table) {
         Elements trs = table.select("tbody tr");
+        if (trs.size() == 1 && trs.eq(0).select("td").size() != 5) {
+            return Collections.emptyList();
+        }
         return trs.stream().map(tr -> {
             if (tr.parent().parent().parent().hasClass("object-sub")) {
                 return null;
@@ -237,7 +241,7 @@ public class BuilderDTOUtils {
             }
             return sb.toString();
         }
-        return field;
+        return field.substring(0, 1).toUpperCase() + field.substring(1);
     }
 
     private String getText(Elements tds, int i) {
