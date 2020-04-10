@@ -79,6 +79,9 @@ public class BuilderDTOUtils {
 
     public void builder(String url, String path, String fileName) throws IOException {
         Document document = Jsoup.connect(url).get();
+        // 单页文档中有多个接口
+        boolean mulEntity = document.select(".part").size() > 4;
+        int[] is = new int[]{-1, -1};
         Elements tables = document.select("table");
         tables.forEach(table -> {
             List<DTO> list = getDtos(table);
@@ -89,6 +92,9 @@ public class BuilderDTOUtils {
                 return;
             }
             String newFileName = fileName + (request ? "Request" : "Response");
+            if (mulEntity && is[request ? 0 : 1]++ >= 0) {
+                newFileName += is[request ? 0 : 1];
+            }
             try {
                 String sourcePath = path + (request ? "request" : "response");
                 FileWriter fileWriter = new FileWriter(sourcePath + "/" + newFileName + ".java");
