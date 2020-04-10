@@ -139,32 +139,9 @@ public class BuilderDTOUtils {
                         objectDTOList.add(dto);
                     }
                 }
-
-                for (DTO parentDTO : objectDTOList) {
-                    String uppercaseField = getTopUppercaseField(parentDTO.getField());
-                    fileWriter.write("\t@JsonIgnoreProperties(ignoreUnknown = true)\n\tpublic static class " + uppercaseField + " {\n");
-
-                    List<DTO> childList = parentDTO.getChildList();
-                    for (DTO dto : childList) {
-                        String content = "\t\t/**\n\t\t * <pre>\n\t\t * 字段名：%s\n\t\t * 变量名：%s\n\t\t * 是否必填：%s\n\t\t * 类型：%s\n\t\t * 描述：%s \n\t\t * </pre>\n\t\t */\n";
-                        String field = dto.getField();
-                        content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
-                        fileWriter.write(content);
-                        fileWriter.write(String.format("\t\t@JsonProperty(value = \"%s\")\n", field));
-                        fileWriter.write("\t\tprivate String " +getField(field) + ";\n\n");
-                    }
-                    for (DTO dto : childList) {
-                        String sourceField = dto.getField();
-                        String field = getTopUppercaseField(sourceField);
-                        String param = getField(sourceField);
-                        String getString = String.format("\t\tpublic %s get%s() {\n\t\t\treturn this.%s;\n\t\t}\n\n", getType(dto), field, param);
-                        String setString = String.format("\t\tpublic void set%s(%s %s) {\n\t\t\tthis.%s = %s;\n\t\t}\n\n", field, getType(dto), param, param, param);
-                        fileWriter.write(getString);
-                        fileWriter.write(setString);
-                    }
-                    fileWriter.write("\t}\n\n");
+                while (!objectDTOList.isEmpty()) {
+                    objectDTOList = buildObject(fileWriter, objectDTOList);
                 }
-
                 fileWriter.write("}");
                 fileWriter.flush();
                 fileWriter.close();
@@ -173,6 +150,39 @@ public class BuilderDTOUtils {
             }
         });
 
+    }
+
+    private List<DTO> buildObject(FileWriter fileWriter, List<DTO> objectDTOList) throws IOException {
+        List<DTO> childDTOList = new ArrayList<>();
+        for (DTO parentDTO : objectDTOList) {
+            String uppercaseField = getTopUppercaseField(parentDTO.getField());
+            fileWriter.write("\t@JsonIgnoreProperties(ignoreUnknown = true)\n\tpublic static class " + uppercaseField + " {\n");
+
+            List<DTO> childList = parentDTO.getChildList();
+            for (DTO dto : childList) {
+                String content = "\t\t/**\n\t\t * <pre>\n\t\t * 字段名：%s\n\t\t * 变量名：%s\n\t\t * 是否必填：%s\n\t\t * 类型：%s\n\t\t * 描述：%s \n\t\t * </pre>\n\t\t */\n";
+                String field = dto.getField();
+                content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
+                fileWriter.write(content);
+                fileWriter.write(String.format("\t\t@JsonProperty(value = \"%s\")\n", field));
+                fileWriter.write("\t\tprivate String " +getField(field) + ";\n\n");
+            }
+            for (DTO dto : childList) {
+                String sourceField = dto.getField();
+                String field = getTopUppercaseField(sourceField);
+                String param = getField(sourceField);
+                String getString = String.format("\t\tpublic %s get%s() {\n\t\t\treturn this.%s;\n\t\t}\n\n", getType(dto), field, param);
+                String setString = String.format("\t\tpublic void set%s(%s %s) {\n\t\t\tthis.%s = %s;\n\t\t}\n\n", field, getType(dto), param, param, param);
+                fileWriter.write(getString);
+                fileWriter.write(setString);
+                List<DTO> childList1 = dto.getChildList();
+                if (!childList1.isEmpty()) {
+                    childDTOList.add(dto);
+                }
+            }
+            fileWriter.write("\t}\n\n");
+        }
+        return childDTOList;
     }
 
     private List<DTO> getDtos(Element table) {
