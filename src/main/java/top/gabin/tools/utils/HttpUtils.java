@@ -1,77 +1,64 @@
 package top.gabin.tools.utils;
 
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
-import com.wechat.pay.contrib.apache.httpclient.auth.AutoUpdateCertificatesVerifier;
-import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
-import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Credentials;
-import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Validator;
-import org.apache.commons.codec.binary.Base64;
+import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import top.gabin.tools.request.ecommerce.AbstractRequest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 
 public class HttpUtils {
 
-    /**
-     * 获取私钥。
-     *
-     * @param filename 私钥文件路径  (required)
-     * @return 私钥对象
-     */
-    private static PrivateKey getPrivateKey(String filename) throws IOException {
+    private String mchId;       // 商户号
+    private String mchSerialNo; // 商户证书序列号
+    private String privateKey;  // 你的商户私钥
+    private String certificate; // 你的微信支付平台证书
+    private CloseableHttpClient httpClient;
 
-        String content = new String(Files.readAllBytes(Paths.get(filename)), "utf-8");
+    public HttpUtils(String mchId, String mchSerialNo, String privateKey, String certificate) {
+        this.mchId = mchId;
+        this.mchSerialNo = mchSerialNo;
+        this.privateKey = privateKey;
+        this.certificate = certificate;
         try {
-            String privateKey = content.replace("-----BEGIN PRIVATE KEY-----", "")
-                    .replace("-----END PRIVATE KEY-----", "")
-                    .replaceAll("\\s+", "");
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            return kf.generatePrivate(
-                    new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey)));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("当前Java环境不支持RSA", e);
-        } catch (InvalidKeySpecException e) {
+            init();
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("无效的密钥格式");
         }
     }
 
-    private static HttpClient getClient() throws IOException {
-        //不需要传入微信支付证书，将会自动更新
-        String merchantId = "1328384201";
-        String merchantSerialNumber = "SLHKqLh6buZEBQKKqLh6teSEBQKKqLh6";
-        PrivateKey merchantPrivateKey = getPrivateKey("/Users/linjiabin/cert/wxPay3/cert.txt");
-        String apiV3Key = "apiV3Key";
-        PrivateKeySigner keySigner = new PrivateKeySigner(merchantSerialNumber, merchantPrivateKey);
-        WechatPay2Credentials pay2Credentials = new WechatPay2Credentials(merchantId, keySigner);
-        AutoUpdateCertificatesVerifier verifier =
-                new AutoUpdateCertificatesVerifier(pay2Credentials, apiV3Key.getBytes("utf-8"));
-        WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
-                .withMerchant(merchantId, merchantSerialNumber, merchantPrivateKey)
-                .withValidator(new WechatPay2Validator(verifier));
-        HttpClient httpClient = builder.build();
-        return httpClient;
+    private void init() throws IOException  {
+        PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(
+                new ByteArrayInputStream(privateKey.getBytes("utf-8")));
+//        X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
+//                new ByteArrayInputStream(certificate.getBytes("utf-8")));
+
+        ArrayList<X509Certificate> listCertificates = new ArrayList<>();
+//        listCertificates.add(wechatpayCertificate);
+
+        httpClient = WechatPayHttpClientBuilder.create()
+                .withMerchant(mchId, mchSerialNo, merchantPrivateKey)
+                .withWechatpay(listCertificates)
+                .build();
     }
 
-    private static <T> T request(Class<T> responseClass, HttpUriRequest request) {
+    private <T> T request(Class<T> responseClass, HttpUriRequest request) {
         request.addHeader("Content-Type", "application/json");
         request.addHeader("Accept", "application/json");
         try {
-            HttpResponse response = getClient().execute(request);
+            HttpResponse response = httpClient.execute(request);
             HttpEntity entity = response.getEntity();
             String responseText = EntityUtils.toString(entity, "utf-8");
             EntityUtils.consume(entity);
@@ -85,11 +72,11 @@ public class HttpUtils {
         return null;
     }
 
-    public static <T> T get(Class<T> responseClass, String url) {
+    public <T> T get(Class<T> responseClass, String url) {
         return request(responseClass, new HttpGet(url));
     }
 
-    public static <T> T post(Class<T> responseClass, Object requestObj, String url) {
+    public <T> T post(Class<T> responseClass, Object requestObj, String url) {
         HttpPost httpPost = new HttpPost(url);
         String jsonData = "";
         //增加一个判断是否有Declared方法，要不JsonUtils.bean2Json(requestBody)会报异常
@@ -100,11 +87,17 @@ public class HttpUtils {
             jsonData = JsonUtils.bean2Json(requestObj);
         }
         if (jsonData != null && !jsonData.equals("{}")) {
-            httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
+            StringEntity reqEntity = new StringEntity(
+                    jsonData, ContentType.create("application/json", "utf-8"));
+            httpPost.setEntity(reqEntity);
         }
         if (jsonData != null && !jsonData.equals("{}")) {
             httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
         }
         return request(responseClass, httpPost);
+    }
+
+    public <T> T post(Class<T> responseClass, AbstractRequest requestObj) {
+        return post(responseClass, requestObj, requestObj.getUrl());
     }
 }
