@@ -61,6 +61,16 @@ public class BuildDTOUtilsTest {
     @Test
     public void test3() throws IOException {
         List<Params> params = new ArrayList<>();
+//        params.add(new Params("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_1.shtml", "Applyments"));
+//        params.add(new Params("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_2.shtml", "ApplymentsDetail"));
+//        params.add(new Params("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_3.shtml", "DownCertificates"));
+//        params.add(new Params("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_4.shtml", "ModifySettlement"));
+//        params.add(new Params("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_5.shtml", "SettlementDetail"));
+
+
+        params.add(new Params("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_1.shtml", "CombineTransactionsApp"));
+
+
         for (Params param : params) {
             builderDTOUtils.builder(param.getUrl(), path, param.getClassName());
         }

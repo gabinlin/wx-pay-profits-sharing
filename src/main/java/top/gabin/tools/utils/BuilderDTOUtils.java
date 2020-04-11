@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BuilderDTOUtils {
@@ -103,6 +104,23 @@ public class BuilderDTOUtils {
 
                 fileWriter.write("import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
                         "import com.fasterxml.jackson.annotation.JsonProperty;\n\n");
+                List<DTO> tempList = list;
+                outer : while (!tempList.isEmpty()) {
+                    List<DTO> temp = new ArrayList<>();
+                    for (DTO dto : tempList) {
+                        if (dto.getType().equals("array")) {
+                            fileWriter.write("import java.util.List;\n\n");
+                            break outer;
+                        }
+                        List<DTO> childList = dto.getChildList();
+                        if (!childList.isEmpty()) {
+                            temp.addAll(childList);
+                        }
+                    }
+                    tempList = temp;
+                }
+                fileWriter.write("\n");
+
                 String classFunc = table.parent().parent().parent().select(".overview p").eq(1).text();
                 fileWriter.write("/**\n" +
                         " * <pre>\n" +
@@ -165,7 +183,7 @@ public class BuilderDTOUtils {
                 content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
                 fileWriter.write(content);
                 fileWriter.write(String.format("\t\t@JsonProperty(value = \"%s\")\n", field));
-                fileWriter.write("\t\tprivate String " +getField(field) + ";\n\n");
+                fileWriter.write("\t\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
             }
             for (DTO dto : childList) {
                 String sourceField = dto.getField();
@@ -186,14 +204,11 @@ public class BuilderDTOUtils {
     }
 
     private List<DTO> getDtos(Element table) {
-        Elements trs = table.select("tbody tr");
+        Elements trs = table.select("tbody tr").eq(0).first().parent().children();
         if (trs.size() == 1 && trs.eq(0).select("td").size() != 5) {
             return Collections.emptyList();
         }
         return trs.stream().map(tr -> {
-            if (tr.parent().parent().parent().hasClass("object-sub")) {
-                return null;
-            }
             Elements tds = tr.select("td");
             if (tds.eq(0).hasClass("object-sub")) {
                 return null;
@@ -202,20 +217,40 @@ public class BuilderDTOUtils {
             String html = descElement.html();
             descElement.html(html.replaceAll("<br>", "@换行@"));
             DTO dto = new DTO(getText(tds, 0), getText(tds, 1), getText(tds, 2), getText(tds, 3), getText(tds, 4));
-            if (tr.hasClass("object")) {
-                Element object = tr.nextElementSibling();
-                Elements objectTrs = object.select("table tbody tr");
-                List<DTO> childList = objectTrs.stream().map(objectTr -> {
-                    Elements objectTds = objectTr.select("td");
-                    Elements objDescElement = objectTds.eq(4);
-                    String objHtml = objDescElement.html();
-                    objDescElement.html(objHtml.replaceAll("<br>", "@换行@"));
-                    return new DTO(getText(objectTds, 0), getText(objectTds, 1), getText(objectTds, 2), getText(objectTds, 3), get2Text(objectTds, 4));
-                }).collect(Collectors.toList());
-                dto.getChildList().addAll(childList);
-            }
+            List<DTO> childList = getChildDtos(tr);
+            dto.getChildList().addAll(childList);
             return dto;
-        }).collect(Collectors.toList());
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    private List<DTO> getChildDtos(Element sourceTr) {
+        if (!sourceTr.hasClass("object")) {
+            return Collections.emptyList();
+        }
+        Element object = sourceTr.nextElementSibling();
+
+        Elements objectTrs = object.select("table tbody tr").eq(0).first().parent().children();
+        if (objectTrs.size() == 1 && objectTrs.eq(0).select("td").size() != 5) {
+            return Collections.emptyList();
+        }
+        return objectTrs.stream().map(tr -> {
+            Element parent = tr.parent().parent().parent();
+            Elements tds = tr.select("td");
+            if (tds.eq(0).hasClass("object-sub")) {
+                return null;
+            }
+            Elements objectTds = tr.select("td");
+            Elements objDescElement = objectTds.eq(4);
+            String objHtml = objDescElement.html();
+            objDescElement.html(objHtml.replaceAll("<br>", "@换行@"));
+            DTO dto = new DTO(getText(objectTds, 0), getText(objectTds, 1), getText(objectTds, 2), getText(objectTds, 3), get2Text(objectTds, 4));
+            if (dto.getField().isEmpty()) {
+                return null;
+            }
+            List<DTO> childDtos = getChildDtos(tr);
+            dto.getChildList().addAll(childDtos);
+            return dto;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     private String getType(DTO dto) {
@@ -223,6 +258,8 @@ public class BuilderDTOUtils {
         switch (type) {
             case "object":
                 return getTopUppercaseField(dto.getField());
+            case "array":
+                return String.format("List<%s>", getTopUppercaseField(dto.getField()));
             default:
                 return "String";
         }
