@@ -255,6 +255,7 @@ public class BuilderDTOUtils {
 
     private String getType(DTO dto) {
         String type = dto.getType();
+        type = type.toLowerCase();
         switch (type) {
             case "object":
                 return getTopUppercaseField(dto.getField());
