@@ -65,6 +65,7 @@ public class HttpUtils {
             if (responseClass.isAssignableFrom(String.class)) {
                 return (T) responseText;
             }
+            System.out.println(responseText);
             return JsonUtils.json2Bean(responseClass, responseText);
         } catch (IOException e) {
             e.printStackTrace();

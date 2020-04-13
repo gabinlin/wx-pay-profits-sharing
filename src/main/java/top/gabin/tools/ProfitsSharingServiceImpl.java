@@ -1,42 +1,22 @@
 package top.gabin.tools;
 
+import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
 import top.gabin.tools.utils.HttpUtils;
+import top.gabin.tools.utils.RSASignUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private String mchId = "1449025802"; // 商户号
     private String mchSerialNo = "SLHKqLh6buZEBQKKqLh6teSEBQKKqLh6"; // 商户证书序列号
     // 你的商户私钥
-    private String privateKey = "-----BEGIN PRIVATE KEY-----\n" +
-            "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCl6I4wof85BeXr\n" +
-            "TMXNrSSMDH6chbfLLCrXD0C/tv/CWkYVa0i6nltykV6nfz/7NXoNmbAr2KC0s17H\n" +
-            "cpOqVVPru+00hIWxs6uNP95l2BIxqaRb92uLLvoYOXXWnZPyAsDWin4ibQOMjbIx\n" +
-            "uIiE+fiHR9sSxbNbBbOZKTwUaOJkPUfeAs43D7EZAl3xWQwOqfoj/mZTh9P3xxwD\n" +
-            "p/kYTvEoDxqaRhi2WmnF4BReb/3rkEdIfcMKbEd3ExPHTbeX1Fl0sp6F4zE4/ZCG\n" +
-            "Ed99d82F/k37SCZHcQgQSHSWzIeTwcNnbuE/CueaKnvgI3UW3UuvYGY73m9eV2A0\n" +
-            "xjhgdqADAgMBAAECggEBAIbhKbgf+35AbUt+ftFXkf7JqaVWkLV8kteEbv9tp0A6\n" +
-            "Y//F2LrfQzlBNdK2gS2ZrECiUbdTxlMiAEvlumcgN7nObmnj001E5JNQ+V2S7Dez\n" +
-            "0wtxet0MtAY9sK9qLHz0ABJrRWB3gAskp1oEy/hPwN06bcA1Ojslx30dKNru6h7S\n" +
-            "4/GpoS3w8tt1cWmTApsYVjR3eY7cAv9hyxj6vjv81gW93F0IrWhZsliRB3vSjBaE\n" +
-            "7/wvbLQ4slUJ17wJfh1HGlvZI1CkYPUx9206cNI/KoMTNOt45fki0FAg1QIGU1qL\n" +
-            "blxWlSO8XVQTJSNiU8WeuYxckzy3n0iMi5wpPf2fzAECgYEA1SDKvIxEA0YFQUY4\n" +
-            "0ZwuVd61nN4M7pdxeJmy1+93M7PmBJwJ0ZxrZ6Kdzy/45Ey0X1036i652WObbRi3\n" +
-            "TjrggfwrsfzK9rkLrGF4qjl7lkxIv0vpMShnqhovY5Ts9fbmnWk+Gxw+0FUiZskQ\n" +
-            "6TFxDxsBUV3Qqem2tAkPa0p/UPMCgYEAx0glrolYDWY+s/eFL53dp0jBQzOR345I\n" +
-            "rDP2P35af3qFyhAzT1J7Gn8v+SpXskEkI5Hx2tbnmOhH7RKs40Hd5SQFxluL66et\n" +
-            "GkSlq+cKh8gYnP2QsJ056GcGSKcG+xVnovUYZZsaMVQsjfxv6uC4qAAL5xS86oJo\n" +
-            "m/wanYr7uLECgYB6ReDqQVK3yhEzvLTWVNMkgqwQ/jfPHmWEOjGnvwPVTs2VMWxU\n" +
-            "rHfWMi51cmFJoVQOLi3pFbucI5BFC9wGbrLlACaVa6GJ4On4kMcoaegkd0l5LnTv\n" +
-            "te2bYoBzkjpMdsUh5AI0jYTgAyfEbnBcSPhDIUwlQTx4btRZ/6Sv+kKGzwKBgHFV\n" +
-            "vth8k+9K7u47HyvthFnXLtKhSZzytrH4+1sw6RcG/3/jpsq+BfUT0JzMUAO4uGzi\n" +
-            "W8Ix5pU3xXA25sx4cVIYIpClD/Z97hy6Xd5eD8cZLaZbLybCxGQ/83ruQzIZAk/T\n" +
-            "RITEqSjUzmIR5zSViW9CV4KccLSOZiAQSLLAkFiBAoGBAKH7XLBco2+CTuBsRfVn\n" +
-            "0BMmQufU4uFsLpmUdK6sRnrFth1wqMshwDTLEmE01EVbNTh1IeJDZ4TkTX6dhVfc\n" +
-            "wGx5GTCaMKfJtIIU45fSFh0XgA6G+3ID8+G7rshIgpKPUKScgk42MaQZtrsYSVf+\n" +
-            "7vEp1PIHFrLY5+9cjkoFufCS\n" +
-            "-----END PRIVATE KEY-----";
+    private String privateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDS9se1wbq51SXw49bZgzIdj/ShiV618b/vNDztFhK/iW1nD1zMxo72YD9yHRX8jVWnrByDwL18107HK2nYbHu8t3Bcxd8k3/tpZgosbDOoXExDuJG02cwSx4jbCK6x5WWvucGO+tjoMaB1pPEurK6R8AVykcEzB6eo0bGSjx6ZUDh3pUESMXTKkXoQO/fJofq1BibWUq5KpAdeNL+yjFUUZg05PH2K7XRFp8nwe9tDQ3HrvUx1HhyNP/IFxU/XSR/D7uZsYuYOehiBX76mQzYD8PocnS0ehjpcyho7R/jmGuD4O6BGdWxCthrNrrRd6g030/TvfRictiuEJAMSQqf/AgMBAAECggEAHa61OMCSSjVQSk10XFRWR8yKafQPDGCAVeKus9kIOETYzMhfkTxavxWZt6+Z+VfVdmsD9BG5V4hfwCw+j0HsQwg4WgVJOUH+eLzvr4Jl3klmPZ0Jez2ttfK3McJN+h/Bp/Dl5/0paboZzpOvj5aiVUxFJ/KUEV8BWwJuDqXuczmRsG/JwXCDnLsrIEMmyBXDgvGSEiu/L6mjfIMNpwBPGkTiiJGRlBSWIAWdQr/jNw/po0zb+jlCVGWoPcivWGAafXJQX66aAk4JMiNCuLjdkH+xen/xSWU/QEQ9nWwLRJh6l9shvPWY3bfqQKPYkDGyyLdIUzxpIQBpkn+SZp5TSQKBgQD7KOtBC0bcVPpOVu333BC/pxMzqA2HPMyflQuUr7Di6HXZulxb2qEuXfafRMgVo7puLu/TDozZa83L7W1nEf5nbjClVEgVMbhT1uNgkIRuJ8CJu50wnDWUBsmMB4+Dn6kUG7YD/Psp4M1xzhWQSXvyxFXzAf6+DzrISK0FymJeVQKBgQDXB462cxKLbot8la1rQIjw2lX6p/WMBASuqOnPFlkDjIZuQbYfXchWxJRXVLCUikPzBLjWvJHbjrhmBTeIyxTyib+JThqaMzyMf0Y77/GiUJdUBx7PFHFyhDaj+jSmOxi7ceSZF37RNn539D2S6E7Qusj3OYPlaQrSV1WmLxBZAwKBgQDh9lSBdnXQMRvpc0gxoOnoo5Yg+WcCbu7h/CQpJ1ALNX0h4ArMEQzGPH9vl2A0J9PI4a2eww5xZg4HFJtDCetKftaBSCx59PuTYle7PwoGWPlecU7gtwl1Hg4iT4MMto5VqwC84dPOP5RWeUTpRVOgfIefVAIuWGFYZBpWhViu6QKBgQDLU3gdCX6VnbgD3DyZV/KlXK9ETyGefgY3ab18djNBadWL2FLwIevYMBXc5lX6fyt1Vhe55aE+LRwsS+6RSQbLuHkGynXZLW2ppIezEVY5F1+gswLs6PXFRUOtll/Gd8cRJ8bzBAaEqbS4lJjMmyI7uQNi0l3nxYXYE4EHnSUmJQKBgHqcrvr0P2fl01Yma4CxU/CVppAWpN2xPFrIaOgIhMRwAIB/VJxMIcA35hjf5IDMFeevGFtqUCMHtxvFeDWsQlFw4WVR3aaATnQypNC3lukH4kgko7v6IsVj0NoaVOJd2kpNmivlcQGNGX1fg+wfkuF2vksKWfsJVZjM8GUoqMiu";
     // 你的微信支付平台证书
-    private String certificate =  "-----BEGIN CERTIFICATE-----\n" +
+    private String certificate = "-----BEGIN CERTIFICATE-----\n" +
             "MIID9jCCAt6gAwIBAgIULl0WVna8Zk1TKJIqIdJAnSZNk/owDQYJKoZIhvcNAQEL\n" +
             "BQAwXjELMAkGA1UEBhMCQ04xEzARBgNVBAoTClRlbnBheS5jb20xHTAbBgNVBAsT\n" +
             "FFRlbnBheS5jb20gQ0EgQ2VudGVyMRswGQYDVQQDExJUZW5wYXkuY29tIFJvb3Qg\n" +
@@ -67,4 +47,37 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     }
 
+    @Override
+    public String combineTransactions(CombineTransactionsJsRequest request) {
+        Optional<CombineTransactionsJsResponse> responseOptional = getResponse(CombineTransactionsJsResponse.class, request,
+                "https://api.mch.weixin.qq.com/v3/combine-transactions/jsapi");
+        return responseOptional.map(CombineTransactionsJsResponse::getPrepayId).orElse(null);
+    }
+
+
+    @Override
+    public Map<String, String> getStringStringMap(String prePayId, String appId) {
+        Map<String, String> params = new HashMap<>();
+        String signType = "RSA";
+        params.put("appId", appId);
+        long timeStamp = System.currentTimeMillis();
+        String nonceStr = timeStamp + "_gabin";
+//        params.put("timeStamp", timeStamp + "");
+        params.put("timeStamp", "1414561699");
+//        params.put("nonceStr", nonceStr);
+        params.put("nonceStr", "5K8264ILTKCH16CQ2502SI8ZNMTM67VS");
+        params.put("signType", signType);
+        String packageStr = "prepay_id=" + prePayId;
+        params.put("package", packageStr);
+
+        String singSource = String.format("%s\n%s\n%s\n%s",
+                appId, timeStamp, nonceStr, "prepay_id=" + prePayId);
+        String sign = RSASignUtil.sign(privateKey, singSource);
+        params.put("paySign", sign);
+        return params;
+    }
+
+    private <T> Optional<T> getResponse(Class<T> classZ, CombineTransactionsJsRequest request, String url) {
+        return Optional.ofNullable(httpUtils.post(classZ, request, url));
+    }
 }
