@@ -1,6 +1,12 @@
 package top.gabin.tools;
 
+import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
+import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
+import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
+import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
+import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
 import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.RSASignUtil;
@@ -54,6 +60,23 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return responseOptional.map(CombineTransactionsJsResponse::getPrepayId).orElse(null);
     }
 
+    @Override
+    public Optional<SubsidiesCreateResponse> subsidiesCreate(SubsidiesCreateRequest request) {
+        return getResponse(SubsidiesCreateResponse.class, request,
+                "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/create");
+    }
+
+    @Override
+    public Optional<SubsidiesRefundResponse> subsidiesRefund(SubsidiesRefundRequest request) {
+        return getResponse(SubsidiesRefundResponse.class, request,
+                "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/return");
+    }
+
+    @Override
+    public Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request) {
+        return getResponse(SubsidiesCancelResponse.class, request,
+                "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel");
+    }
 
     @Override
     public Map<String, String> getStringStringMap(String prePayId, String appId) {
@@ -77,7 +100,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return params;
     }
 
-    private <T> Optional<T> getResponse(Class<T> classZ, CombineTransactionsJsRequest request, String url) {
+    private <T> Optional<T> getResponse(Class<T> classZ, Object request, String url) {
         return Optional.ofNullable(httpUtils.post(classZ, request, url));
     }
 }
