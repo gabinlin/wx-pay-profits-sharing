@@ -110,7 +110,8 @@ public class BuilderDTOUtils {
                 fileWriter.write("import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
                         "import com.fasterxml.jackson.annotation.JsonProperty;\n\n");
                 List<DTO> tempList = list;
-                outer : while (!tempList.isEmpty()) {
+                outer:
+                while (!tempList.isEmpty()) {
                     List<DTO> temp = new ArrayList<>();
                     for (DTO dto : tempList) {
                         if (dto.getType().equals("array")) {
@@ -129,9 +130,31 @@ public class BuilderDTOUtils {
                 String classFunc = table.parent().parent().parent().select(".overview p").eq(1).text();
                 fileWriter.write("/**\n" +
                         " * <pre>\n" +
-                        " * " + classFunc + "\n" +
-                        " * </pre>\n" +
-                        " */\n");
+                        " * " + classFunc + "\n");
+                fileWriter.write(String.format(" * 文档地址:%s\n", url));
+                if (response) {
+                    tables.stream().filter(element -> element.select("tbody tr").eq(0).select("td").size() == 4).findFirst().ifPresent(codeTable -> {
+                        try {
+                            fileWriter.write(String.format(" * %s\t%s\t%s\t%s\n", "状态码", "错误码", "描述", "解决方案"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        codeTable.select("tbody tr").forEach(tr -> {
+                            Elements tds = tr.select("td");
+                            try {
+                                fileWriter.write(String.format(" * %s\t%s\t%s\t%s\n",
+                                        getText(tds, 0),
+                                        getText(tds, 1),
+                                        getText(tds, 2),
+                                        getText(tds, 3)
+                                ));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    });
+                }
+                fileWriter.write(" * </pre>\n */\n");
                 fileWriter.write("@JsonIgnoreProperties(ignoreUnknown = true)\npublic class " + newFileName + " {");
                 fileWriter.write("\n");
                 for (DTO dto : list) {
