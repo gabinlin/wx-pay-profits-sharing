@@ -4,9 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.gabin.tools.ProfitsSharingServiceImpl;
-import top.gabin.tools.request.ecommerce.ApplymentsRequest;
-import top.gabin.tools.response.ecommerce.ApplymentsResponse;
 
 public class HttpUtilsTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -77,10 +74,6 @@ public class HttpUtilsTest {
 
     @Test
     public void test1() {
-        // 后面跟使用Apache HttpClient一样
-//        String s = httpUtils.get(String.class, "https://api.mch.weixin.qq.com/v3/bill/tradebill?bill_date=2019-06-11&sub_mchid=1900000001&bill_type=ALL");
-//        logger.info(s);
-        ProfitsSharingServiceImpl profitsSharingService = new ProfitsSharingServiceImpl();
-        ApplymentsResponse applyments = profitsSharingService.applyments(new ApplymentsRequest());
+
     }
 }

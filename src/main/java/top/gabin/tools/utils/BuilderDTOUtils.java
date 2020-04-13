@@ -5,12 +5,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BuilderDTOUtils {
@@ -80,6 +78,7 @@ public class BuilderDTOUtils {
     }
 
     public void builder(String url, String path, String fileName) throws IOException {
+        String[] modules = url.split("/wxpay/")[1].split("chapter")[0].split("/");
         Document document = Jsoup.connect(url).get();
         // 单页文档中有多个接口
         boolean mulEntity = document.select(".part").size() > 4;
@@ -88,8 +87,9 @@ public class BuilderDTOUtils {
         tables.forEach(table -> {
             List<DTO> list = getDtos(table);
 
-            boolean request = table.parent().parent().text().startsWith("请求参数");
-            boolean response = table.parent().parent().text().startsWith("返回参数");
+            String text = table.parent().parent().select("h3").text();
+            boolean request = isRequest(text);
+            boolean response = isResponse(text);
             if (!request && !response) {
                 return;
             }
@@ -98,7 +98,12 @@ public class BuilderDTOUtils {
                 newFileName += is[request ? 0 : 1];
             }
             try {
-                String sourcePath = path + (request ? "request" : "response");
+                String module = Arrays.stream(modules).collect(Collectors.joining("/"));
+                String sourcePath = path + (request ? "request/" : "response/") + module;
+                File file = new File(sourcePath);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
                 FileWriter fileWriter = new FileWriter(sourcePath + "/" + newFileName + ".java");
                 fileWriter.write("package " + sourcePath.replaceAll("src/main/java/", "").replaceAll("/", ".") + ";\n\n");
 
@@ -168,6 +173,27 @@ public class BuilderDTOUtils {
             }
         });
 
+    }
+
+    private boolean isResponse(String text) {
+        switch (text) {
+            case "返回参数":
+            case "通知应答":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isRequest(String text) {
+        switch (text) {
+            case "请求参数":
+            case "通知参数":
+            case "支付成功通知参数":
+                return true;
+            default:
+                return false;
+        }
     }
 
     private List<DTO> buildObject(FileWriter fileWriter, List<DTO> objectDTOList) throws IOException {

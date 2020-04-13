@@ -1,10 +1,9 @@
 package top.gabin.tools;
 
-import top.gabin.tools.request.ecommerce.ApplymentsRequest;
-import top.gabin.tools.response.ecommerce.ApplymentsResponse;
 import top.gabin.tools.utils.HttpUtils;
 
-public class ProfitsSharingServiceImpl {
+public class ProfitsSharingServiceImpl implements ProfitsSharingService {
+
     private String mchId = "1449025802"; // 商户号
     private String mchSerialNo = "SLHKqLh6buZEBQKKqLh6teSEBQKKqLh6"; // 商户证书序列号
     // 你的商户私钥
@@ -68,7 +67,4 @@ public class ProfitsSharingServiceImpl {
 
     }
 
-    public ApplymentsResponse applyments(ApplymentsRequest request) {
-        return httpUtils.post(ApplymentsResponse.class, request);
-    }
 }
