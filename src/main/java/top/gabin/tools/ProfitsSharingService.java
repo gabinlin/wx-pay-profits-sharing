@@ -4,16 +4,39 @@ import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
-import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.request.pay.combine.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
 
 import java.util.Map;
 import java.util.Optional;
 
 public interface ProfitsSharingService {
+
+    // ##################  合单接口
+
+    /**
+     * <pre>
+     * 合单下单-APP支付API.
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_1.shtml
+     * 使用合单支付接口，用户只输入一次密码，即可完成多个订单的支付。目前最多一次可支持50笔订单进行合单支付。
+     * 注意：
+     * • 订单如果需要进行抽佣等，需要在合单中指定需要进行分账（profit_sharing为true）；指定后，交易资金进入二级商户账户，处于冻结状态，可在后续使用分账接口进行分账，利用分账完结进行资金解冻，实现抽佣和对二级商户的账期。
+     * • 合单中同一个二级商户只允许有一笔子订单。
+     *
+     * 适用对象：电商平台 服务商 直连商户
+     * 请求URL：https://api.mch.weixin.qq.com/v3/combine-transactions/app
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return 预支付交易会话标识, 数字和字母。微信生成的预支付会话标识，用于后续接口调用使用。
+     */
+    Optional<String> combineTransactions(CombineTransactionsAppRequest request);
 
     /**
      * <pre>
@@ -23,20 +46,118 @@ public interface ProfitsSharingService {
      * 注意：
      * • 订单如果需要进行抽佣等，需要在合单中指定需要进行分账（profit_sharing为true）；指定后，交易资金进入二级商户账户，处于冻结状态，可在后续使用分账接口进行分账，利用分账完结进行资金解冻，实现抽佣和对二级商户的账期。
      * • 合单中同一个二级商户只允许有一笔子订单。
-     * 接口地址：https://api.mch.weixin.qq.com/v3/combine-transactions/jsapi
+     * 适用对象：电商平台 服务商 直连商户
+     * 请求URL：https://api.mch.weixin.qq.com/v3/combine-transactions/jsapi
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
-     * @param request 微信订单号
-     * @return String 预支付交易会话标识,数字和字母。微信生成的预支付会话标识，用于后续接口调用使用。
+     * @param request 请求对象
+     * @return 预支付交易会话标识, 数字和字母。微信生成的预支付会话标识，用于后续接口调用使用。
      */
-    String combineTransactions(CombineTransactionsJsRequest request);
+    Optional<String> combineTransactions(CombineTransactionsJsRequest request);
+
+    /**
+     * <pre>
+     * 合单查询订单API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_3.shtml
+     * 电商平台通过合单查询订单API查询订单状态，完成下一步的业务逻辑。
+     * 注意：
+     * • 需要调用查询接口的情况：
+     * 1、当商户后台、网络、服务器等出现异常，商户系统最终未接收到支付通知。
+     * 2、调用支付接口后，返回系统错误或未知交易状态情况。
+     * 3、调用刷卡支付API，返回USERPAYING的状态。
+     * 4、调用关单或撤销接口API之前，需确认支付状态。
+     * 适用对象：电商平台 服务商 直连商户
+     * 请求URL：https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/{combine_out_trade_no}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param combineOutTradeNo 合单支付总订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一 。
+     * @return 订单详情
+     */
+    Optional<CombineTransactionsDetailResponse> combineTransactionsDetail(String combineOutTradeNo);
+
+    /**
+     * <pre>
+     * 合单关闭订单API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_4.shtml
+     * 合单支付订单只能使用此合单关单api完成关单。
+     *
+     * 适用对象：电商平台 服务商 直连商户
+     * 请求URL：https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/{combine_out_trade_no}/close
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     * <p>
+     * 没有数据，返回状态码204（一般情况）
+     * <p>
+     * 状态码	错误码	描述	解决方案
+     * 202	USERPAYING	用户支付中，需要输入密码	等待5秒，然后调用被扫订单结果查询API，查询当前订单的不同状态，决定下一步的操作
+     * 403	TRADE_ERROR	交易错误	因业务原因交易失败，请查看接口返回的详细信息
+     * 500	SYSTEMERROR	系统错误	系统异常，请用相同参数重新调用
+     * 401	SIGN_ERROR	签名错误	请检查签名参数和方法是否都符合签名算法要求
+     * 403	RULELIMIT	业务规则限制	因业务规则限制请求频率，请查看接口返回的详细信息
+     * 400	PARAM_ERROR	参数错误	请根据接口返回的详细信息检查请求参数
+     * 403	OUT_TRADE_NO_USED	商户订单号重复	请核实商户订单号是否重复提交
+     * 404	ORDERNOTEXIST	订单不存在	请检查订单是否发起过交易
+     * 400	ORDER_CLOSED	订单已关闭	当前订单已关闭，请重新下单
+     * 500	OPENID_MISMATCH	openid和appid不匹配	请确认openid和appid是否匹配
+     * 403	NOTENOUGH	余额不足	用户帐号余额不足，请用户充值或更换支付卡后再支付
+     * 403	NOAUTH	商户无权限	请商户前往申请此接口相关权限
+     * 400	MCH_NOT_EXISTS	商户号不存在	请检查商户号是否正确
+     * 500	INVALID_TRANSACTIONID	订单号非法	请检查微信支付订单号是否正确
+     * 400	INVALID_REQUEST	无效请求	请根据接口返回的详细信息检查
+     * 429	FREQUENCY_LIMITED	频率超限	请降低请求接口频率
+     * 500	BANKERROR	银行系统异常	银行系统异常，请用相同参数重新调用
+     * 400	APPID_MCHID_NOT_MATCH	appid和mch_id不匹配	请确认appid和mch_id是否匹配
+     * 403	ACCOUNTERROR	账号异常	用户账号异常，无需更多操作
+     *
+     * @param request 请求对象
+     */
+    void combineTransactionsClose(CombineTransactionsCloseRequest request);
+
+    /**
+     * @param prePayId 预下单ID
+     * @param appId    appID
+     * @return 用于app调起支付的参数
+     */
+    Map<String, String> getAppPayParams(String prePayId, String appId);
 
     /**
      * @param prePayId 预下单ID
      * @param appId    appID
      * @return 用于js调起支付的参数
      */
-    Map<String, String> getStringStringMap(String prePayId, String appId);
+    Map<String, String> getJsPayParams(String prePayId, String appId);
+
+    /**
+     * @param prePayId 预下单ID
+     * @param appId    appID
+     * @return 用于小程序调起支付的参数
+     */
+    Map<String, String> getSmallPayParams(String prePayId, String appId);
+
+    /**
+     * @param timeStamp 时间戳
+     * @param nonce     随机串
+     * @param body      请求实体
+     * @param signed    已签名字符串
+     * @return 验签结果
+     */
+    boolean verifyPayNotifySign(String timeStamp, String nonce, String body, String signed);
+
+    /**
+     * 对通知的数据体进行解析
+     *
+     * @param request
+     * @return 支付信息
+     */
+    Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request);
+
+
+    // ##################  补差接口
 
     /**
      * <pre>
@@ -89,6 +210,9 @@ public interface ProfitsSharingService {
      * @return .
      */
     Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request);
+
+
+    // ##################  退款接口
 
     /**
      * <pre>

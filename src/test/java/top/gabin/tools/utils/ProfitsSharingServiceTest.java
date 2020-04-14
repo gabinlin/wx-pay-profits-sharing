@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.ProfitsSharingService;
 import top.gabin.tools.ProfitsSharingServiceImpl;
+import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class ProfitsSharingServiceTest {
 
@@ -18,20 +20,19 @@ public class ProfitsSharingServiceTest {
 
     @Before
     public void service() {
-        profitsSharingService = new ProfitsSharingServiceImpl();
+        profitsSharingService = new ProfitsSharingServiceImpl(new ProfitsSharingConfig());
     }
 
 
     @Test
     public void combineTransactionsTest() {
-        String transactions = profitsSharingService.combineTransactions(new CombineTransactionsJsRequest());
-        logger.info(transactions);
+        Optional<String> preId = profitsSharingService.combineTransactions(new CombineTransactionsJsRequest());
+        logger.info(preId.orElse(""));
     }
 
     @Test
     public void getStringStringMapTest() {
-
-        Map<String, String> stringStringMap = profitsSharingService.getStringStringMap("wx201410272009395522657a690389285100", "wx8888888888888888");
+        Map<String, String> stringStringMap = profitsSharingService.getJsPayParams("wx201410272009395522657a690389285100", "wx8888888888888888");
         logger.info(JsonUtils.bean2Json(stringStringMap));
     }
 

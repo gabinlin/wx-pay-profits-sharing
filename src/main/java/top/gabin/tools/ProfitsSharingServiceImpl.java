@@ -1,114 +1,207 @@
 package top.gabin.tools;
 
+import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
-import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.request.pay.combine.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsAppResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
 import top.gabin.tools.utils.HttpUtils;
+import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
-    private String mchId = "1449025802"; // 商户号
-    private String mchSerialNo = "SLHKqLh6buZEBQKKqLh6teSEBQKKqLh6"; // 商户证书序列号
-    // 你的商户私钥
-    private String privateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDS9se1wbq51SXw49bZgzIdj/ShiV618b/vNDztFhK/iW1nD1zMxo72YD9yHRX8jVWnrByDwL18107HK2nYbHu8t3Bcxd8k3/tpZgosbDOoXExDuJG02cwSx4jbCK6x5WWvucGO+tjoMaB1pPEurK6R8AVykcEzB6eo0bGSjx6ZUDh3pUESMXTKkXoQO/fJofq1BibWUq5KpAdeNL+yjFUUZg05PH2K7XRFp8nwe9tDQ3HrvUx1HhyNP/IFxU/XSR/D7uZsYuYOehiBX76mQzYD8PocnS0ehjpcyho7R/jmGuD4O6BGdWxCthrNrrRd6g030/TvfRictiuEJAMSQqf/AgMBAAECggEAHa61OMCSSjVQSk10XFRWR8yKafQPDGCAVeKus9kIOETYzMhfkTxavxWZt6+Z+VfVdmsD9BG5V4hfwCw+j0HsQwg4WgVJOUH+eLzvr4Jl3klmPZ0Jez2ttfK3McJN+h/Bp/Dl5/0paboZzpOvj5aiVUxFJ/KUEV8BWwJuDqXuczmRsG/JwXCDnLsrIEMmyBXDgvGSEiu/L6mjfIMNpwBPGkTiiJGRlBSWIAWdQr/jNw/po0zb+jlCVGWoPcivWGAafXJQX66aAk4JMiNCuLjdkH+xen/xSWU/QEQ9nWwLRJh6l9shvPWY3bfqQKPYkDGyyLdIUzxpIQBpkn+SZp5TSQKBgQD7KOtBC0bcVPpOVu333BC/pxMzqA2HPMyflQuUr7Di6HXZulxb2qEuXfafRMgVo7puLu/TDozZa83L7W1nEf5nbjClVEgVMbhT1uNgkIRuJ8CJu50wnDWUBsmMB4+Dn6kUG7YD/Psp4M1xzhWQSXvyxFXzAf6+DzrISK0FymJeVQKBgQDXB462cxKLbot8la1rQIjw2lX6p/WMBASuqOnPFlkDjIZuQbYfXchWxJRXVLCUikPzBLjWvJHbjrhmBTeIyxTyib+JThqaMzyMf0Y77/GiUJdUBx7PFHFyhDaj+jSmOxi7ceSZF37RNn539D2S6E7Qusj3OYPlaQrSV1WmLxBZAwKBgQDh9lSBdnXQMRvpc0gxoOnoo5Yg+WcCbu7h/CQpJ1ALNX0h4ArMEQzGPH9vl2A0J9PI4a2eww5xZg4HFJtDCetKftaBSCx59PuTYle7PwoGWPlecU7gtwl1Hg4iT4MMto5VqwC84dPOP5RWeUTpRVOgfIefVAIuWGFYZBpWhViu6QKBgQDLU3gdCX6VnbgD3DyZV/KlXK9ETyGefgY3ab18djNBadWL2FLwIevYMBXc5lX6fyt1Vhe55aE+LRwsS+6RSQbLuHkGynXZLW2ppIezEVY5F1+gswLs6PXFRUOtll/Gd8cRJ8bzBAaEqbS4lJjMmyI7uQNi0l3nxYXYE4EHnSUmJQKBgHqcrvr0P2fl01Yma4CxU/CVppAWpN2xPFrIaOgIhMRwAIB/VJxMIcA35hjf5IDMFeevGFtqUCMHtxvFeDWsQlFw4WVR3aaATnQypNC3lukH4kgko7v6IsVj0NoaVOJd2kpNmivlcQGNGX1fg+wfkuF2vksKWfsJVZjM8GUoqMiu";
-    // 你的微信支付平台证书
-    private String certificate = "-----BEGIN CERTIFICATE-----\n" +
-            "MIID9jCCAt6gAwIBAgIULl0WVna8Zk1TKJIqIdJAnSZNk/owDQYJKoZIhvcNAQEL\n" +
-            "BQAwXjELMAkGA1UEBhMCQ04xEzARBgNVBAoTClRlbnBheS5jb20xHTAbBgNVBAsT\n" +
-            "FFRlbnBheS5jb20gQ0EgQ2VudGVyMRswGQYDVQQDExJUZW5wYXkuY29tIFJvb3Qg\n" +
-            "Q0EwHhcNMTkwNDEwMTAwNDIyWhcNMjAwNDA5MTAwNDIyWjCBhzETMBEGA1UEAwwK\n" +
-            "MTQ0OTAyNTgwMjEbMBkGA1UECgwS5b6u5L+h5ZWG5oi357O757ufMTMwMQYDVQQL\n" +
-            "DCrljqbpl6jluILllYbml4XojZ/nvZHnu5znp5HmioDmnInpmZDlhazlj7gxCzAJ\n" +
-            "BgNVBAYMAkNOMREwDwYDVQQHDAhTaGVuWmhlbjCCASIwDQYJKoZIhvcNAQEBBQAD\n" +
-            "ggEPADCCAQoCggEBAKXojjCh/zkF5etMxc2tJIwMfpyFt8ssKtcPQL+2/8JaRhVr\n" +
-            "SLqeW3KRXqd/P/s1eg2ZsCvYoLSzXsdyk6pVU+u77TSEhbGzq40/3mXYEjGppFv3\n" +
-            "a4su+hg5ddadk/ICwNaKfiJtA4yNsjG4iIT5+IdH2xLFs1sFs5kpPBRo4mQ9R94C\n" +
-            "zjcPsRkCXfFZDA6p+iP+ZlOH0/fHHAOn+RhO8SgPGppGGLZaacXgFF5v/euQR0h9\n" +
-            "wwpsR3cTE8dNt5fUWXSynoXjMTj9kIYR3313zYX+TftIJkdxCBBIdJbMh5PBw2du\n" +
-            "4T8K55oqe+AjdRbdS69gZjveb15XYDTGOGB2oAMCAwEAAaOBgTB/MAkGA1UdEwQC\n" +
-            "MAAwCwYDVR0PBAQDAgTwMGUGA1UdHwReMFwwWqBYoFaGVGh0dHA6Ly9ldmNhLml0\n" +
-            "cnVzLmNvbS5jbi9wdWJsaWMvaXRydXNjcmw/Q0E9MUJENDIyMEU1MERCQzA0QjA2\n" +
-            "QUQzOTc1NDk4NDZDMDFDM0U4RUJEMjANBgkqhkiG9w0BAQsFAAOCAQEAUZh79ZRV\n" +
-            "YZnAKwyH9STDZoBtDaqGI/ji4I2b03koUxdMjFj9E6Ufvs144Sn10PogwjSM07sb\n" +
-            "eXLanzEWWE2V1ZjKsyNJe6kK9v4E8tKuNmMTyJpNgVHQNXLQh4aZry6pWnCNDEjz\n" +
-            "tzv/zrCsqdVpAOjSI8dH9iFr1Tuvo0GBkrUKj8B1HmfC0QLbAZ/OyS51RveytTIr\n" +
-            "qLwC9uPGrQhKWauHZgFTKx/4ee1J8/pkmKoIM3xleFYuBgr+Us4JzUR5nwvEwhPK\n" +
-            "/Ob90Tl1jy+/KxZ2NEYfLw7Kp+3tfstF1ZeurFYR6dUxdGl7fbP9gsdM7aM4t93e\n" +
-            "u3qYEAnjcWVdVA==\n" +
-            "-----END CERTIFICATE-----\n";
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private ProfitsSharingConfig config;
     private HttpUtils httpUtils;
 
-    public ProfitsSharingServiceImpl() {
-        httpUtils = new HttpUtils(mchId, mchSerialNo, privateKey, certificate);
 
+    public ProfitsSharingServiceImpl(ProfitsSharingConfig config) {
+        this.config = config;
+        httpUtils = new HttpUtils(config.getMchId(), config.getMchSerialNo(), config.getPrivateKey(), config.getCertificate());
+    }
+
+    private String getPrivateKey() {
+        return config.getPrivateKey();
+    }
+
+    private String getPublicKey() {
+        return config.getPublicKey();
     }
 
     @Override
-    public String combineTransactions(CombineTransactionsJsRequest request) {
-        Optional<CombineTransactionsJsResponse> responseOptional = getResponse(CombineTransactionsJsResponse.class, request,
+    public Optional<String> combineTransactions(CombineTransactionsAppRequest request) {
+        Optional<CombineTransactionsAppResponse> responseOptional = post(CombineTransactionsAppResponse.class, request,
+                "https://api.mch.weixin.qq.com/v3/combine-transactions/app");
+        return responseOptional.map(CombineTransactionsAppResponse::getPrepayId);
+    }
+
+    @Override
+    public Optional<String> combineTransactions(CombineTransactionsJsRequest request) {
+        Optional<CombineTransactionsJsResponse> responseOptional = post(CombineTransactionsJsResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/combine-transactions/jsapi");
-        return responseOptional.map(CombineTransactionsJsResponse::getPrepayId).orElse(null);
+        return responseOptional.map(CombineTransactionsJsResponse::getPrepayId);
+    }
+
+    @Override
+    public Optional<CombineTransactionsDetailResponse> combineTransactionsDetail(String combineOutTradeNo) {
+        String url = String.format("https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/%s", combineOutTradeNo);
+        return get(CombineTransactionsDetailResponse.class, url);
+    }
+
+    @Override
+    public void combineTransactionsClose(CombineTransactionsCloseRequest request) {
+        String url = String.format("https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/%s/close", request.getCombineOutTradeNo());
+        post(String.class, request, url);
+    }
+
+    @Override
+    public Map<String, String> getAppPayParams(String prePayId, String appId) {
+        Map<String, String> params = getParams();
+        params.put("appId", appId);
+        long timeStamp = System.currentTimeMillis();
+        String nonceStr = timeStamp + "_app";
+        params.put("timeStamp", timeStamp + "");
+        params.put("nonceStr", nonceStr);
+        String packageStr = "prepay_id=" + prePayId;
+        params.put("package", packageStr);
+        params.put("signType", "RSA");
+        String singSource = String.format("%s\n%s\n%s\n%s",
+                appId,
+                timeStamp,
+                nonceStr,
+                "prepay_id=" + prePayId);
+        String sign = RSASignUtil.sign(getPrivateKey(), singSource);
+        params.put("paySign", sign);
+        return params;
+    }
+
+    @Override
+    public Map<String, String> getJsPayParams(String prePayId, String appId) {
+        Map<String, String> params = getParams();
+        params.put("appId", appId);
+        long timeStamp = System.currentTimeMillis();
+        String nonceStr = timeStamp + "_js";
+        params.put("timeStamp", timeStamp + "");
+        params.put("nonceStr", nonceStr);
+        String packageVal = "prepay_id=" + prePayId;
+        params.put("package", packageVal);
+        String signType = "RSA";
+        params.put("signType", signType);
+        String singSource = String.format("%s\n%s\n%s\n%s",
+                appId,
+                timeStamp,
+                nonceStr,
+                packageVal);
+        String sign = RSASignUtil.sign(getPrivateKey(), singSource);
+        params.put("paySign", sign);
+        return params;
+    }
+
+    private HashMap<String, String> getParams() {
+        return new HashMap<>();
+    }
+
+    @Override
+    public Map<String, String> getSmallPayParams(String prePayId, String appId) {
+        Map<String, String> params = getParams();
+        params.put("appId", appId);
+        long timeStamp = System.currentTimeMillis();
+        String nonceStr = timeStamp + "_small_app";
+        params.put("timeStamp", timeStamp + "");
+        params.put("nonceStr", nonceStr);
+        String packageVal = "prepay_id=" + prePayId;
+        params.put("package", packageVal);
+        params.put("signType", "RSA");
+        String singSource = String.format("%s\n%s\n%s\n%s",
+                appId,
+                timeStamp,
+                nonceStr,
+                prePayId);
+        String sign = RSASignUtil.sign(getPrivateKey(), singSource);
+        params.put("paySign", sign);
+        return params;
+    }
+
+    @Override
+    public boolean verifyPayNotifySign(String timeStamp, String nonce, String body, String signed) {
+        StringBuilder beforeSign = new StringBuilder(timeStamp + "\n");
+        beforeSign.append(nonce + "\n");
+        beforeSign.append(body);
+        return RSASignUtil.verifySign(getPublicKey(), beforeSign.toString(), signed);
+    }
+
+    @Override
+    public Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request) {
+        if (request != null) {
+            CombineTransactionsNotifyRequest.Resource resource = request.getResource();
+            // TODO 待优化
+            AesUtil aesUtil = getAesUtil();
+            try {
+                String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
+                CombineTransactionsNotifyRequest1 request1 = JsonUtils.json2Bean(CombineTransactionsNotifyRequest1.class, json);
+                return Optional.ofNullable(request1);
+            } catch (GeneralSecurityException e) {
+                logger.error(e.getMessage(), e);
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private AesUtil getAesUtil() {
+        return new AesUtil(config.getApiKey().getBytes());
     }
 
     @Override
     public Optional<SubsidiesCreateResponse> subsidiesCreate(SubsidiesCreateRequest request) {
-        return getResponse(SubsidiesCreateResponse.class, request,
+        return post(SubsidiesCreateResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/create");
     }
 
     @Override
     public Optional<SubsidiesRefundResponse> subsidiesRefund(SubsidiesRefundRequest request) {
-        return getResponse(SubsidiesRefundResponse.class, request,
+        return post(SubsidiesRefundResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/return");
     }
 
     @Override
     public Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request) {
-        return getResponse(SubsidiesCancelResponse.class, request,
+        return post(SubsidiesCancelResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel");
     }
 
     @Override
     public Optional<RefundApplyResponse> refundApply(RefundApplyRequest request) {
-        return getResponse(RefundApplyResponse.class, request,
+        return post(RefundApplyResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/refunds/apply");
     }
 
-    @Override
-    public Map<String, String> getStringStringMap(String prePayId, String appId) {
-        Map<String, String> params = new HashMap<>();
-        String signType = "RSA";
-        params.put("appId", appId);
-        long timeStamp = System.currentTimeMillis();
-        String nonceStr = timeStamp + "_gabin";
-//        params.put("timeStamp", timeStamp + "");
-        params.put("timeStamp", "1414561699");
-//        params.put("nonceStr", nonceStr);
-        params.put("nonceStr", "5K8264ILTKCH16CQ2502SI8ZNMTM67VS");
-        params.put("signType", signType);
-        String packageStr = "prepay_id=" + prePayId;
-        params.put("package", packageStr);
 
-        String singSource = String.format("%s\n%s\n%s\n%s",
-                appId, timeStamp, nonceStr, "prepay_id=" + prePayId);
-        String sign = RSASignUtil.sign(privateKey, singSource);
-        params.put("paySign", sign);
-        return params;
+    private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
+        return Optional.ofNullable(httpUtils.post(classZ, request, url));
     }
 
-    private <T> Optional<T> getResponse(Class<T> classZ, Object request, String url) {
-        return Optional.ofNullable(httpUtils.post(classZ, request, url));
+    private <T> Optional<T> get(Class<T> classZ, String url) {
+        return Optional.ofNullable(httpUtils.get(classZ, url));
     }
 }
