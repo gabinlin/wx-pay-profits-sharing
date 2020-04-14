@@ -3,6 +3,7 @@ package top.gabin.tools;
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.*;
+import top.gabin.tools.request.ecommerce.profitsharing.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
@@ -21,6 +22,7 @@ import top.gabin.tools.response.ecommerce.fund.WithdrawForPlatformResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawForSubMchResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForPlatformResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForSubMchResponse;
+import top.gabin.tools.response.ecommerce.profitsharing.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
@@ -378,6 +380,220 @@ public interface ProfitsSharingService {
      */
     Optional<SubsidiesCancelResponse> subsidiesCancel(SubsidiesCancelRequest request);
 
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_1.shtml
+     * 请求分账API
+     * 最新更新时间：2020.2.27 版本说明
+     *
+     * 微信订单支付成功后，由电商平台发起分账请求，将结算后的资金分给分账接收方。
+     *
+     * 注意：
+     * • 微信订单支付成功后，服务商代特约商户发起分账请求，将结算后的钱分到分账接收方。
+     * • 对同一笔订单最多能发起20次分账请求，每次请求最多分给5个接收方。
+     * • 此接口采用异步处理模式，即在接收到商户请求后，会先受理请求再异步处理，最终的分账结果可以通过查询分账接口获取。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/orders
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingApplyResponse> applyProfitSharing(ProfitSharingApplyRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_2.shtml
+     *
+     * 返回上一层文档首页 / 电商收付通 / 分账 / 查询分账结果API
+     * 查询分账结果API
+     * 最新更新时间：2020.04.01 版本说明
+     *
+     * 发起分账请求后，可调用此接口查询分账结果 ;发起分账完结请求后，可调用此接口查询分账完结的结果
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/orders
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingQueryApplyResponse> queryProfitSharingStatus(ProfitSharingQueryApplyRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_3.shtml
+     * 请求分账回退API
+     * 最新更新时间：2019.09.11 版本说明
+     *
+     * 订单已经分账，在退款时，可以先调此接口，将已分账的资金从分账接收方的账户回退给分账方，再发起退款。
+     *
+     * 注意：
+     * • 分账回退以原分账单为依据，支持多次回退，申请回退总金额不能超过原分账单分给该接收方的金额。
+     * • 此接口采用同步处理模式，即在接收到商户请求后，会实时返回处理结果。
+     * • 此功能需要接收方在商户平台开启同意分账回退后，才能使用。
+     * • 对同一笔分账单最多能发起20次分账回退请求。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/returnorders
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingRefundResponse> refundProfitSharing(ProfitSharingRefundRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_4.shtml
+     * 查询分账回退结果API
+     * 最新更新时间：2019.09.11 版本说明
+     *
+     * 商户需要核实回退结果，可调用此接口查询回退结果;如果分账回退接口返回状态为处理中，可调用此接口查询回退结果
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/returnorders
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingQueryRefundResponse> queryRefundProfitSharingStatus(ProfitSharingQueryRefundRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_5.shtml
+     * 完结分账API
+     * 最新更新时间：2019.09.11 版本说明
+     *
+     * 不需要进行分账的订单，可直接调用本接口将订单的金额全部解冻给特约商户。
+     *
+     * 注意：
+     * • 调用分账接口后，需要解冻剩余资金时，调用本接口将剩余的分账金额全部解冻给特约商户。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/finish-order
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingFinishResponse> finishProfitSharing(ProfitSharingFinishRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_7.shtml
+     * 添加分账接收方API
+     * 最新更新时间：2020.03.05 版本说明
+     *
+     * 1. 电商平台可通过此接口添加分账接收方，建立分账接收方列表。后续通过发起分账请求，将电商平台下的二级商户结算后的资金，分给分账接收方列表中具体的分账接收方。
+     * 2. 添加的分账接收方统一都在电商平台维度进行管理，其他二级商户，均可向该分账接收方列表中的接收方进行分账，避免在二级商户维度重复维护。
+     *
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/receivers/add
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingAddReceiverResponse> addReceiver(ProfitSharingAddReceiverRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_8.shtml
+     * 删除分账接收方API
+     * 最新更新时间：2020.03.05 版本说明
+     *
+     * 电商平台发起删除分账接收方请求。删除后，不支持将电商平台下二级商户结算后的资金，分到该分账接收方。
+     *
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/receivers/delete
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingRemoveReceiverResponse> removeReceiver(ProfitSharingRemoveReceiverRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_6.shtml
+     *
+     * 返回上一层文档首页 / 电商收付通 / 分账 / 分账动账通知API
+     * 分账动账通知API
+     * 最新更新时间：2020.03.23 版本说明
+     *
+     * 1、此功能仅针对分账接收方。
+     * 2、分账动账金额变动后，微信会把相关变动结果发送给需要实时关注的分账接收方。
+     *
+     * 注意：
+     * 对后台通知交互时，如果微信收到应答不是成功或超时，微信认为通知失败，微信会通过一定的策略定期重新发起通知，尽可能提高通知的成功率，但微信不保证通知最终能成功
+     *
+     * • 同样的通知可能会多次发送给商户系统。商户系统必须能够正确处理重复的通知。 推荐的做法是，当商户系统收到通知进行处理时，先检查对应业务数据的状态，并判断该通知是否已经处理。如果未处理，则再进行处理；如果已处理，则直接返回结果成功。在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱。
+     * • 如果在所有通知频率(4小时)后没有收到微信侧回调，商户应调用查询订单接口确认订单状态。
+     *
+     * 特别提醒：商户系统对于开启结果通知的内容一定要做签名验证，并校验通知的信息是否与商户侧的信息一致，防止数据泄漏导致出现“假通知”，造成资金损失。
+     * 接口说明
+     * 适用对象：直联商户电商服务商 服务商
+     * 请求URL：该链接是通过[商户配置]提交service_notify_url设置，必须为https协议。如果链接无法访问，商户将无法接收到微信通知。 通知url必须为直接可访问的url，不能携带参数。示例： “https://pay.weixin.qq.com/wxpay/pay.action”
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * 通知规则
+     * 用户支付完成后，微信会把相关支付结果和用户信息发送给清算机构，清算机构需要接收处理后返回应答成功，然后继续给异步通知到下游从业机构。
+     * 对后台通知交互时，如果微信收到应答不是成功或超时，微信认为通知失败，微信会通过一定的策略定期重新发起通知，尽可能提高通知的成功率，但微信不保证通知最终能成功。（通知频率为15s/15s/30s/3m/10m/20m/30m/30m/30m/60m/3h/3h/3h/6h/6h - 总计 24h4m）
+     * 通知报文
+     * 支付结果通知是以POST 方法访问商户设置的通知url，通知的数据以JSON 格式通过请求主体（BODY）传输。通知的数据包括了加密的支付结果详情。
+     *
+     * 下面详细描述对通知数据进行解密的流程：
+     * 1、用商户平台上设置的APIv3密钥【微信商户平台—>账户设置—>API安全—>设置APIv3密钥】，记为key。
+     * 2、针对resource.algorithm中描述的算法（目前为AEAD_AES_256_GCM），取得对应的参数nonce和associated_data。
+     * 3、使用key、nonce和associated_data，对数据密文resource.ciphertext进行解密，得到JSON形式的资源对象。
+     *
+     * 注： AEAD_AES_256_GCM算法的接口细节，请参考rfc5116。微信支付使用的密钥key长度为32个字节，随机串nonce长度12个字节，associated_data长度小于16个字节并可能为空。
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ProfitSharingNotifyRequest1> parseProfitsSharingNotify(ProfitSharingNotifyRequest request);
 
     /**
      * <pre>

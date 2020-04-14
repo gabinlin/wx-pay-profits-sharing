@@ -8,6 +8,7 @@ import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.*;
+import top.gabin.tools.request.ecommerce.profitsharing.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
@@ -23,6 +24,7 @@ import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.applyments.*;
 import top.gabin.tools.response.ecommerce.fund.*;
+import top.gabin.tools.response.ecommerce.profitsharing.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
@@ -172,7 +174,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return params;
     }
 
-    private HashMap<String, String> getParams() {
+    private Map<String, String> getParams() {
         return new HashMap<>();
     }
 
@@ -244,6 +246,68 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<SubsidiesCancelResponse> subsidiesCancel(SubsidiesCancelRequest request) {
         return post(SubsidiesCancelResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel");
+    }
+
+    @Override
+    public Optional<ProfitSharingApplyResponse> applyProfitSharing(ProfitSharingApplyRequest request) {
+        return post(ProfitSharingApplyResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/orders");
+    }
+
+    @Override
+    public Optional<ProfitSharingQueryApplyResponse> queryProfitSharingStatus(ProfitSharingQueryApplyRequest request) {
+        Map<String, String> params = getParams();
+        params.put("sub_mchid", request.getSubMchid());
+        params.put("transaction_id", request.getTransactionId());
+        params.put("out_order_no", request.getOutOrderNo());
+        return get(ProfitSharingQueryApplyResponse.class, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/orders", params);
+    }
+
+    @Override
+    public Optional<ProfitSharingRefundResponse> refundProfitSharing(ProfitSharingRefundRequest request) {
+        return post(ProfitSharingRefundResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/returnorders");
+    }
+
+    @Override
+    public Optional<ProfitSharingQueryRefundResponse> queryRefundProfitSharingStatus(ProfitSharingQueryRefundRequest request) {
+        Map<String, String> params = getParams();
+        params.put("sub_mchid", request.getSubMchid());
+        params.put("order_id", request.getOrderId());
+        params.put("out_order_no", request.getOutOrderNo());
+        params.put("out_return_no", request.getOutReturnNo());
+        return get(ProfitSharingQueryRefundResponse.class, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/returnorders", params);
+    }
+
+    @Override
+    public Optional<ProfitSharingFinishResponse> finishProfitSharing(ProfitSharingFinishRequest request) {
+        return post(ProfitSharingFinishResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/finish-order");
+    }
+
+    @Override
+    public Optional<ProfitSharingAddReceiverResponse> addReceiver(ProfitSharingAddReceiverRequest request) {
+        return post(ProfitSharingAddReceiverResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/receivers/add");
+    }
+
+    @Override
+    public Optional<ProfitSharingRemoveReceiverResponse> removeReceiver(ProfitSharingRemoveReceiverRequest request) {
+        return post(ProfitSharingRemoveReceiverResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/receivers/delete");
+    }
+
+    @Override
+    public Optional<ProfitSharingNotifyRequest1> parseProfitsSharingNotify(ProfitSharingNotifyRequest request) {
+        if (request != null) {
+            ProfitSharingNotifyRequest.Resource resource = request.getResource();
+            AesUtil aesUtil = getAesUtil();
+            try {
+                String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
+                ProfitSharingNotifyRequest1 request1 = JsonUtils.json2Bean(ProfitSharingNotifyRequest1.class, json);
+                return Optional.ofNullable(request1);
+            } catch (GeneralSecurityException e) {
+                logger.error(e.getMessage(), e);
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
