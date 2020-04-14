@@ -53,7 +53,7 @@ public interface ProfitsSharingService {
      * </pre>
      *
      * @param request 请求对象
-     * @return
+     * @return .
      */
     Optional<SubsidiesCreateResponse> subsidiesCreate(SubsidiesCreateRequest request);
 
@@ -71,7 +71,7 @@ public interface ProfitsSharingService {
      * </pre>
      *
      * @param request 请求对象
-     * @return
+     * @return .
      */
     Optional<SubsidiesRefundResponse> subsidiesRefund(SubsidiesRefundRequest request);
 
@@ -86,7 +86,7 @@ public interface ProfitsSharingService {
      * </pre>
      *
      * @param request 请求对象
-     * @return
+     * @return .
      */
     Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request);
 
@@ -105,7 +105,7 @@ public interface ProfitsSharingService {
      * </pre>
      *
      * @param request 请求对象
-     * @return
+     * @return .
      */
     Optional<RefundApplyResponse> refundApply(RefundApplyRequest request);
 }

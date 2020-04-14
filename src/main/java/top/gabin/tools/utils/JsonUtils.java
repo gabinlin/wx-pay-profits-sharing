@@ -20,10 +20,12 @@ import java.util.TreeMap;
 public class JsonUtils {
 
     /**
-     * 将对象转换成json字符串
+     * <pre>
+     *     将对象转换成json字符串
+     * </pre>
      *
-     * @param object
-     * @return
+     * @param object 实例对象
+     * @return String
      */
     public static String bean2Json(Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -36,12 +38,14 @@ public class JsonUtils {
     }
 
     /**
-     * 将json字符串转化成对象
+     * <pre>
+     *     将json字符串转化成对象
+     * </pre>
      *
      * @param clazz 转化成的对象类型
      * @param json  需要转化的json字符串
-     * @param <T>
-     * @return
+     * @param <T>   泛型
+     * @return T
      */
     public static <T> T json2Bean(Class<T> clazz, String json) {
         if (json == null) {
@@ -61,12 +65,14 @@ public class JsonUtils {
     }
 
     /**
-     * 将json字符串转化成List对象
+     * <pre>
+     *     将json字符串转化成List对象
+     * </pre>
      *
-     * @param clazz
-     * @param json
-     * @param <T>
-     * @return
+     * @param clazz Class类型
+     * @param json  json字符串
+     * @param <T>   泛型
+     * @return List
      */
     public static <T> List<T> json2List(Class<T> clazz, String json) {
         if (json == null || json.contains("<html>")) {
@@ -82,12 +88,10 @@ public class JsonUtils {
     }
 
     /**
-     * 将json字符串转化成Map对象
-     *
-     * @param clazz
-     * @param json
-     * @param <T>
-     * @return
+     * @param clazz Class类型
+     * @param json  json字符串
+     * @param <T>   泛型
+     * @return T
      */
     public static <T> Map<String, T> json2Map(Class<T> clazz, String json) {
         if (json == null || json.contains("<html>")) {
