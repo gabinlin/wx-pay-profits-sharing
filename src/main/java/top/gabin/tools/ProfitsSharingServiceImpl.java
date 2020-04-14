@@ -13,6 +13,8 @@ import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
+import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
+import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.*;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
@@ -24,6 +26,8 @@ import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
+import top.gabin.tools.response.pay.bill.BillOfFundFlowResponse;
+import top.gabin.tools.response.pay.bill.BillOfTradeResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsAppResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
@@ -31,12 +35,15 @@ import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
@@ -309,11 +316,49 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return responseOptional.map(WithdrawExceptionLogResponse::getDownloadUrl);
     }
 
+    @Override
+    public Optional<String> downloadTradeBill(BillOfTradeRequest request) {
+        Map<String, String> query = new HashMap<>();
+        query.put("bill_date", request.getBillDate());
+        query.put("sub_mchid", request.getSubMchid());
+        query.put("bill_type", request.getBillType());
+        query.put("tar_type", request.getTarType());
+        Optional<BillOfTradeResponse> response = get(BillOfTradeResponse.class, "https://api.mch.weixin.qq.com/v3/bill/tradebill", query);
+        return response.map(BillOfTradeResponse::getDownloadUrl);
+    }
+
+    @Override
+    public Optional<String> downloadTradeBill(BillOfFundFlowRequest request) {
+        Map<String, String> query = new HashMap<>();
+        query.put("bill_date", request.getBillDate());
+        query.put("account_type", request.getAccountType());
+        query.put("tar_type", request.getTarType());
+        Optional<BillOfFundFlowResponse> response = get(BillOfFundFlowResponse.class, "https://api.mch.weixin.qq.com/v3/bill/fundflowbill", query);
+        return response.map(BillOfFundFlowResponse::getDownloadUrl);
+    }
+
+    @Override
+    public File downloadBillFile(String downloadUrl) {
+        // TODO
+        return null;
+    }
+
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
         return Optional.ofNullable(httpUtils.post(classZ, request, url));
     }
 
     private <T> Optional<T> get(Class<T> classZ, String url) {
+        return Optional.ofNullable(httpUtils.get(classZ, url));
+    }
+
+    private <T> Optional<T> get(Class<T> classZ, String url, Map<String, String> query) {
+        if (query != null && !query.isEmpty()) {
+            if (!url.contains("?")) {
+                url += "?";
+            }
+            String queryStr = query.keySet().stream().map(key -> key + "=" + query.get(key)).collect(Collectors.joining("&"));
+            url += queryStr;
+        }
         return Optional.ofNullable(httpUtils.get(classZ, url));
     }
 

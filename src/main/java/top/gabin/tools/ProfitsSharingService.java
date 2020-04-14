@@ -8,6 +8,8 @@ import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
+import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
+import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.*;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
@@ -24,6 +26,7 @@ import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -546,7 +549,73 @@ public interface ProfitsSharingService {
      * </pre>
      *
      * @param request 请求对象
-     * @return .
+     * @return 下载文件的地址
      */
     Optional<String> downloadWithdrawExceptionFile(WithdrawExceptionLogRequest request);
+
+    /**
+     * <pre>
+     * 申请交易账单API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/bill/chapter3_1.shtml
+     *
+     * 微信支付按天提供交易账单文件，商户可以通过该接口获取账单文件的下载地址。文件内包含交易相关的金额、时间、营销等信息，供商户核对订单、退款、银行到账等情况。
+     *
+     * 注意：
+     * • 微信侧未成功下单的交易不会出现在对账单中。支付成功后撤销的交易会出现在对账单中，跟原支付单订单号一致；
+     * • 对账单中涉及金额的字段单位为“元”；
+     * • 对账单接口只能下载三个月以内的账单。
+     * • 小微商户不单独提供对账单下载，如有需要，可在调取“下载对账单”API接口时不传sub_mch_id，获取服务商下全量电商二级商户（包括小微商户和非小微商户）的对账单。
+     * 接口说明
+     * 适用对象：电商平台 服务商 直连商户
+     * 请求URL：https://api.mch.weixin.qq.com/v3/bill/tradebill
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return 下载文件的地址
+     */
+    Optional<String> downloadTradeBill(BillOfTradeRequest request);
+
+    /**
+     * <pre>
+     * 申请资金账单API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/bill/chapter3_2.shtml
+     *
+     * 微信支付按天提供微信支付账户的资金流水账单文件，商户可以通过该接口获取账单文件的下载地址。文件内包含该账户资金操作相关的业务单号、收支金额、记账时间等信息，供商户进行核对。
+     *
+     * 注意：
+     * • 资金账单中的数据反映的是商户微信支付账户资金变动情况；
+     * • 对账单中涉及金额的字段单位为“元”。
+     * 接口说明
+     * 适用对象：电商平台 服务商 直连商户
+     * 请求URL：https://api.mch.weixin.qq.com/v3/bill/fundflowbill
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return 下载文件的地址
+     */
+    Optional<String> downloadTradeBill(BillOfFundFlowRequest request);
+
+    /**
+     * <pre>
+     * 下载账单API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/bill/chapter3_3.shtml
+     * 下载账单API为通用接口，交易/资金账单都可以通过该接口获取到对应的账单。
+     *
+     * 注意：
+     * • 账单文件的下载地址的有效时间为30s。
+     * • 强烈建议商户将实际账单文件的哈希值和之前从接口获取到的哈希值进行比对，以确认数据的完整性。
+     * 接口说明
+     * 适用对象：电商平台 服务商 直连商户
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param downloadUrl 下载地址
+     * @return
+     */
+    File downloadBillFile(String downloadUrl);
 }
