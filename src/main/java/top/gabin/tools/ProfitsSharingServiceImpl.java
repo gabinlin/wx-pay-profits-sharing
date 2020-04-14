@@ -185,7 +185,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request) {
+    public Optional<SubsidiesCancelResponse> subsidiesCancel(SubsidiesCancelRequest request) {
         return post(SubsidiesCancelResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel");
     }

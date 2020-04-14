@@ -170,7 +170,11 @@ public interface ProfitsSharingService {
      * • 补差金额需要和下单的时候传入的补差金额保持一致(发生用户退款时可以小于下单时的补差金额，须有对应的微信退款单号，任意一笔该订单的微信退款单)。
      * • 该接口支持重入，请求参数相同只会扣款一次，重入有效期180天。
      * • 系统异常（如返回SYSTEM_ERROR），请使用相同参数稍后重新调用，请务必用原参数来重入此接口，如更换金额重试，可能会导致重复扣款，系统会在1天后回退到原账户。
-     * 接口地址：https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/create
+     *
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/create
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
      * @param request 请求对象
@@ -180,7 +184,7 @@ public interface ProfitsSharingService {
 
     /**
      * <pre>
-     * 申退补差API
+     * 请求补差回退API
      * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/subsidies/chapter3_2.shtml
      * 订单发送退款的时候，可以对补贴成功的补差单发起回退。
      * 注意：
@@ -188,7 +192,11 @@ public interface ProfitsSharingService {
      * • 此接口采用同步处理模式，即在接收到商户请求后，会实时返回处理结果。
      * • 补差回退的前置条件是订单发生退款。
      * • 系统异常（如返回SYSTEM_ERROR），请使用相同参数稍后重新调用，请务必用原商户补差回退单号和原参数来重入此接口。
-     * 接口地址：https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/refund
+     *
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/return
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
      * @param request 请求对象
@@ -204,12 +212,17 @@ public interface ProfitsSharingService {
      * 注意：
      * • 取消补差完成后，商户可以对未补差的订单进行分账。
      * • 订单补差取消的前置条件是订单发生退款。
+     *
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
      * @param request 请求对象
      * @return .
      */
-    Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request);
+    Optional<SubsidiesCancelResponse> subsidiesCancel(SubsidiesCancelRequest request);
 
 
     // ##################  退款接口
