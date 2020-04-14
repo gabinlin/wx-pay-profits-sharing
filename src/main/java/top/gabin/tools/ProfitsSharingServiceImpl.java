@@ -39,8 +39,8 @@ import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.HashMap;
@@ -440,9 +440,8 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public File downloadBillFile(String downloadUrl) {
-        // TODO
-        return null;
+    public InputStream downloadBillFile(String downloadUrl) {
+        return httpUtils.download(downloadUrl);
     }
 
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {

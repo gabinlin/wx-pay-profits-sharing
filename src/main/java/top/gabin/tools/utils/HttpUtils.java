@@ -4,6 +4,8 @@ import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -11,15 +13,19 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import top.gabin.tools.request.ecommerce.AbstractRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 
 public class HttpUtils {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String mchId;       // 商户号
     private String mchSerialNo; // 商户证书序列号
@@ -42,11 +48,11 @@ public class HttpUtils {
     private void init() throws IOException  {
         PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(
                 new ByteArrayInputStream(privateKey.getBytes("utf-8")));
-//        X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
-//                new ByteArrayInputStream(certificate.getBytes("utf-8")));
+        X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
+                new ByteArrayInputStream(certificate.getBytes("utf-8")));
 
         ArrayList<X509Certificate> listCertificates = new ArrayList<>();
-//        listCertificates.add(wechatpayCertificate);
+        listCertificates.add(wechatpayCertificate);
 
         httpClient = WechatPayHttpClientBuilder.create()
                 .withMerchant(mchId, mchSerialNo, merchantPrivateKey)
@@ -98,7 +104,23 @@ public class HttpUtils {
         return request(responseClass, httpPost);
     }
 
-    public <T> T post(Class<T> responseClass, AbstractRequest requestObj) {
-        return post(responseClass, requestObj, requestObj.getUrl());
+    public InputStream download(String downloadUrl) {
+        HttpGet httpGet = new HttpGet(downloadUrl);
+        httpGet.addHeader("Accept", "application/json");
+
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            String body = EntityUtils.toString(response.getEntity());
+            if (statusCode == 200) {
+                return response.getEntity().getContent();
+            } else {
+                throw new IOException("request failed");
+            }
+        } catch (ClientProtocolException e) {
+            logger.error(e.getMessage(), e);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
     }
 }

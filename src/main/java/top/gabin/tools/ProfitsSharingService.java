@@ -30,7 +30,7 @@ import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -972,7 +972,7 @@ public interface ProfitsSharingService {
      * </pre>
      *
      * @param downloadUrl 下载地址
-     * @return
+     * @return .
      */
-    File downloadBillFile(String downloadUrl);
+    InputStream downloadBillFile(String downloadUrl);
 }
