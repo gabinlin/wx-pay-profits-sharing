@@ -48,11 +48,11 @@ public class HttpUtils {
     private void init() throws IOException  {
         PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(
                 new ByteArrayInputStream(privateKey.getBytes("utf-8")));
-        X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
-                new ByteArrayInputStream(certificate.getBytes("utf-8")));
+//        X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
+//                new ByteArrayInputStream(certificate.getBytes("utf-8")));
 
         ArrayList<X509Certificate> listCertificates = new ArrayList<>();
-        listCertificates.add(wechatpayCertificate);
+//        listCertificates.add(wechatpayCertificate);
 
         httpClient = WechatPayHttpClientBuilder.create()
                 .withMerchant(mchId, mchSerialNo, merchantPrivateKey)

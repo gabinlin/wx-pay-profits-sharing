@@ -1,7 +1,7 @@
 package top.gabin.tools.config;
 
 public class ProfitsSharingConfig {
-    private String apiKey = "api3Key";
+    private String apiKey = "SLHKqLh6buZEBQKKqLh6teSEBQKKqLh7";
     private String mchId = "1449025802"; // 商户号
     private String mchSerialNo = "SLHKqLh6buZEBQKKqLh6teSEBQKKqLh6"; // 商户证书序列号
     // 你的商户私钥
