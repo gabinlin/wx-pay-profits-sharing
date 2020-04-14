@@ -5,11 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
+import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
+import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
+import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
@@ -142,7 +145,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public boolean verifyPayNotifySign(String timeStamp, String nonce, String body, String signed) {
+    public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed) {
         StringBuilder beforeSign = new StringBuilder(timeStamp + "\n");
         beforeSign.append(nonce + "\n");
         beforeSign.append(body);
@@ -153,7 +156,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request) {
         if (request != null) {
             CombineTransactionsNotifyRequest.Resource resource = request.getResource();
-            // TODO 待优化
             AesUtil aesUtil = getAesUtil();
             try {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
@@ -168,6 +170,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return Optional.empty();
     }
 
+    // TODO 待优化
     private AesUtil getAesUtil() {
         return new AesUtil(config.getApiKey().getBytes());
     }
@@ -194,6 +197,36 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<RefundApplyResponse> refundApply(RefundApplyRequest request) {
         return post(RefundApplyResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/refunds/apply");
+    }
+
+    @Override
+    public Optional<RefundQueryResultResponse> refundQueryById(String subMchid, String refundId) {
+        String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/refunds/%s/%s", subMchid, refundId);
+        return post(RefundQueryResultResponse.class, new Object(), url);
+    }
+
+    @Override
+    public Optional<RefundQueryResultResponse> refundQueryByNumber(String subMchid, String outRefundNo) {
+        String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/refunds/%s/%s", subMchid, outRefundNo);
+        return post(RefundQueryResultResponse.class, new Object(), url);
+    }
+
+    @Override
+    public Optional<RefundNotifyRequest1> parseRefundNotify(RefundNotifyRequest request) {
+        if (request != null) {
+            RefundNotifyRequest.Resource resource = request.getResource();
+            AesUtil aesUtil = getAesUtil();
+            try {
+                String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
+                RefundNotifyRequest1 request1 = JsonUtils.json2Bean(RefundNotifyRequest1.class, json);
+                return Optional.ofNullable(request1);
+            } catch (GeneralSecurityException e) {
+                logger.error(e.getMessage(), e);
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return Optional.empty();
     }
 
 

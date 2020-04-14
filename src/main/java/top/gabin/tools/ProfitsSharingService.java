@@ -1,11 +1,14 @@
 package top.gabin.tools;
 
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
+import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
+import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
+import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
@@ -146,12 +149,12 @@ public interface ProfitsSharingService {
      * @param signed    已签名字符串
      * @return 验签结果
      */
-    boolean verifyPayNotifySign(String timeStamp, String nonce, String body, String signed);
+    boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed);
 
     /**
      * 对通知的数据体进行解析
      *
-     * @param request
+     * @param request 请求对象
      * @return 支付信息
      */
     Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request);
@@ -229,20 +232,80 @@ public interface ProfitsSharingService {
 
     /**
      * <pre>
-     * 退款API
+     * 退款申请API
      * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_1.shtml
      * 当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，微信支付将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家帐号上。
-     * 注意：
      *
+     * 注意：
      * • 交易时间超过一年的订单无法提交退款。
      * • 微信支付退款支持单笔交易分多次退款，多次退款需要提交原支付订单的商户订单号和设置不同的退款单号。申请退款总金额不能超过订单金额。 一笔退款失败后重新提交，请不要更换退款单号，请使用原商户退款单号。
      * • 请求频率限制：150qps，即每秒钟正常的申请退款请求次数不超过150次，错误或无效请求频率限制：6qps，即每秒钟异常或错误的退款申请请求不超过6次。
      * • 每个支付订单的部分退款次数不能超过50次。
-     * 接口地址 https://api.mch.weixin.qq.com/v3/ecommerce/refunds/apply
+     *
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/refunds/apply
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
      * @param request 请求对象
      * @return .
      */
     Optional<RefundApplyResponse> refundApply(RefundApplyRequest request);
+
+    /**
+     * <pre>
+     * 查询退款API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_2.shtml
+     * 提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
+     *
+     * 注意：
+     * ● 退款查询API可按以下两种不同方式查询：
+     *     1、通过微信支付退款单号查询退款；
+     *     2、通过商户退款单号查询退款。
+     * ● 两种不同查询方式返回结果相同
+     *
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/refunds/id/{refund_id}
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param subMchid 二级商户
+     * @param refundId 退款记录ID
+     * @return .
+     */
+    Optional<RefundQueryResultResponse> refundQueryById(String subMchid, String refundId);
+
+    /**
+     * <pre>
+     * 查询退款API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_2.shtml
+     * 提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
+     *
+     * 注意：
+     * ● 退款查询API可按以下两种不同方式查询：
+     *     1、通过微信支付退款单号查询退款；
+     *     2、通过商户退款单号查询退款。
+     * ● 两种不同查询方式返回结果相同
+     *
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/refunds/out-refund-no/{out_refund_no}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param subMchid    二级商户
+     * @param outRefundNo 退款记录单号
+     * @return .
+     */
+    Optional<RefundQueryResultResponse> refundQueryByNumber(String subMchid, String outRefundNo);
+
+    /**
+     * 对通知的数据体进行解析
+     *
+     * @param request 请求对象
+     * @return 退款信息
+     */
+    Optional<RefundNotifyRequest1> parseRefundNotify(RefundNotifyRequest request);
 }
