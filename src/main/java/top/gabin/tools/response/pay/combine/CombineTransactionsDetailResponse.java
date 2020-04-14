@@ -42,7 +42,7 @@ public class CombineTransactionsDetailResponse {
 	 * 是否必填：是
 	 * 类型：string(32)
 	 * 描述：
-	 *  合单发起方的appid。 
+	 *  合单发起方的appid。
 	 *  示例值：wxd678efh567hg6787 
 	 * </pre>
 	 */
@@ -218,7 +218,7 @@ public class CombineTransactionsDetailResponse {
 		 *  JSAPI：公众号支付 
 		 *  APP：APP支付
 		 *  MWEB：H5支付 
-		 *  示例值： JSAPI 
+		 *  示例值： JSAPI 
 		 * </pre>
 		 */
 		@JsonProperty(value = "trade_type")
@@ -238,7 +238,7 @@ public class CombineTransactionsDetailResponse {
 		 *  CLOSED：已关闭 
 		 *  USERPAYING：用户支付中
 		 *  PAYERROR：支付失败(其他原因，如银行返回失败) 
-		 *  示例值： SUCCESS 
+		 *  示例值： SUCCESS 
 		 * </pre>
 		 */
 		@JsonProperty(value = "trade_state")

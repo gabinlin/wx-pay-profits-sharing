@@ -20,7 +20,7 @@ public class RefundQueryResultRequest1 {
 	 * 类型：string(32)
 	 * 描述：
 	 *  path 商户系统内部的退款单号，商户系统内部唯一，同一退款单号多次请求只退一笔。 
-	 *  示例值： 1217752501201407033233368018 
+	 *  示例值： 1217752501201407033233368018 
 	 * </pre>
 	 */
 	@JsonProperty(value = "out_refund_no")

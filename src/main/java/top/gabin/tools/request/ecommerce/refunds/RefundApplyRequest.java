@@ -20,7 +20,7 @@ public class RefundApplyRequest {
 	 * 类型：string(32)
 	 * 描述：
 	 *  微信支付分配二级商户的商户号。
-	 *  示例值： 1900000109 
+	 *  示例值： 1900000109 
 	 * </pre>
 	 */
 	@JsonProperty(value = "sub_mchid")

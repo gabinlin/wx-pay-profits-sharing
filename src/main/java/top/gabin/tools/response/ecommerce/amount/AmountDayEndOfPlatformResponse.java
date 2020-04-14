@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_4.shtml
  * 状态码	错误码	描述	解决方案
  * 403	NO_AUTH	无接口权限	请确认是否已经开通相关权限
- * 400	INVALID_REQUEST	日终余额当日无数据	 
+ * 400	INVALID_REQUEST	日终余额当日无数据	
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
  * </pre>
  */

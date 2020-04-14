@@ -197,7 +197,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 *  JSAPI：公众号支付 
 		 *  APP：APP支付
 		 *  MWEB：H5支付 
-		 *  示例值： JSAPI 
+		 *  示例值： JSAPI 
 		 * </pre>
 		 */
 		@JsonProperty(value = "trade_type")
@@ -217,7 +217,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 *  CLOSED：已关闭 
 		 *  USERPAYING：用户支付中
 		 *  PAYERROR：支付失败(其他原因，如银行返回失败) 
-		 *  示例值： SUCCESS 
+		 *  示例值： SUCCESS 
 		 * </pre>
 		 */
 		@JsonProperty(value = "trade_state")

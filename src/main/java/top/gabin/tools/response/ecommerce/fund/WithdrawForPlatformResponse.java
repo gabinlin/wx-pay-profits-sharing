@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 403	REQUEST_BLOCKED	商户号提现权限被冻结，无法发起提现	商户号提现权限为被冻结状态，无法发起提现
  * 403	CONTRACT_NOT_CONFIRM	商户号提现权限已关闭，无法发起提现	商户号提现权限已关闭，无法发起提现
  * 400	INVALID_REQUEST	当前请求已经超过有效期	当前请求已经超过有效期
- * 403	ACCOUNT_ERROR 	商户号没有绑定结算银行卡	请绑定后重试
+ * 403	ACCOUNT_ERROR	商户号没有绑定结算银行卡	请绑定后重试
  * 403	ACCOUNT_NOT_VERIFIED	商户号结算银行卡信息有误	请修改后重试
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
  * 提交相同商户单号的请求但参数和历史提交的参数不一致			

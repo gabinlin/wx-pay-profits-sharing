@@ -130,7 +130,7 @@ public class CombineTransactionsAppRequest {
 	 * 类型：string(256)
 	 * 描述：
 	 *  接收微信支付异步通知回调地址，通知url必须为直接可访问的URL，不能携带参数。 
-	 *  格式: URL 
+	 *  格式: URL 
 	 *  示例值：https://yourapp.com/notify 
 	 * </pre>
 	 */
@@ -257,7 +257,7 @@ public class CombineTransactionsAppRequest {
 		 * 类型：string(45)
 		 * 描述：
 		 *  用户端实际ip 
-		 *  格式: ip(ipv4+ipv6) 
+		 *  格式: ip(ipv4+ipv6) 
 		 *  示例值：14.17.22.32 
 		 * </pre>
 		 */

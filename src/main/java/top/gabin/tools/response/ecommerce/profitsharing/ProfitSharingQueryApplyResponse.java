@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <pre>
- * 发起分账请求后，可调用此接口查询分账结果 ;发起分账完结请求后，可调用此接口查询分账完结的结果
+ * 发起分账请求后，可调用此接口查询分账结果 ;发起分账完结请求后，可调用此接口查询分账完结的结果
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_2.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEM_ERROR	系统错误	系统异常，请使用相同参数稍后重新调用

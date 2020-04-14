@@ -91,7 +91,7 @@ public class RefundQueryResultResponse {
 	 *  BALANCE：退回到余额
 	 *  OTHER_BALANCE：原账户异常退到其他余额账户
 	 *  OTHER_BANKCARD：原银行卡异常退到其他银行卡 
-	 *  示例值： ORIGINAL 
+	 *  示例值： ORIGINAL 
 	 * </pre>
 	 */
 	@JsonProperty(value = "channel")
@@ -109,7 +109,7 @@ public class RefundQueryResultResponse {
 	 *  退回支付用户零钱：支付用户零钱
 	 *  退还商户：商户基本账户、商户结算银行账户
 	 *  退回支付用户零钱通：支付用户零钱通 
-	 *  示例值： 招商银行信用卡0403 
+	 *  示例值： 招商银行信用卡0403 
 	 * </pre>
 	 */
 	@JsonProperty(value = "user_received_account")
@@ -123,7 +123,7 @@ public class RefundQueryResultResponse {
 	 * 类型：string(64)
 	 * 描述：
 	 *  退款成功时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日13点29分35秒。
-	 *  示例值： 2018-06-08T10:34:56+08:00 
+	 *  示例值： 2018-06-08T10:34:56+08:00 
 	 * </pre>
 	 */
 	@JsonProperty(value = "success_time")
@@ -326,7 +326,7 @@ public class RefundQueryResultResponse {
 		 * 类型：string(18)
 		 * 描述：
 		 *  符合ISO 4217标准的三位字母代码，目前只支持人民币：CNY 。
-		 *  示例值： CNY 
+		 *  示例值： CNY 
 		 * </pre>
 		 */
 		@JsonProperty(value = "currency")
