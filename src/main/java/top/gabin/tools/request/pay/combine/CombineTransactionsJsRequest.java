@@ -142,14 +142,15 @@ public class CombineTransactionsJsRequest {
 	 * 字段名：指定支付方式
 	 * 变量名：limit_pay
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：array
 	 * 描述：
 	 *  指定支付方式 
-	 * 示例值：no_debit 
+	 *  特殊规则：长度最大限制32个字节 
+	 *  示例值：no_credit 
 	 * </pre>
 	 */
 	@JsonProperty(value = "limit_pay")
-	private String limitPay;
+	private List<String> limitPay;
 
 	public String getCombineAppid() {
 		return this.combineAppid;
@@ -223,11 +224,11 @@ public class CombineTransactionsJsRequest {
 		this.notifyUrl = notifyUrl;
 	}
 
-	public String getLimitPay() {
+	public List<String> getLimitPay() {
 		return this.limitPay;
 	}
 
-	public void setLimitPay(String limitPay) {
+	public void setLimitPay(List<String> limitPay) {
 		this.limitPay = limitPay;
 	}
 
@@ -346,6 +347,7 @@ public class CombineTransactionsJsRequest {
 		 * 类型：string(32)
 		 * 描述：
 		 *  二级商户商户号，由微信支付生成并下发。 
+		 *  注意：仅适用于电商平台 服务商
 		 *  示例值：1900000109 
 		 * </pre>
 		 */

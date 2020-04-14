@@ -119,6 +119,7 @@ public class CombineTransactionsCloseRequest {
 		 * 类型：string(32)
 		 * 描述：
 		 *  二级商户商户号，由微信支付生成并下发。 
+		 *  注意：仅适用于电商平台 服务商
 		 *  示例值：1900000109 
 		 * </pre>
 		 */

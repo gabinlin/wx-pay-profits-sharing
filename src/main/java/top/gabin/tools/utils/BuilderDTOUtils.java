@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class BuilderDTOUtils {
     public static class DTO {
+        private boolean isObject;
         private String name;
         private String field;
         private String type;
@@ -20,12 +21,29 @@ public class BuilderDTOUtils {
         private String desc;
         private List<DTO> childList = new ArrayList<>();
 
+        public DTO(boolean isObject, String name, String field, String type, String required, String desc) {
+            this.isObject = isObject;
+            this.name = name;
+            this.field = field;
+            this.type = type;
+            this.required = required;
+            this.desc = desc;
+        }
+
         public DTO(String name, String field, String type, String required, String desc) {
             this.name = name;
             this.field = field;
             this.type = type;
             this.required = required;
             this.desc = desc;
+        }
+
+        public boolean isObject() {
+            return isObject;
+        }
+
+        public void setObject(boolean object) {
+            isObject = object;
         }
 
         public String getName() {
@@ -265,7 +283,7 @@ public class BuilderDTOUtils {
             Elements descElement = tds.eq(4);
             String html = descElement.html();
             descElement.html(html.replaceAll("<br>", "@换行@"));
-            DTO dto = new DTO(getText(tds, 0), getText(tds, 1), getText(tds, 2), getText(tds, 3), getText(tds, 4));
+            DTO dto = new DTO(tr.hasClass("object"), getText(tds, 0), getText(tds, 1), getText(tds, 2), getText(tds, 3), getText(tds, 4));
             List<DTO> childList = getChildDtos(tr);
             dto.getChildList().addAll(childList);
             return dto;
@@ -292,7 +310,7 @@ public class BuilderDTOUtils {
             Elements objDescElement = objectTds.eq(4);
             String objHtml = objDescElement.html();
             objDescElement.html(objHtml.replaceAll("<br>", "@换行@"));
-            DTO dto = new DTO(getText(objectTds, 0), getText(objectTds, 1), getText(objectTds, 2), getText(objectTds, 3), get2Text(objectTds, 4));
+            DTO dto = new DTO(tr.hasClass("object"), getText(objectTds, 0), getText(objectTds, 1), getText(objectTds, 2), getText(objectTds, 3), get2Text(objectTds, 4));
             if (dto.getField().isEmpty()) {
                 return null;
             }
@@ -309,7 +327,7 @@ public class BuilderDTOUtils {
             case "object":
                 return getTopUppercaseField(dto.getField());
             case "array":
-                return String.format("List<%s>", getTopUppercaseField(dto.getField()));
+                return String.format("List<%s>", dto.isObject ? getTopUppercaseField(dto.getField()): "String");
             default:
                 return "String";
         }
