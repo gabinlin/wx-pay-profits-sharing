@@ -1,6 +1,7 @@
 package top.gabin.tools;
 
 import top.gabin.tools.constant.AccountType;
+import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
@@ -15,6 +16,7 @@ import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
+import top.gabin.tools.response.ecommerce.applyments.*;
 import top.gabin.tools.response.ecommerce.fund.WithdrawForPlatformResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawForSubMchResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForPlatformResponse;
@@ -32,6 +34,145 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ProfitsSharingService {
+
+    /**
+     * <pre>
+     * 二级商户进件API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_1.shtml
+     * 电商平台，可使用该接口，帮助其二级商户进件成为微信支付商户。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/applyments/
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ApplymentsResponse> applyments(ApplymentsRequest request);
+
+    /**
+     * <pre>
+     * 查询申请状态API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_2.shtml
+     *
+     * 电商平台通过查询申请状态API查询二级商户入驻申请结果。
+     *
+     * 注意：
+     * ● 查询申请状态API可按以下两种不同方式查询：
+     *     1、通过申请单ID查询申请状态；
+     *     2、通过业务申编号查询申请状态
+     * ● 两种不同查询方式返回结果相同
+     *
+     * 1、通过申请单ID查询申请状态
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/applyments/{applyment_id}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest request);
+
+    /**
+     * <pre>
+     * 查询申请状态API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_2.shtml
+     *
+     * 电商平台通过查询申请状态API查询二级商户入驻申请结果。
+     *
+     * 注意：
+     * ● 查询申请状态API可按以下两种不同方式查询：
+     *     1、通过申请单ID查询申请状态；
+     *     2、通过业务申编号查询申请状态
+     * ● 两种不同查询方式返回结果相同
+     *
+     * 2、通过业务申请编号查询申请状态
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/applyments/out-request-no/{out_request_no}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest1 request);
+
+    /**
+     * <pre>
+     * 下载平台证书API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_3.shtml
+     * 由于证书有效期限制和交易安全的原因，微信支付会不定期的更换平台证书。微信支付提供了一系列接口，帮助商户后台系统实现平滑的证书更换。
+     *
+     * 更换指引：
+     * ● 建议开发者使用中控服务器（即统一管理和分发，注意证书的保密和安全性）统一下载和管理微信支付平台证书。其他业务逻辑服务器通过该中控服务器进行报文的验签和解密。
+     * ● 在微信支付更换平台证书之前，待更换的证书会提前24小时加入商户的平台证书列表。中控服务器需要定时查询商户的平台证书列表，并及时下载新的平台证书。
+     * ● 在微信支付更换平台证书期间，商户收到的应答请求和回调通知中会同时存在不同的证书序列号，商户要能正确处理这种情况。
+     * ● 获取平台证书的接口频率限制规则: 单个商户号 1000次/s (查单接口为600次/s)。
+     *
+     * 最佳实践：
+     * 在中控服务器上调用；
+     * 定时调用，间隔应小于12小时；
+     * 与本地证书序列表对比，如果发现有新增证书序列号，则需要新换的证书。老证书会在1天内失效，应及时清理；
+     * 获取到证书后，分发到各业务接口服务器。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/certificates
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @return .
+     */
+    Optional<ApplymentsDownCertificatesResponse> downloadCertificates();
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_4.shtml
+     * 修改结算帐号API
+     * 普通服务商（支付机构、银行不可用），可使用本接口修改其进件、已签约的特约商户-结算账户信息。
+     *
+     * 注意：
+     * • 本接口无需传银行开户名称参数。
+     * 若账户类型为“经营者个人银行卡”，则系统自动拉取特约商户的经营者姓名为开户名称。
+     * 若账户类型为“对公银行账户”，则系统自动拉取特约商户的公司名称为开户名称。
+     * 接口说明
+     * 适用对象：普通服务商
+     * 请求URL：https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/{sub_mchid}/modify-settlement
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ApplymentsModifySettlementResponse> modifySettlement(ApplymentsModifySettlementRequest request);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_5.shtml
+     * 查询结算账户API
+     * 最新更新时间：2019.09.09 版本说明
+     *
+     * 普通服务商（支付机构、银行不可用），可使用本接口查询其进件、已签约的特约商户-结算账户信息（敏感信息掩码）。 该接口可用于核实是否成功修改结算账户信息、及查询系统汇款验证结果。
+     *
+     * 接口说明
+     * 适用对象：普通服务商
+     * 请求URL：https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/{sub_mchid}/settlement
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ApplymentsSettlementDetailResponse> querySettlement(ApplymentsSettlementDetailRequest request);
 
     /**
      * <pre>

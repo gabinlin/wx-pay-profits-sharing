@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
+import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
@@ -20,6 +21,7 @@ import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
+import top.gabin.tools.response.ecommerce.applyments.*;
 import top.gabin.tools.response.ecommerce.fund.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
@@ -42,7 +44,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
@@ -64,6 +65,42 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private String getPublicKey() {
         return config.getPublicKey();
+    }
+
+    @Override
+    public Optional<ApplymentsResponse> applyments(ApplymentsRequest request) {
+        return post(ApplymentsResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/applyments");
+    }
+
+    @Override
+    public Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest request) {
+        return get(ApplymentsDetailResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/%s",
+                request.getApplymentId()));
+    }
+
+    @Override
+    public Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest1 request) {
+        return get(ApplymentsDetailResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/out-request-no/%s",
+                request.getOutRequestNo()));
+    }
+
+    @Override
+    public Optional<ApplymentsDownCertificatesResponse> downloadCertificates() {
+        return get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
+    }
+
+    @Override
+    public Optional<ApplymentsModifySettlementResponse> modifySettlement(ApplymentsModifySettlementRequest request) {
+        return post(ApplymentsModifySettlementResponse.class, request,
+                String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/modify-settlement",
+                        request.getSubMchid()));
+    }
+
+    @Override
+    public Optional<ApplymentsSettlementDetailResponse> querySettlement(ApplymentsSettlementDetailRequest request) {
+        return get(ApplymentsSettlementDetailResponse.class,
+                String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/settlement",
+                        request.getSubMchid()));
     }
 
     @Override
