@@ -583,7 +583,7 @@ public interface ProfitsSharingService {
      * 支付结果通知是以POST 方法访问商户设置的通知url，通知的数据以JSON 格式通过请求主体（BODY）传输。通知的数据包括了加密的支付结果详情。
      *
      * 下面详细描述对通知数据进行解密的流程：
-     * 1、用商户平台上设置的APIv3密钥【微信商户平台—>账户设置—>API安全—>设置APIv3密钥】，记为key。
+     * 1、用商户平台上设置的APIv3密钥【微信商户平台—&gt;账户设置—&gt;API安全—&gt;设置APIv3密钥】，记为key。
      * 2、针对resource.algorithm中描述的算法（目前为AEAD_AES_256_GCM），取得对应的参数nonce和associated_data。
      * 3、使用key、nonce和associated_data，对数据密文resource.ciphertext进行解密，得到JSON形式的资源对象。
      *
