@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
+import top.gabin.tools.request.ecommerce.fund.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
@@ -17,6 +18,7 @@ import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
+import top.gabin.tools.response.ecommerce.fund.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
@@ -261,6 +263,50 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         String url = String.format("https://api.mch.weixin.qq.com/v3/merchant/fund/dayendbalance/%s?date=%s",
                 accountType, getFormatDate(date));
         return get(AmountDayEndOfPlatformResponse.class, url);
+    }
+
+    @Override
+    public Optional<WithdrawForSubMchResponse> withdraw(WithdrawForSubMchRequest request) {
+        return post(WithdrawForSubMchResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw");
+    }
+
+    @Override
+    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest request) {
+        return get(WithdrawStatusForSubMchResponse.class,
+                String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/%s?sub_mchid=%s",
+                        request.getWithdrawId(),
+                        request.getSubMchid()));
+    }
+
+    @Override
+    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest1 request) {
+        return get(WithdrawStatusForSubMchResponse.class,
+                String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/out-request-no/%s?sub_mchid=%s",
+                        request.getOutRequestNo(),
+                        request.getSubMchid()));
+    }
+
+    @Override
+    public Optional<WithdrawForPlatformResponse> withdraw(WithdrawForPlatformRequest request) {
+        return post(WithdrawForPlatformResponse.class, request, "https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw");
+    }
+
+    @Override
+    public Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(WithdrawStatusForPlatformRequest request) {
+        return get(WithdrawStatusForPlatformResponse.class,
+                String.format("https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw/out-request-no/%s",
+                        request.getOutRequestNo()));
+    }
+
+    @Override
+    public Optional<String> downloadWithdrawExceptionFile(WithdrawExceptionLogRequest request) {
+        Optional<WithdrawExceptionLogResponse> responseOptional = get(WithdrawExceptionLogResponse.class,
+                String.format("https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw/bill-type/%s?bill_date=%s&tar_type=%s",
+                        request.getBillType(),
+                        request.getBillDate(),
+                        request.getTarType())
+        );
+        return responseOptional.map(WithdrawExceptionLogResponse::getDownloadUrl);
     }
 
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {

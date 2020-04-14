@@ -1,6 +1,7 @@
 package top.gabin.tools;
 
 import top.gabin.tools.constant.AccountType;
+import top.gabin.tools.request.ecommerce.fund.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
@@ -12,6 +13,10 @@ import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
+import top.gabin.tools.response.ecommerce.fund.WithdrawForPlatformResponse;
+import top.gabin.tools.response.ecommerce.fund.WithdrawForSubMchResponse;
+import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForPlatformResponse;
+import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForSubMchResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
@@ -24,8 +29,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ProfitsSharingService {
-
-    // ##################  合单接口
 
     /**
      * <pre>
@@ -166,8 +169,6 @@ public interface ProfitsSharingService {
     Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request);
 
 
-    // ##################  补差接口
-
     /**
      * <pre>
      * 请求补差API
@@ -233,8 +234,6 @@ public interface ProfitsSharingService {
      */
     Optional<SubsidiesCancelResponse> subsidiesCancel(SubsidiesCancelRequest request);
 
-
-    // ##################  退款接口
 
     /**
      * <pre>
@@ -314,8 +313,6 @@ public interface ProfitsSharingService {
      * @return 退款信息
      */
     Optional<RefundNotifyRequest1> parseRefundNotify(RefundNotifyRequest request);
-
-    // ##########   余额查询
 
     /**
      * <pre>
@@ -403,4 +400,153 @@ public interface ProfitsSharingService {
      * @return .
      */
     Optional<AmountDayEndOfPlatformResponse> queryDayEndAmount(AccountType accountType, Date date);
+
+    /**
+     * <pre>
+     * 账户余额提现API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_2.shtml
+     *
+     * 电商平台通过余额提现API帮助二级商户发起账户余额提现申请，完成账户余额提现。
+     *
+     * 注意：
+     * • 相同的“商户提现单号”+“二级商户商户号”可以提供20天内防重。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<WithdrawForSubMchResponse> withdraw(WithdrawForSubMchRequest request);
+
+    /**
+     * <pre>
+     * 二级商户查询提现状态API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_3.shtml
+     *
+     * 电商平台通过查询提现状态API查询二级商户提现单的提现结果。
+     *
+     * 注意：
+     * • 支持查询一年内提现结果。
+     *
+     * 两种查询方式返回结果相同。
+     *
+     * 1、微信支付提现单号查询
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/{withdraw_id}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest request);
+
+    /**
+     * <pre>
+     * 二级商户查询提现状态API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_3.shtml
+     *
+     * 电商平台通过查询提现状态API查询二级商户提现单的提现结果。
+     *
+     * 注意：
+     * • 支持查询一年内提现结果。
+     *
+     * 两种查询方式返回结果相同。
+     *
+     * 2、商户提现单号查询
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/out-request-no/{out_request_no}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest1 request);
+
+    /**
+     * <pre>
+     * 电商平台提现API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_5.shtml
+     *
+     * 电商平台通过该接口可将其平台的收入进行提现
+     *
+     * 注意：
+     * • 只能在电商平台指定账户的可用余额中进行提现。
+     * • 发起提现后如果微信支付正确返回了微信支付提现单号，查询状态需要隔日早上8点后进行。
+     * • 查询结果可能存在延迟，提现发起后查询无单据并不代表没有发起提现，应以隔日查询结果为准判断单据是否存在。
+     * • 查询结果中状态为INIT时并不代表一定未受理成功，需要等待7日后确定单据最终状态或者原单（所有请求参数保持不变）重入请求。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<WithdrawForPlatformResponse> withdraw(WithdrawForPlatformRequest request);
+
+    /**
+     * <pre>
+     * 电商平台查询提现状态API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_6.shtml
+     *
+     * 电商平台通过该接口查询其提现结果
+     *
+     * 注意：
+     * • 发起提现后如果微信支付正确返回了微信支付提现单号，查询状态需要隔日早上8点后进行。
+     * • 查询结果可能存在延迟，提现发起后查询无单据并不代表没有发起提现，应以隔日查询结果为准判断单据是否存在。
+     * • 查询结果中状态为INIT时并不代表一定未受理成功，需要等待7日后确定单据最终状态或者原单（所有请求参数保持不变）重入请求。
+     * • 可查询90天内的提现数据，时间以微信支付提现单创建时间为准。
+     *
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw/out-request-no/{out_request_no}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(WithdrawStatusForPlatformRequest request);
+
+    /**
+     * <pre>
+     * 按日下载提现异常文件API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_4.shtml
+     *
+     * 电商服务商按日查询并下载提现状态为异常的提现单，提现异常包括提现失败和银行退票。
+     *
+     * 注意：
+     * • 每日09:00开始可以下载前一日的提现异常文件，支持下载90天内提现状态变为提现异常的提现单文件。
+     * • 日期（date）字段为提现状态变为提现异常的日期。建议输入日期为昨日，每天定时（早上9点后）查询昨日是否有状态为异常的提现单。
+     * • 电商服务商查询的结果包括电商服务商发起的提现和给电商二级商户发起的提现。
+     *
+     * • 同一笔提现的相同数据可能出现在不同日期。即提现单A的失败数据，可能同时出现在1日和3日。
+     * • 历史数据如果有某一日遗漏，则系统会补入当天的账单中。例如：今日为2019-11-15日，发现2019-11-12日某数据遗漏，则该数据会补入2019-11-15日。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw/bill-type/{bill_type}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<String> downloadWithdrawExceptionFile(WithdrawExceptionLogRequest request);
 }
