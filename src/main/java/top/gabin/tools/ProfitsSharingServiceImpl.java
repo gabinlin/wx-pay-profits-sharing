@@ -54,11 +54,13 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private ProfitsSharingConfig config;
     private HttpUtils httpUtils;
+    private AesUtil aesUtil;
 
 
     public ProfitsSharingServiceImpl(ProfitsSharingConfig config) {
         this.config = config;
         httpUtils = new HttpUtils(config.getMchId(), config.getMchSerialNo(), config.getPrivateKey(), config.getCertificate());
+        aesUtil = new AesUtil(config.getApiKey().getBytes());
     }
 
     private String getPrivateKey() {
@@ -67,6 +69,10 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private String getPublicKey() {
         return config.getPublicKey();
+    }
+
+    private AesUtil getAesUtil() {
+        return aesUtil;
     }
 
     @Override
@@ -223,11 +229,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             }
         }
         return Optional.empty();
-    }
-
-    // TODO 待优化
-    private AesUtil getAesUtil() {
-        return new AesUtil(config.getApiKey().getBytes());
     }
 
     @Override
