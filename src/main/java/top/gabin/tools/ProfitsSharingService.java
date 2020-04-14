@@ -1,5 +1,6 @@
 package top.gabin.tools;
 
+import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
@@ -7,6 +8,10 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.*;
+import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
+import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
+import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
+import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
@@ -14,6 +19,7 @@ import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -308,4 +314,93 @@ public interface ProfitsSharingService {
      * @return 退款信息
      */
     Optional<RefundNotifyRequest1> parseRefundNotify(RefundNotifyRequest request);
+
+    // ##########   余额查询
+
+    /**
+     * <pre>
+     * 查询二级商户账户实时余额API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_1.shtml
+     *
+     * 电商服务商通过此接口可以查询二级商户账户余额信息。
+     *
+     * 注意：
+     * • 电商平台可利用分账实现对二级商户的账期，不建议电商平台利用限制二级商户提现进行账期控制，特殊情况下商户可直接到微信支付进行提现，造成账期控制无效。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/fund/balance/{sub_mchid}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param subMchid 电商平台二级商户号，由微信支付生成并下发。
+     * @return .
+     */
+    Optional<AmountOnlineOfSubMchResponse> queryOnlineAmount(String subMchid);
+
+    /**
+     * <pre>
+     * 查询二级商户账户日终余额API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_2.shtml
+     *
+     * 电商服务商通过该接口可以查询二级商户指定日期当天24点的账户余额。
+     *
+     * 注意：
+     * • 可查询90天内的日终余额。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/ecommerce/fund/enddaybalance/{sub_mchid}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param subMchid 电商平台二级商户号，由微信支付生成并下发。
+     * @param date     指定查询商户日终余额的日期 示例值：2019-08-17
+     * @return .
+     */
+    Optional<AmountDayEndOfSubMchResponse> queryDayEndAmount(String subMchid, Date date);
+
+    /**
+     * <pre>
+     * 查询电商平台账户实时余额API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_3.shtml
+     *
+     * 电商平台可通过此接口可以查询本商户号的账号余额情况。
+     *
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/merchant/fund/balance/{account_type}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param accountType 账户类型
+     * @return .
+     */
+    Optional<AmountOnlineOfPlatformResponse> queryOnlineAmount(AccountType accountType);
+
+    /**
+     * <pre>
+     * 查询电商平台账户日终余额API
+     * 通过此接口可以查询本商户号指定日期当天24点的账户余额。。
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_4.shtml
+     *
+     * 注意：
+     * • 可查询90天内的日终余额。
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/merchant/fund/dayendbalance/{account_type}
+     * 请求方式：GET
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * </pre>
+     *
+     * @param accountType 账户类型
+     * @param date        指定查询商户日终余额的日期 示例值：2019-08-17
+     * @return .
+     */
+    Optional<AmountDayEndOfPlatformResponse> queryDayEndAmount(AccountType accountType, Date date);
 }

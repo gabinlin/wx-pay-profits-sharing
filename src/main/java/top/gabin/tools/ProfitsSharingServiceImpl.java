@@ -1,9 +1,11 @@
 package top.gabin.tools;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
+import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest1;
@@ -11,6 +13,10 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.*;
+import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
+import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
+import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
+import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
@@ -25,6 +31,7 @@ import top.gabin.tools.utils.RSASignUtil;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -229,6 +236,32 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<AmountOnlineOfSubMchResponse> queryOnlineAmount(String subMchid) {
+        return get(AmountOnlineOfSubMchResponse.class,
+                String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/balance/%s", subMchid));
+    }
+
+    @Override
+    public Optional<AmountDayEndOfSubMchResponse> queryDayEndAmount(String subMchid, Date date) {
+        // 这边文档写的是在body json数据体中，可是。。。按照标准，应该get请求直接包含在query参数中。。
+        String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/enddaybalance/{sub_mchid}?date=%s",
+                subMchid, getFormatDate(date));
+        return get(AmountDayEndOfSubMchResponse.class, url);
+    }
+
+    @Override
+    public Optional<AmountOnlineOfPlatformResponse> queryOnlineAmount(AccountType accountType) {
+        String url = String.format("https://api.mch.weixin.qq.com/v3/merchant/fund/balance/%s", accountType);
+        return get(AmountOnlineOfPlatformResponse.class, url);
+    }
+
+    @Override
+    public Optional<AmountDayEndOfPlatformResponse> queryDayEndAmount(AccountType accountType, Date date) {
+        String url = String.format("https://api.mch.weixin.qq.com/v3/merchant/fund/dayendbalance/%s?date=%s",
+                accountType, getFormatDate(date));
+        return get(AmountDayEndOfPlatformResponse.class, url);
+    }
 
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
         return Optional.ofNullable(httpUtils.post(classZ, request, url));
@@ -237,4 +270,10 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     private <T> Optional<T> get(Class<T> classZ, String url) {
         return Optional.ofNullable(httpUtils.get(classZ, url));
     }
+
+    private String getFormatDate(Date date) {
+        return DateFormatUtils.format(date, "yyyy-MM-dd");
+    }
+
+
 }
