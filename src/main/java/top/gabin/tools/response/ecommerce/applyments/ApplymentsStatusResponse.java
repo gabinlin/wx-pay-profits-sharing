@@ -20,7 +20,7 @@ import java.util.List;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplymentsDetailResponse {
+public class ApplymentsStatusResponse {
 	/**
 	 * <pre>
 	 * 字段名：申请状态

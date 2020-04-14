@@ -26,15 +26,15 @@ import top.gabin.tools.response.ecommerce.applyments.*;
 import top.gabin.tools.response.ecommerce.fund.*;
 import top.gabin.tools.response.ecommerce.profitsharing.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
-import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
+import top.gabin.tools.response.ecommerce.refunds.RefundQueryStatusResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.bill.BillOfFundFlowResponse;
 import top.gabin.tools.response.pay.bill.BillOfTradeResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsAppResponse;
-import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
@@ -75,14 +75,14 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest request) {
-        return get(ApplymentsDetailResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/%s",
+    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest request) {
+        return get(ApplymentsStatusResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/%s",
                 request.getApplymentId()));
     }
 
     @Override
-    public Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest1 request) {
-        return get(ApplymentsDetailResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/out-request-no/%s",
+    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest1 request) {
+        return get(ApplymentsStatusResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/out-request-no/%s",
                 request.getOutRequestNo()));
     }
 
@@ -99,8 +99,8 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsSettlementDetailResponse> querySettlement(ApplymentsSettlementDetailRequest request) {
-        return get(ApplymentsSettlementDetailResponse.class,
+    public Optional<ApplymentsSettlementStatusResponse> querySettlement(ApplymentsSettlementStatusRequest request) {
+        return get(ApplymentsSettlementStatusResponse.class,
                 String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/settlement",
                         request.getSubMchid()));
     }
@@ -120,9 +120,9 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<CombineTransactionsDetailResponse> combineTransactionsDetail(String combineOutTradeNo) {
+    public Optional<CombineTransactionsStatusResponse> combineTransactionsStatus(String combineOutTradeNo) {
         String url = String.format("https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/%s", combineOutTradeNo);
-        return get(CombineTransactionsDetailResponse.class, url);
+        return get(CombineTransactionsStatusResponse.class, url);
     }
 
     @Override
@@ -317,15 +317,15 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<RefundQueryResultResponse> refundQueryById(String subMchid, String refundId) {
+    public Optional<RefundQueryStatusResponse> refundQueryById(String subMchid, String refundId) {
         String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/refunds/%s/%s", subMchid, refundId);
-        return post(RefundQueryResultResponse.class, new Object(), url);
+        return post(RefundQueryStatusResponse.class, new Object(), url);
     }
 
     @Override
-    public Optional<RefundQueryResultResponse> refundQueryByNumber(String subMchid, String outRefundNo) {
+    public Optional<RefundQueryStatusResponse> refundQueryByNumber(String subMchid, String outRefundNo) {
         String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/refunds/%s/%s", subMchid, outRefundNo);
-        return post(RefundQueryResultResponse.class, new Object(), url);
+        return post(RefundQueryStatusResponse.class, new Object(), url);
     }
 
     @Override

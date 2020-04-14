@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplymentsDetailRequest1 {
+public class ApplymentsStatusRequest1 {
 	/**
 	 * <pre>
 	 * 字段名：业务申请编号

@@ -23,7 +23,7 @@ import java.util.List;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefundQueryResultResponse {
+public class RefundQueryStatusResponse {
 	/**
 	 * <pre>
 	 * 字段名：微信退款单号

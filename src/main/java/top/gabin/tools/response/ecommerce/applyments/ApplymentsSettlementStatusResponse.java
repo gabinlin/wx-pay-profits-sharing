@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplymentsSettlementDetailResponse {
+public class ApplymentsSettlementStatusResponse {
 	/**
 	 * <pre>
 	 * 字段名：账户类型

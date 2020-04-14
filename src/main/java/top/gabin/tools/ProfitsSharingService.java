@@ -24,11 +24,11 @@ import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForPlatformResponse
 import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForSubMchResponse;
 import top.gabin.tools.response.ecommerce.profitsharing.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
-import top.gabin.tools.response.ecommerce.refunds.RefundQueryResultResponse;
+import top.gabin.tools.response.ecommerce.refunds.RefundQueryStatusResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
-import top.gabin.tools.response.pay.combine.CombineTransactionsDetailResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 
 import java.io.File;
 import java.util.Date;
@@ -78,7 +78,7 @@ public interface ProfitsSharingService {
      * @param request 请求对象
      * @return .
      */
-    Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest request);
+    Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest request);
 
     /**
      * <pre>
@@ -104,7 +104,7 @@ public interface ProfitsSharingService {
      * @param request 请求对象
      * @return .
      */
-    Optional<ApplymentsDetailResponse> queryApplymentsStatus(ApplymentsDetailRequest1 request);
+    Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest1 request);
 
     /**
      * <pre>
@@ -174,7 +174,7 @@ public interface ProfitsSharingService {
      * @param request 请求对象
      * @return .
      */
-    Optional<ApplymentsSettlementDetailResponse> querySettlement(ApplymentsSettlementDetailRequest request);
+    Optional<ApplymentsSettlementStatusResponse> querySettlement(ApplymentsSettlementStatusRequest request);
 
     /**
      * <pre>
@@ -235,7 +235,7 @@ public interface ProfitsSharingService {
      * @param combineOutTradeNo 合单支付总订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一 。
      * @return 订单详情
      */
-    Optional<CombineTransactionsDetailResponse> combineTransactionsDetail(String combineOutTradeNo);
+    Optional<CombineTransactionsStatusResponse> combineTransactionsStatus(String combineOutTradeNo);
 
     /**
      * <pre>
@@ -640,7 +640,7 @@ public interface ProfitsSharingService {
      * @param refundId 退款记录ID
      * @return .
      */
-    Optional<RefundQueryResultResponse> refundQueryById(String subMchid, String refundId);
+    Optional<RefundQueryStatusResponse> refundQueryById(String subMchid, String refundId);
 
     /**
      * <pre>
@@ -664,7 +664,7 @@ public interface ProfitsSharingService {
      * @param outRefundNo 退款记录单号
      * @return .
      */
-    Optional<RefundQueryResultResponse> refundQueryByNumber(String subMchid, String outRefundNo);
+    Optional<RefundQueryStatusResponse> refundQueryByNumber(String subMchid, String outRefundNo);
 
     /**
      * 对通知的数据体进行解析

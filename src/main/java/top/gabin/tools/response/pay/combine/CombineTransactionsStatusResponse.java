@@ -34,7 +34,7 @@ import java.util.List;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CombineTransactionsDetailResponse {
+public class CombineTransactionsStatusResponse {
 	/**
 	 * <pre>
 	 * 字段名：合单商户appid

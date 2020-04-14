@@ -51,16 +51,16 @@ public class BuildDTOUtilsTest {
         List<Params> params = new ArrayList<>();
         // 进件-二级分销商
         params.add(new Params("ecommerce/applyments/chapter3_1.shtml", "Applyments"));
-        params.add(new Params("ecommerce/applyments/chapter3_2.shtml", "ApplymentsDetail"));
+        params.add(new Params("ecommerce/applyments/chapter3_2.shtml", "ApplymentsStatus"));
         params.add(new Params("ecommerce/applyments/chapter3_3.shtml", "ApplymentsDownCertificates"));
         params.add(new Params("ecommerce/applyments/chapter3_4.shtml", "ApplymentsModifySettlement"));
-        params.add(new Params("ecommerce/applyments/chapter3_5.shtml", "ApplymentsSettlementDetail"));
+        params.add(new Params("ecommerce/applyments/chapter3_5.shtml", "ApplymentsSettlementStatus"));
 
 
         // 合单
         params.add(new Params("pay/combine/chapter3_1.shtml", "CombineTransactionsApp"));
         params.add(new Params("pay/combine/chapter3_2.shtml", "CombineTransactionsJs"));
-        params.add(new Params("pay/combine/chapter3_3.shtml", "CombineTransactionsDetail"));
+        params.add(new Params("pay/combine/chapter3_3.shtml", "CombineTransactionsStatus"));
         params.add(new Params("pay/combine/chapter3_4.shtml", "CombineTransactionsClose"));
         params.add(new Params("pay/combine/chapter3_5.shtml", "CombineTransactionsPayForApp"));
         params.add(new Params("pay/combine/chapter3_6.shtml", "CombineTransactionsPayForJs"));
@@ -84,7 +84,7 @@ public class BuildDTOUtilsTest {
 
         // 退款
         params.add(new Params("ecommerce/refunds/chapter3_1.shtml", "RefundApply"));
-        params.add(new Params("ecommerce/refunds/chapter3_2.shtml", "RefundQueryResult"));
+        params.add(new Params("ecommerce/refunds/chapter3_2.shtml", "RefundQueryStatus"));
         params.add(new Params("ecommerce/refunds/chapter3_3.shtml", "RefundNotify"));
 
         // 余额查询

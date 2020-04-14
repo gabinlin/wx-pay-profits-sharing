@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplymentsDetailRequest {
+public class ApplymentsStatusRequest {
 	/**
 	 * <pre>
 	 * 字段名：微信支付申请单号

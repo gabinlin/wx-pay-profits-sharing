@@ -11,20 +11,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefundQueryResultRequest1 {
+public class RefundQueryStatusRequest {
 	/**
 	 * <pre>
-	 * 字段名：商户退款单号
-	 * 变量名：out_refund_no
+	 * 字段名：微信退款单号
+	 * 变量名：refund_id
 	 * 是否必填：是
 	 * 类型：string(32)
 	 * 描述：
-	 *  path 商户系统内部的退款单号，商户系统内部唯一，同一退款单号多次请求只退一笔。 
-	 *  示例值： 1217752501201407033233368018 
+	 *  path 退款单的主键，唯一定义此资源的标识。 
+	 *  示例值： 50000000382019052709732678859 
 	 * </pre>
 	 */
-	@JsonProperty(value = "out_refund_no")
-	private String outRefundNo;
+	@JsonProperty(value = "refund_id")
+	private String refundId;
 
 	/**
 	 * <pre>
@@ -33,19 +33,19 @@ public class RefundQueryResultRequest1 {
 	 * 是否必填：是
 	 * 类型：string(32)
 	 * 描述：
-	 *  path微信支付分配给二级商户的商户号。 
+	 *  path 微信支付分配给二级商户的商户号。 
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
-	public String getOutRefundNo() {
-		return this.outRefundNo;
+	public String getRefundId() {
+		return this.refundId;
 	}
 
-	public void setOutRefundNo(String outRefundNo) {
-		this.outRefundNo = outRefundNo;
+	public void setRefundId(String refundId) {
+		this.refundId = refundId;
 	}
 
 	public String getSubMchid() {
