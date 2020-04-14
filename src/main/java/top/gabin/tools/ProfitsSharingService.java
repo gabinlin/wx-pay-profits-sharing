@@ -1,9 +1,11 @@
 package top.gabin.tools;
 
+import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
@@ -87,4 +89,23 @@ public interface ProfitsSharingService {
      * @return
      */
     Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request);
+
+    /**
+     * <pre>
+     * 退款API
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_1.shtml
+     * 当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，微信支付将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家帐号上。
+     * 注意：
+     *
+     * • 交易时间超过一年的订单无法提交退款。
+     * • 微信支付退款支持单笔交易分多次退款，多次退款需要提交原支付订单的商户订单号和设置不同的退款单号。申请退款总金额不能超过订单金额。 一笔退款失败后重新提交，请不要更换退款单号，请使用原商户退款单号。
+     * • 请求频率限制：150qps，即每秒钟正常的申请退款请求次数不超过150次，错误或无效请求频率限制：6qps，即每秒钟异常或错误的退款申请请求不超过6次。
+     * • 每个支付订单的部分退款次数不能超过50次。
+     * 接口地址 https://api.mch.weixin.qq.com/v3/ecommerce/refunds/apply
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return
+     */
+    Optional<RefundApplyResponse> refundApply(RefundApplyRequest request);
 }

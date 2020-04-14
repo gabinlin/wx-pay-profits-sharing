@@ -1,9 +1,11 @@
 package top.gabin.tools;
 
+import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
@@ -76,6 +78,12 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<SubsidiesCancelResponse> subsidiesRefund(SubsidiesCancelRequest request) {
         return getResponse(SubsidiesCancelResponse.class, request,
                 "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel");
+    }
+
+    @Override
+    public Optional<RefundApplyResponse> refundApply(RefundApplyRequest request) {
+        return getResponse(RefundApplyResponse.class, request,
+                "https://api.mch.weixin.qq.com/v3/ecommerce/refunds/apply");
     }
 
     @Override
