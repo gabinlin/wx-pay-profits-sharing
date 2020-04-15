@@ -18,6 +18,7 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
 import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.*;
+import top.gabin.tools.request.tool.ImageUploadRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
@@ -35,6 +36,7 @@ import top.gabin.tools.response.pay.bill.BillOfTradeResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsAppResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
+import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
@@ -444,8 +446,20 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return httpUtils.download(downloadUrl);
     }
 
+    @Override
+    public Optional<ImageUploadResponse> uploadImage(ImageUploadRequest request) {
+        // 需要将文件的二进制内容做sha256摘要处理
+        String sha256 = RSASignUtil.sign(getPrivateKey(), request.getFile());
+        request.getMeta().setSha256(sha256);
+        return formPost(ImageUploadResponse.class, request, "https://api.mch.weixin.qq.com/v3/merchant/media/upload");
+    }
+
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
         return Optional.ofNullable(httpUtils.post(classZ, request, url));
+    }
+
+    private <T> Optional<T> formPost(Class<T> classZ, Object request, String url) {
+        return Optional.ofNullable(httpUtils.formPost(classZ, request, url));
     }
 
     private <T> Optional<T> get(Class<T> classZ, String url) {

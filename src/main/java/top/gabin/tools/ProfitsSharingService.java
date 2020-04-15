@@ -13,6 +13,7 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
 import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.*;
+import top.gabin.tools.request.tool.ImageUploadRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
@@ -29,6 +30,7 @@ import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCancelResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesCreateResponse;
 import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
+import top.gabin.tools.response.tool.ImageUploadResponse;
 
 import java.io.InputStream;
 import java.util.Date;
@@ -975,4 +977,16 @@ public interface ProfitsSharingService {
      * @return .
      */
     InputStream downloadBillFile(String downloadUrl);
+
+    /**
+     * <pre>
+     * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/tool/chapter3_1.shtml
+     * 图片上传API
+     * 最新更新时间：2019.09.09 版本说明
+     * 部分微信支付业务指定商户需要使用图片上传 API来上报图片信息，从而获得必传参数的值：图片MediaID 。
+     * </pre>
+     * @param request 请求对象
+     * @return .
+     */
+    Optional<ImageUploadResponse> uploadImage(ImageUploadRequest request);
 }

@@ -105,6 +105,9 @@ public class BuildDTOUtilsTest {
         params.add(new Params("pay/bill/chapter3_2.shtml", "BillOfFundFlow"));
         params.add(new Params("pay/bill/chapter3_3.shtml", "BillDownload"));
 
+        // 其他接口
+        params.add(new Params("tool/chapter3_1.shtml", "ImageUpload"));
+
 
         for (Params param : params) {
             builderDTOUtils.builder("https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/" + param.getUrl(), path, param.getClassName());
