@@ -3,6 +3,8 @@ package top.gabin.tools.response.ecommerce.refunds;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import top.gabin.tools.response.AbstractResponse;
+
 import java.util.List;
 
 
@@ -23,7 +25,7 @@ import java.util.List;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RefundQueryStatusResponse {
+public class RefundQueryStatusResponse extends AbstractResponse {
 	/**
 	 * <pre>
 	 * 字段名：微信退款单号

@@ -3,6 +3,8 @@ package top.gabin.tools.response.pay.combine;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import top.gabin.tools.response.AbstractResponse;
+
 import java.util.List;
 
 
@@ -34,7 +36,7 @@ import java.util.List;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CombineTransactionsStatusResponse {
+public class CombineTransactionsStatusResponse extends AbstractResponse {
 	/**
 	 * <pre>
 	 * 字段名：合单商户appid

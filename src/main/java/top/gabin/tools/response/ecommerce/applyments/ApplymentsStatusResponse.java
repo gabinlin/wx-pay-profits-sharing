@@ -3,6 +3,8 @@ package top.gabin.tools.response.ecommerce.applyments;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import top.gabin.tools.response.AbstractResponse;
+
 import java.util.List;
 
 
@@ -20,7 +22,7 @@ import java.util.List;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApplymentsStatusResponse {
+public class ApplymentsStatusResponse extends AbstractResponse {
 	/**
 	 * <pre>
 	 * 字段名：申请状态

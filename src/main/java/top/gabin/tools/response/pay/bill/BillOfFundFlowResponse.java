@@ -3,6 +3,8 @@ package top.gabin.tools.response.pay.bill;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import top.gabin.tools.response.AbstractResponse;
+
 
 /**
  * <pre>
@@ -24,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BillOfFundFlowResponse {
+public class BillOfFundFlowResponse extends AbstractResponse {
 	/**
 	 * <pre>
 	 * 字段名：哈希类型

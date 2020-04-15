@@ -127,6 +127,10 @@ public class BuilderDTOUtils {
 
                 fileWriter.write("import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
                         "import com.fasterxml.jackson.annotation.JsonProperty;\n\n");
+
+                if (response) {
+                    fileWriter.write("import top.gabin.tools.response.AbstractResponse;\n\n");
+                }
                 List<DTO> tempList = list;
                 outer:
                 while (!tempList.isEmpty()) {
@@ -173,7 +177,7 @@ public class BuilderDTOUtils {
                     });
                 }
                 fileWriter.write(" * </pre>\n */\n");
-                fileWriter.write("@JsonIgnoreProperties(ignoreUnknown = true)\npublic class " + newFileName + " {");
+                fileWriter.write("@JsonIgnoreProperties(ignoreUnknown = true)\npublic class " + newFileName + (response ? " extends AbstractResponse" : "") + " {");
                 fileWriter.write("\n");
                 for (DTO dto : list) {
                     if (dto == null) {
