@@ -8,7 +8,9 @@ import top.gabin.tools.ProfitsSharingService;
 import top.gabin.tools.ProfitsSharingServiceImpl;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.response.tool.ImageUploadResponse;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,5 +37,13 @@ public class ProfitsSharingServiceTest {
         Map<String, String> stringStringMap = profitsSharingService.getJsPayParams("wx201410272009395522657a690389285100", "wx8888888888888888");
         logger.info(JsonUtils.bean2Json(stringStringMap));
     }
+
+    @Test
+    public void uploadImageTest() throws Exception {
+        Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/images/金毛1.jpeg"));
+        logger.info(JsonUtils.bean2Json(imageUploadResponse.orElse(null)));
+    }
+
+
 
 }

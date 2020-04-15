@@ -32,6 +32,9 @@ import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.response.tool.ImageUploadResponse;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
@@ -984,9 +987,19 @@ public interface ProfitsSharingService {
      * 图片上传API
      * 最新更新时间：2019.09.09 版本说明
      * 部分微信支付业务指定商户需要使用图片上传 API来上报图片信息，从而获得必传参数的值：图片MediaID 。
+     *
+     * 接口说明
+     * 适用对象：电商平台
+     * 请求URL：https://api.mch.weixin.qq.com/v3/merchant/media/upload
+     * 请求主体类型：multipart/form-data
+     * 请求方式：POST
+     * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
+     *
+     * path 指该参数需在请求URL传参
+     * query 指该参数需在请求JSON传参
      * </pre>
-     * @param request 请求对象
+     * @param file 文件
      * @return .
      */
-    Optional<ImageUploadResponse> uploadImage(ImageUploadRequest request);
+    Optional<ImageUploadResponse> uploadImage(File file) throws Exception;
 }

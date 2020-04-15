@@ -1,7 +1,19 @@
 package top.gabin.tools;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
@@ -18,7 +30,6 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
 import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.*;
-import top.gabin.tools.request.tool.ImageUploadRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
@@ -41,9 +52,12 @@ import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,11 +66,11 @@ import java.util.stream.Collectors;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private ProfitsSharingConfig config;
-    private HttpUtils httpUtils;
-    private AesUtil aesUtil;
+    private final ProfitsSharingConfig config;
+    private final HttpUtils httpUtils;
+    private final AesUtil aesUtil;
 
 
     public ProfitsSharingServiceImpl(ProfitsSharingConfig config) {
@@ -209,10 +223,8 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     @Override
     public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed) {
-        StringBuilder beforeSign = new StringBuilder(timeStamp + "\n");
-        beforeSign.append(nonce + "\n");
-        beforeSign.append(body);
-        return RSASignUtil.verifySign(getPublicKey(), beforeSign.toString(), signed);
+        String beforeSign = timeStamp + "\n" + nonce + "\n" + body;
+        return RSASignUtil.verifySign(getPublicKey(), beforeSign, signed);
     }
 
     @Override
@@ -224,9 +236,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
                 CombineTransactionsNotifyRequest1 request1 = JsonUtils.json2Bean(CombineTransactionsNotifyRequest1.class, json);
                 return Optional.ofNullable(request1);
-            } catch (GeneralSecurityException e) {
-                logger.error(e.getMessage(), e);
-            } catch (IOException e) {
+            } catch (GeneralSecurityException | IOException e) {
                 logger.error(e.getMessage(), e);
             }
         }
@@ -304,9 +314,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
                 ProfitSharingNotifyRequest1 request1 = JsonUtils.json2Bean(ProfitSharingNotifyRequest1.class, json);
                 return Optional.ofNullable(request1);
-            } catch (GeneralSecurityException e) {
-                logger.error(e.getMessage(), e);
-            } catch (IOException e) {
+            } catch (GeneralSecurityException | IOException e) {
                 logger.error(e.getMessage(), e);
             }
         }
@@ -340,9 +348,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
                 RefundNotifyRequest1 request1 = JsonUtils.json2Bean(RefundNotifyRequest1.class, json);
                 return Optional.ofNullable(request1);
-            } catch (GeneralSecurityException e) {
-                logger.error(e.getMessage(), e);
-            } catch (IOException e) {
+            } catch (GeneralSecurityException | IOException e) {
                 logger.error(e.getMessage(), e);
             }
         }
@@ -358,7 +364,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public Optional<AmountDayEndOfSubMchResponse> queryDayEndAmount(String subMchid, Date date) {
         // 这边文档写的是在body json数据体中，可是。。。按照标准，应该get请求直接包含在query参数中。。
-        String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/enddaybalance/{sub_mchid}?date=%s",
+        String url = String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/enddaybalance/%s?date=%s",
                 subMchid, getFormatDate(date));
         return get(AmountDayEndOfSubMchResponse.class, url);
     }
@@ -447,23 +453,171 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ImageUploadResponse> uploadImage(ImageUploadRequest request) {
-        // 需要将文件的二进制内容做sha256摘要处理
-        String sha256 = RSASignUtil.sign(getPrivateKey(), request.getFile());
-        request.getMeta().setSha256(sha256);
-        return formPost(ImageUploadResponse.class, request, "https://api.mch.weixin.qq.com/v3/merchant/media/upload");
+    public Optional<ImageUploadResponse> uploadImage(File file) throws Exception {
+        // 商户号
+        String mchid = config.getMchId();
+        // 证书序列号
+        String serial_no = config.getMchSerialNo();
+        // 时间戳
+        String timestamp = Long.toString(System.currentTimeMillis() / 1000);
+        // 随机数
+        String nonce_str = timestamp + "gabin";
+
+        //图片文件
+        String filename = file.getName();//文件名
+        String fileSha256 = DigestUtils.sha256Hex(new FileInputStream(file));//文件sha256
+
+        //拼签名串
+
+        //计算签名
+        String sb = "POST" + "\n" +
+                "/v3/merchant/media/upload" + "\n" +
+                timestamp + "\n" +
+                nonce_str + "\n" +
+                "{\"filename\":\"" + filename + "\",\"sha256\":\"" + fileSha256 + "\"}" + "\n";
+        String sign = new String(Base64.encodeBase64(signRSA(sb, getPrivateKey())));
+
+        //拼装http头的Authorization内容
+        String authorization = "WECHATPAY2-SHA256-RSA2048 mchid=\"" + mchid + "\",nonce_str=\"" + nonce_str + "\",signature=\"" + sign + "\",timestamp=\"" + timestamp + "\",serial_no=\"" + serial_no + "\"";
+
+        //接口URL
+        String url = "https://api.mch.weixin.qq.com/v3/merchant/media/upload";
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+
+        //设置头部
+        httpPost.addHeader("Accept", "application/json");
+        httpPost.addHeader("Content-Type", "multipart/form-data");
+        httpPost.addHeader("Authorization", authorization);
+
+        //创建MultipartEntityBuilder
+        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.RFC6532);
+        //设置boundary
+        multipartEntityBuilder.setBoundary("boundary");
+        multipartEntityBuilder.setCharset(StandardCharsets.UTF_8);
+        //设置meta内容
+        multipartEntityBuilder.addTextBody("meta", "{\"filename\":\"" + filename + "\",\"sha256\":\"" + fileSha256 + "\"}", ContentType.APPLICATION_JSON);
+        //设置图片内容
+        multipartEntityBuilder.addBinaryBody("file", file, ContentType.create("image/jpg"), filename);
+        //放入内容
+        httpPost.setEntity(multipartEntityBuilder.build());
+
+        //获取返回内容
+        CloseableHttpResponse response = httpclient.execute(httpPost);
+        HttpEntity httpEntity = response.getEntity();
+        String responseText = new String(InputStreamTOByte(httpEntity.getContent()));
+        //验证微信支付返回签名
+        Header timestampHeader = response.getFirstHeader("Wechatpay-Timestamp");
+        Header nonceHeader = response.getFirstHeader("Wechatpay-Nonce");
+        Header singedHear = response.getFirstHeader("Wechatpay-Signature");
+        if (timestampHeader != null && nonceHeader != null && singedHear != null) {
+            String timestampH = timestampHeader.getValue();
+            String nonceH = nonceHeader.getValue();
+            String signed = singedHear.getValue();
+            //拼装待签名串
+            StringBuilder ss = new StringBuilder();
+            ss.append(timestampH).append("\n");
+            ss.append(nonceH).append("\n");
+            ss.append(responseText).append("\n");
+            //验证签名
+            if (verifyRSA(ss.toString(), Base64.decodeBase64(signed.getBytes()), getPublicKey())) {
+                logger.info("签名验证成功");
+            } else {
+                logger.info("签名验证失败");
+            }
+        }
+        EntityUtils.consume(httpEntity);
+        response.close();
+        ImageUploadResponse imageUploadResponse = JsonUtils.json2Bean(ImageUploadResponse.class, responseText);
+        if (imageUploadResponse == null) {
+            return Optional.empty();
+        }
+        return Optional.of(imageUploadResponse);
+    }
+
+    public static byte[] InputStreamTOByte(InputStream in) throws IOException {
+
+        int BUFFER_SIZE = 4096;
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] data = new byte[BUFFER_SIZE];
+        int count;
+
+        while ((count = in.read(data, 0, BUFFER_SIZE)) != -1)
+            outStream.write(data, 0, count);
+
+        byte[] outByte = outStream.toByteArray();
+        outStream.close();
+
+        return outByte;
+    }
+
+
+    public static byte[] signRSA(String data, String priKey) throws Exception {
+        //签名的类型
+
+        Signature sign = Signature.getInstance("SHA256withRSA");
+
+        //读取商户私钥,该方法传入商户私钥证书的内容即可
+
+        byte[] keyBytes = Base64.decodeBase64(priKey);
+
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+
+        sign.initSign(privateKey);
+
+        sign.update(data.getBytes(StandardCharsets.UTF_8));
+
+        return sign.sign();
+
+    }
+
+    private boolean verifyRSA(String data, byte[] sign, String pubKey) throws Exception {
+
+        if (data == null || sign == null || pubKey == null) {
+
+            return false;
+
+        }
+
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
+        FileInputStream in = new FileInputStream(pubKey);
+
+        Certificate c = cf.generateCertificate(in);
+
+        in.close();
+
+        PublicKey publicKey = c.getPublicKey();
+
+        Signature signature = Signature.getInstance("SHA256WithRSA");
+
+        signature.initVerify(publicKey);
+
+        signature.update(data.getBytes(StandardCharsets.UTF_8));
+
+        return signature.verify(sign);
+
+
     }
 
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
-        return Optional.ofNullable(httpUtils.post(classZ, request, url));
-    }
-
-    private <T> Optional<T> formPost(Class<T> classZ, Object request, String url) {
-        return Optional.ofNullable(httpUtils.formPost(classZ, request, url));
+        T post = httpUtils.post(classZ, request, url);
+        if (post == null) {
+            return Optional.empty();
+        }
+        return Optional.of(post);
     }
 
     private <T> Optional<T> get(Class<T> classZ, String url) {
-        return Optional.ofNullable(httpUtils.get(classZ, url));
+        T value = httpUtils.get(classZ, url);
+        if (value == null) {
+            return Optional.empty();
+        }
+        return Optional.of(value);
     }
 
     private <T> Optional<T> get(Class<T> classZ, String url, Map<String, String> query) {
@@ -474,7 +628,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             String queryStr = query.keySet().stream().map(key -> key + "=" + query.get(key)).collect(Collectors.joining("&"));
             url += queryStr;
         }
-        return Optional.ofNullable(httpUtils.get(classZ, url));
+        return get(classZ, url);
     }
 
     private String getFormatDate(Date date) {

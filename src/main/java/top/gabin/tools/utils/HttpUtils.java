@@ -79,25 +79,6 @@ public class HttpUtils {
         return null;
     }
 
-    private <T> T formRequest(Class<T> responseClass, HttpUriRequest request) {
-        request.addHeader("Content-Type", "multipart/form-data");
-        request.addHeader("Accept", "application/json");
-        try {
-            HttpResponse response = httpClient.execute(request);
-            HttpEntity entity = response.getEntity();
-            String responseText = EntityUtils.toString(entity, "utf-8");
-            EntityUtils.consume(entity);
-            if (responseClass.isAssignableFrom(String.class)) {
-                return (T) responseText;
-            }
-            System.out.println(responseText);
-            return JsonUtils.json2Bean(responseClass, responseText);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public <T> T get(Class<T> responseClass, String url) {
         return request(responseClass, new HttpGet(url));
     }
@@ -121,27 +102,6 @@ public class HttpUtils {
             httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
         }
         return request(responseClass, httpPost);
-    }
-
-    public <T> T formPost(Class<T> responseClass, Object requestObj, String url) {
-        HttpPost httpPost = new HttpPost(url);
-        String jsonData = "";
-        //增加一个判断是否有Declared方法，要不JsonUtils.bean2Json(requestBody)会报异常
-        int methodsNum = requestObj.getClass().getDeclaredMethods().length;
-        if (requestObj instanceof String) {
-            jsonData = requestObj.toString();
-        } else if (methodsNum > 0) {
-            jsonData = JsonUtils.bean2Json(requestObj);
-        }
-        if (jsonData != null && !jsonData.equals("{}")) {
-            StringEntity reqEntity = new StringEntity(
-                    jsonData, ContentType.create("application/json", "utf-8"));
-            httpPost.setEntity(reqEntity);
-        }
-        if (jsonData != null && !jsonData.equals("{}")) {
-            httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
-        }
-        return formRequest(responseClass, httpPost);
     }
 
     public InputStream download(String downloadUrl) {
