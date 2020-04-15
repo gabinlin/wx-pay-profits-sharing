@@ -462,12 +462,9 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         String timestamp = Long.toString(System.currentTimeMillis() / 1000);
         // 随机数
         String nonce_str = timestamp + "gabin";
-
         //图片文件
         String filename = file.getName();//文件名
         String fileSha256 = DigestUtils.sha256Hex(new FileInputStream(file));//文件sha256
-
-        //拼签名串
 
         //计算签名
         String sb = "POST" + "\n" +
@@ -475,14 +472,13 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 timestamp + "\n" +
                 nonce_str + "\n" +
                 "{\"filename\":\"" + filename + "\",\"sha256\":\"" + fileSha256 + "\"}" + "\n";
-        String sign = new String(Base64.encodeBase64(signRSA(sb, getPrivateKey())));
+        String sign = RSASignUtil.sign(getPrivateKey(), sb);
 
-        //拼装http头的Authorization内容
+        // 拼装http头的Authorization内容
         String authorization = "WECHATPAY2-SHA256-RSA2048 mchid=\"" + mchid + "\",nonce_str=\"" + nonce_str + "\",signature=\"" + sign + "\",timestamp=\"" + timestamp + "\",serial_no=\"" + serial_no + "\"";
-
         //接口URL
-        String url = "https://api.mch.weixin.qq.com/v3/merchant/media/upload";
         CloseableHttpClient httpclient = HttpClients.createDefault();
+        String url = "https://api.mch.weixin.qq.com/v3/merchant/media/upload";
         HttpPost httpPost = new HttpPost(url);
 
         //设置头部
@@ -514,13 +510,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             String timestampH = timestampHeader.getValue();
             String nonceH = nonceHeader.getValue();
             String signed = singedHear.getValue();
-            //拼装待签名串
-            StringBuilder ss = new StringBuilder();
-            ss.append(timestampH).append("\n");
-            ss.append(nonceH).append("\n");
-            ss.append(responseText).append("\n");
-            //验证签名
-            if (verifyRSA(ss.toString(), Base64.decodeBase64(signed.getBytes()), getPublicKey())) {
+            if (verifyNotifySign(timestampH, nonceH, responseText, signed)) {
                 logger.info("签名验证成功");
             } else {
                 logger.info("签名验证失败");
@@ -551,58 +541,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return outByte;
     }
 
-
-    public static byte[] signRSA(String data, String priKey) throws Exception {
-        //签名的类型
-
-        Signature sign = Signature.getInstance("SHA256withRSA");
-
-        //读取商户私钥,该方法传入商户私钥证书的内容即可
-
-        byte[] keyBytes = Base64.decodeBase64(priKey);
-
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
-
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-
-        sign.initSign(privateKey);
-
-        sign.update(data.getBytes(StandardCharsets.UTF_8));
-
-        return sign.sign();
-
-    }
-
-    private boolean verifyRSA(String data, byte[] sign, String pubKey) throws Exception {
-
-        if (data == null || sign == null || pubKey == null) {
-
-            return false;
-
-        }
-
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
-
-        FileInputStream in = new FileInputStream(pubKey);
-
-        Certificate c = cf.generateCertificate(in);
-
-        in.close();
-
-        PublicKey publicKey = c.getPublicKey();
-
-        Signature signature = Signature.getInstance("SHA256WithRSA");
-
-        signature.initVerify(publicKey);
-
-        signature.update(data.getBytes(StandardCharsets.UTF_8));
-
-        return signature.verify(sign);
-
-
-    }
 
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
         T post = httpUtils.post(classZ, request, url);
