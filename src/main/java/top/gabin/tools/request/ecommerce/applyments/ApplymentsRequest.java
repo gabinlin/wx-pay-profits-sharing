@@ -137,7 +137,7 @@ public class ApplymentsRequest {
 	 * </pre>
 	 */
 	@JsonProperty(value = "need_account_info")
-	private String needAccountInfo;
+	private Boolean needAccountInfo;
 
 	/**
 	 * <pre>
@@ -290,11 +290,11 @@ public class ApplymentsRequest {
 		this.idDocInfo = idDocInfo;
 	}
 
-	public String getNeedAccountInfo() {
+	public Boolean getNeedAccountInfo() {
 		return this.needAccountInfo;
 	}
 
-	public void setNeedAccountInfo(String needAccountInfo) {
+	public void setNeedAccountInfo(Boolean needAccountInfo) {
 		this.needAccountInfo = needAccountInfo;
 	}
 

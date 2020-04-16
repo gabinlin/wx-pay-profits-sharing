@@ -82,7 +82,7 @@ public class ProfitSharingApplyRequest {
 	 * </pre>
 	 */
 	@JsonProperty(value = "finish")
-	private String finish;
+	private Boolean finish;
 
 	public String getSubMchid() {
 		return this.subMchid;
@@ -116,11 +116,11 @@ public class ProfitSharingApplyRequest {
 		this.receivers = receivers;
 	}
 
-	public String getFinish() {
+	public Boolean getFinish() {
 		return this.finish;
 	}
 
-	public void setFinish(String finish) {
+	public void setFinish(Boolean finish) {
 		this.finish = finish;
 	}
 

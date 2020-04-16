@@ -332,6 +332,9 @@ public class BuilderDTOUtils {
                 return getTopUppercaseField(dto.getField());
             case "array":
                 return String.format("List<%s>", dto.isObject ? getTopUppercaseField(dto.getField()): "String");
+            case "bool":
+            case "boolean":
+                return "Boolean";
             default:
                 if (type.startsWith("string"))  {
                     return "String";

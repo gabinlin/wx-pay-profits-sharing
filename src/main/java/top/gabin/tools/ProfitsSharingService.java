@@ -414,6 +414,11 @@ public interface ProfitsSharingService {
     Optional<ProfitSharingApplyResponse> applyProfitSharing(ProfitSharingApplyRequest request);
 
     /**
+     *
+     * @return 平台的商户ID
+     */
+    Optional<String> getPlatformId();
+    /**
      * <pre>
      * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_2.shtml
      *

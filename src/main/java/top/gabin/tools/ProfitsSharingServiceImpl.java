@@ -270,6 +270,11 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
+    public Optional<String> getPlatformId() {
+        return Optional.ofNullable(config.getMchId());
+    }
+
+    @Override
     public Optional<ProfitSharingQueryApplyResponse> queryProfitSharingStatus(ProfitSharingQueryApplyRequest request) {
         Map<String, String> params = getParams();
         params.put("sub_mchid", request.getSubMchid());

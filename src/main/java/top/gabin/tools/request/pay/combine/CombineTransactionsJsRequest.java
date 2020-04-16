@@ -380,7 +380,7 @@ public class CombineTransactionsJsRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "profit_sharing")
-		private String profitSharing;
+		private Boolean profitSharing;
 
 		/**
 		 * <pre>
@@ -456,11 +456,11 @@ public class CombineTransactionsJsRequest {
 			this.detail = detail;
 		}
 
-		public String getProfitSharing() {
+		public Boolean getProfitSharing() {
 			return this.profitSharing;
 		}
 
-		public void setProfitSharing(String profitSharing) {
+		public void setProfitSharing(Boolean profitSharing) {
 			this.profitSharing = profitSharing;
 		}
 
@@ -572,7 +572,7 @@ public class CombineTransactionsJsRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "profit_sharing")
-		private String profitSharing;
+		private Boolean profitSharing;
 
 		/**
 		 * <pre>
@@ -588,11 +588,11 @@ public class CombineTransactionsJsRequest {
 		@JsonProperty(value = "subsidy_amount")
 		private Integer subsidyAmount;
 
-		public String getProfitSharing() {
+		public Boolean getProfitSharing() {
 			return this.profitSharing;
 		}
 
-		public void setProfitSharing(String profitSharing) {
+		public void setProfitSharing(Boolean profitSharing) {
 			this.profitSharing = profitSharing;
 		}
 
