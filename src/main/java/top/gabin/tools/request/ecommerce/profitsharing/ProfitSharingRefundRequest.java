@@ -92,7 +92,7 @@ public class ProfitSharingRefundRequest {
 	 * </pre>
 	 */
 	@JsonProperty(value = "amount")
-	private String amount;
+	private Integer amount;
 
 	/**
 	 * <pre>
@@ -148,11 +148,11 @@ public class ProfitSharingRefundRequest {
 		this.returnMchid = returnMchid;
 	}
 
-	public String getAmount() {
+	public Integer getAmount() {
 		return this.amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 

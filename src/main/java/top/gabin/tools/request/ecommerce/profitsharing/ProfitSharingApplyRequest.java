@@ -152,7 +152,7 @@ public class ProfitSharingApplyRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "amount")
-		private String amount;
+		private Integer amount;
 
 		/**
 		 * <pre>
@@ -176,11 +176,11 @@ public class ProfitSharingApplyRequest {
 			this.receiverMchid = receiverMchid;
 		}
 
-		public String getAmount() {
+		public Integer getAmount() {
 			return this.amount;
 		}
 
-		public void setAmount(String amount) {
+		public void setAmount(Integer amount) {
 			this.amount = amount;
 		}
 

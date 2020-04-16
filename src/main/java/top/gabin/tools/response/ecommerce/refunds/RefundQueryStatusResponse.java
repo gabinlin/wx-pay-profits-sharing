@@ -290,7 +290,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * </pre>
 		 */
 		@JsonProperty(value = "refund")
-		private String refund;
+		private Integer refund;
 
 		/**
 		 * <pre>
@@ -304,7 +304,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * </pre>
 		 */
 		@JsonProperty(value = "payer_refund")
-		private String payerRefund;
+		private Integer payerRefund;
 
 		/**
 		 * <pre>
@@ -318,7 +318,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * </pre>
 		 */
 		@JsonProperty(value = "discount_refund")
-		private String discountRefund;
+		private Integer discountRefund;
 
 		/**
 		 * <pre>
@@ -334,27 +334,27 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		@JsonProperty(value = "currency")
 		private String currency;
 
-		public String getRefund() {
+		public Integer getRefund() {
 			return this.refund;
 		}
 
-		public void setRefund(String refund) {
+		public void setRefund(Integer refund) {
 			this.refund = refund;
 		}
 
-		public String getPayerRefund() {
+		public Integer getPayerRefund() {
 			return this.payerRefund;
 		}
 
-		public void setPayerRefund(String payerRefund) {
+		public void setPayerRefund(Integer payerRefund) {
 			this.payerRefund = payerRefund;
 		}
 
-		public String getDiscountRefund() {
+		public Integer getDiscountRefund() {
 			return this.discountRefund;
 		}
 
-		public void setDiscountRefund(String discountRefund) {
+		public void setDiscountRefund(Integer discountRefund) {
 			this.discountRefund = discountRefund;
 		}
 
@@ -428,7 +428,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * </pre>
 		 */
 		@JsonProperty(value = "amount")
-		private String amount;
+		private Integer amount;
 
 		/**
 		 * <pre>
@@ -442,7 +442,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * </pre>
 		 */
 		@JsonProperty(value = "refund_amount")
-		private String refundAmount;
+		private Integer refundAmount;
 
 		public String getPromotionId() {
 			return this.promotionId;
@@ -468,19 +468,19 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 			this.type = type;
 		}
 
-		public String getAmount() {
+		public Integer getAmount() {
 			return this.amount;
 		}
 
-		public void setAmount(String amount) {
+		public void setAmount(Integer amount) {
 			this.amount = amount;
 		}
 
-		public String getRefundAmount() {
+		public Integer getRefundAmount() {
 			return this.refundAmount;
 		}
 
-		public void setRefundAmount(String refundAmount) {
+		public void setRefundAmount(Integer refundAmount) {
 			this.refundAmount = refundAmount;
 		}
 

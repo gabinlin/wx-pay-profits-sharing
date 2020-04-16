@@ -3,6 +3,7 @@ package top.gabin.tools;
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -229,8 +230,9 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request) {
-        if (request != null) {
+    public Optional<CombineTransactionsNotifyRequest1> parsePayNotify(String notifyContent) {
+        if (StringUtils.isNoneBlank(notifyContent)) {
+            CombineTransactionsNotifyRequest request = JsonUtils.json2Bean(CombineTransactionsNotifyRequest.class, notifyContent);
             CombineTransactionsNotifyRequest.Resource resource = request.getResource();
             AesUtil aesUtil = getAesUtil();
             try {

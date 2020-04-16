@@ -52,7 +52,7 @@ public class WithdrawForSubMchRequest {
 	 * </pre>
 	 */
 	@JsonProperty(value = "amount")
-	private String amount;
+	private Integer amount;
 
 	/**
 	 * <pre>
@@ -98,11 +98,11 @@ public class WithdrawForSubMchRequest {
 		this.outRequestNo = outRequestNo;
 	}
 
-	public String getAmount() {
+	public Integer getAmount() {
 		return this.amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 

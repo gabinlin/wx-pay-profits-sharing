@@ -522,7 +522,7 @@ public class CombineTransactionsAppRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "total_amount")
-		private String totalAmount;
+		private Integer totalAmount;
 
 		/**
 		 * <pre>
@@ -538,11 +538,11 @@ public class CombineTransactionsAppRequest {
 		@JsonProperty(value = "currency")
 		private String currency;
 
-		public String getTotalAmount() {
+		public Integer getTotalAmount() {
 			return this.totalAmount;
 		}
 
-		public void setTotalAmount(String totalAmount) {
+		public void setTotalAmount(Integer totalAmount) {
 			this.totalAmount = totalAmount;
 		}
 
@@ -586,7 +586,7 @@ public class CombineTransactionsAppRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "subsidy_amount")
-		private String subsidyAmount;
+		private Integer subsidyAmount;
 
 		public String getProfitSharing() {
 			return this.profitSharing;
@@ -596,11 +596,11 @@ public class CombineTransactionsAppRequest {
 			this.profitSharing = profitSharing;
 		}
 
-		public String getSubsidyAmount() {
+		public Integer getSubsidyAmount() {
 			return this.subsidyAmount;
 		}
 
-		public void setSubsidyAmount(String subsidyAmount) {
+		public void setSubsidyAmount(Integer subsidyAmount) {
 			this.subsidyAmount = subsidyAmount;
 		}
 

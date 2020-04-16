@@ -223,7 +223,7 @@ public class RefundApplyRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "refund")
-		private String refund;
+		private Integer refund;
 
 		/**
 		 * <pre>
@@ -237,7 +237,7 @@ public class RefundApplyRequest {
 		 * </pre>
 		 */
 		@JsonProperty(value = "total")
-		private String total;
+		private Integer total;
 
 		/**
 		 * <pre>
@@ -253,19 +253,19 @@ public class RefundApplyRequest {
 		@JsonProperty(value = "currency")
 		private String currency;
 
-		public String getRefund() {
+		public Integer getRefund() {
 			return this.refund;
 		}
 
-		public void setRefund(String refund) {
+		public void setRefund(Integer refund) {
 			this.refund = refund;
 		}
 
-		public String getTotal() {
+		public Integer getTotal() {
 			return this.total;
 		}
 
-		public void setTotal(String total) {
+		public void setTotal(Integer total) {
 			this.total = total;
 		}
 

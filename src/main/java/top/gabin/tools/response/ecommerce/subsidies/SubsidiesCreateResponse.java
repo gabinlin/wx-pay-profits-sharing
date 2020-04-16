@@ -87,7 +87,7 @@ public class SubsidiesCreateResponse extends AbstractResponse {
 	 * </pre>
 	 */
 	@JsonProperty(value = "amount")
-	private String amount;
+	private Integer amount;
 
 	/**
 	 * <pre>
@@ -152,11 +152,11 @@ public class SubsidiesCreateResponse extends AbstractResponse {
 		this.description = description;
 	}
 
-	public String getAmount() {
+	public Integer getAmount() {
 		return this.amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 

@@ -443,7 +443,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 * </pre>
 		 */
 		@JsonProperty(value = "total_amount")
-		private String totalAmount;
+		private Integer totalAmount;
 
 		/**
 		 * <pre>
@@ -471,7 +471,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 * </pre>
 		 */
 		@JsonProperty(value = "payer_amount")
-		private String payerAmount;
+		private Integer payerAmount;
 
 		/**
 		 * <pre>
@@ -487,11 +487,11 @@ public class CombineTransactionsNotifyRequest1 {
 		@JsonProperty(value = "payer_currency")
 		private String payerCurrency;
 
-		public String getTotalAmount() {
+		public Integer getTotalAmount() {
 			return this.totalAmount;
 		}
 
-		public void setTotalAmount(String totalAmount) {
+		public void setTotalAmount(Integer totalAmount) {
 			this.totalAmount = totalAmount;
 		}
 
@@ -503,11 +503,11 @@ public class CombineTransactionsNotifyRequest1 {
 			this.currency = currency;
 		}
 
-		public String getPayerAmount() {
+		public Integer getPayerAmount() {
 			return this.payerAmount;
 		}
 
-		public void setPayerAmount(String payerAmount) {
+		public void setPayerAmount(Integer payerAmount) {
 			this.payerAmount = payerAmount;
 		}
 

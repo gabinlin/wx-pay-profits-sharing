@@ -333,6 +333,12 @@ public class BuilderDTOUtils {
             case "array":
                 return String.format("List<%s>", dto.isObject ? getTopUppercaseField(dto.getField()): "String");
             default:
+                if (type.startsWith("string"))  {
+                    return "String";
+                }
+                if (type.startsWith("int"))  {
+                    return "Integer";
+                }
                 return "String";
         }
     }

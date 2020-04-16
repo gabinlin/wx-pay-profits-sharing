@@ -12,8 +12,10 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
 import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
-import top.gabin.tools.request.pay.combine.*;
-import top.gabin.tools.request.tool.ImageUploadRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsAppRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsCloseRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsNotifyRequest1;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
@@ -33,8 +35,6 @@ import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.response.tool.ImageUploadResponse;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
@@ -314,10 +314,10 @@ public interface ProfitsSharingService {
     /**
      * 对通知的数据体进行解析
      *
-     * @param request 请求对象
+     * @param notifyContent 消息通知内容
      * @return 支付信息
      */
-    Optional<CombineTransactionsNotifyRequest1> parsePayNotify(CombineTransactionsNotifyRequest request);
+    Optional<CombineTransactionsNotifyRequest1> parsePayNotify(String notifyContent);
 
 
     /**

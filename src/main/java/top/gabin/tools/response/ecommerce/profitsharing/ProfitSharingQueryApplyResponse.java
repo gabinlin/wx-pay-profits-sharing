@@ -140,7 +140,7 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	 * </pre>
 	 */
 	@JsonProperty(value = "finish_amount")
-	private String finishAmount;
+	private Integer finishAmount;
 
 	/**
 	 * <pre>
@@ -212,11 +212,11 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		this.closeReason = closeReason;
 	}
 
-	public String getFinishAmount() {
+	public Integer getFinishAmount() {
 		return this.finishAmount;
 	}
 
-	public void setFinishAmount(String finishAmount) {
+	public void setFinishAmount(Integer finishAmount) {
 		this.finishAmount = finishAmount;
 	}
 
@@ -256,7 +256,7 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		 * </pre>
 		 */
 		@JsonProperty(value = "amount")
-		private String amount;
+		private Integer amount;
 
 		/**
 		 * <pre>
@@ -330,11 +330,11 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 			this.receiverMchid = receiverMchid;
 		}
 
-		public String getAmount() {
+		public Integer getAmount() {
 			return this.amount;
 		}
 
-		public void setAmount(String amount) {
+		public void setAmount(Integer amount) {
 			this.amount = amount;
 		}
 

@@ -121,7 +121,7 @@ public class ProfitSharingQueryRefundResponse extends AbstractResponse {
 	 * </pre>
 	 */
 	@JsonProperty(value = "amount")
-	private String amount;
+	private Integer amount;
 
 	/**
 	 * <pre>
@@ -221,11 +221,11 @@ public class ProfitSharingQueryRefundResponse extends AbstractResponse {
 		this.returnNo = returnNo;
 	}
 
-	public String getAmount() {
+	public Integer getAmount() {
 		return this.amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 

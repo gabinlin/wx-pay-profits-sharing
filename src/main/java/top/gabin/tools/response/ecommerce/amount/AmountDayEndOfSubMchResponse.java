@@ -44,7 +44,7 @@ public class AmountDayEndOfSubMchResponse extends AbstractResponse {
 	 * </pre>
 	 */
 	@JsonProperty(value = "available_amount")
-	private String availableAmount;
+	private Integer availableAmount;
 
 	/**
 	 * <pre>
@@ -58,7 +58,7 @@ public class AmountDayEndOfSubMchResponse extends AbstractResponse {
 	 * </pre>
 	 */
 	@JsonProperty(value = "pending_amount")
-	private String pendingAmount;
+	private Integer pendingAmount;
 
 	public String getSubMchid() {
 		return this.subMchid;
@@ -68,19 +68,19 @@ public class AmountDayEndOfSubMchResponse extends AbstractResponse {
 		this.subMchid = subMchid;
 	}
 
-	public String getAvailableAmount() {
+	public Integer getAvailableAmount() {
 		return this.availableAmount;
 	}
 
-	public void setAvailableAmount(String availableAmount) {
+	public void setAvailableAmount(Integer availableAmount) {
 		this.availableAmount = availableAmount;
 	}
 
-	public String getPendingAmount() {
+	public Integer getPendingAmount() {
 		return this.pendingAmount;
 	}
 
-	public void setPendingAmount(String pendingAmount) {
+	public void setPendingAmount(Integer pendingAmount) {
 		this.pendingAmount = pendingAmount;
 	}
 

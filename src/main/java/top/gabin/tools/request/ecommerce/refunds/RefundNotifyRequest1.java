@@ -252,7 +252,7 @@ public class RefundNotifyRequest1 {
 		 * </pre>
 		 */
 		@JsonProperty(value = "total")
-		private String total;
+		private Integer total;
 
 		/**
 		 * <pre>
@@ -266,7 +266,7 @@ public class RefundNotifyRequest1 {
 		 * </pre>
 		 */
 		@JsonProperty(value = "refund")
-		private String refund;
+		private Integer refund;
 
 		/**
 		 * <pre>
@@ -280,7 +280,7 @@ public class RefundNotifyRequest1 {
 		 * </pre>
 		 */
 		@JsonProperty(value = "payer_total")
-		private String payerTotal;
+		private Integer payerTotal;
 
 		/**
 		 * <pre>
@@ -294,37 +294,37 @@ public class RefundNotifyRequest1 {
 		 * </pre>
 		 */
 		@JsonProperty(value = "payer_refund")
-		private String payerRefund;
+		private Integer payerRefund;
 
-		public String getTotal() {
+		public Integer getTotal() {
 			return this.total;
 		}
 
-		public void setTotal(String total) {
+		public void setTotal(Integer total) {
 			this.total = total;
 		}
 
-		public String getRefund() {
+		public Integer getRefund() {
 			return this.refund;
 		}
 
-		public void setRefund(String refund) {
+		public void setRefund(Integer refund) {
 			this.refund = refund;
 		}
 
-		public String getPayerTotal() {
+		public Integer getPayerTotal() {
 			return this.payerTotal;
 		}
 
-		public void setPayerTotal(String payerTotal) {
+		public void setPayerTotal(Integer payerTotal) {
 			this.payerTotal = payerTotal;
 		}
 
-		public String getPayerRefund() {
+		public Integer getPayerRefund() {
 			return this.payerRefund;
 		}
 
-		public void setPayerRefund(String payerRefund) {
+		public void setPayerRefund(Integer payerRefund) {
 			this.payerRefund = payerRefund;
 		}
 
