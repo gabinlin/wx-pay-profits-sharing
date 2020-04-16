@@ -6,7 +6,7 @@
 
     <groupId>top.gabin</groupId>
     <artifactId>wx-pay-profits-sharing</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
     <packaging>jar</packaging>
     <name>wx-pay-profits-sharing</name>
     <description>>wx-pay-profits-sharing</description>
@@ -30,8 +30,8 @@
     <scm>
         <connection>scm:git@e.coding.net:gabinlin/wx-pay-profits-sharing.git</connection>
         <developerConnection>https://e.coding.net/gabinlin/wx-pay-profits-sharing.git</developerConnection>
-        <url>https://gabinlin.coding.net/p/wx-pay-profits-sharing/d/wx-pay-profits-sharing/git/tree/1.3.0</url>
-        <tag>1.3.0</tag>
+        <url>https://gabinlin.coding.net/p/wx-pay-profits-sharing/d/wx-pay-profits-sharing/git/tree/1.3.1</url>
+        <tag>1.3.1</tag>
     </scm>
     <parent>
         <groupId>org.sonatype.oss</groupId>
