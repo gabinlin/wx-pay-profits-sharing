@@ -1,7 +1,7 @@
 package top.gabin.tools;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
-import org.apache.commons.codec.binary.Base64;
+import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.http.Header;
@@ -53,21 +53,18 @@ import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.security.cert.X509Certificate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final HashMap<BigInteger, X509Certificate> certificates = new HashMap<>();
     private final ProfitsSharingConfig config;
     private final HttpUtils httpUtils;
     private final AesUtil aesUtil;
@@ -77,14 +74,18 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         this.config = config;
         httpUtils = new HttpUtils(config.getMchId(), config.getMchSerialNo(), config.getPrivateKey(), config.getCertificate());
         aesUtil = new AesUtil(config.getApiKey().getBytes());
+        // 用于接收通知时的消息校验
+        try {
+            X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
+                    new ByteArrayInputStream(config.getCertificate().getBytes("utf-8")));
+            certificates.put(wechatpayCertificate.getSerialNumber(), wechatpayCertificate);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getPrivateKey() {
         return config.getPrivateKey();
-    }
-
-    private String getPublicKey() {
-        return config.getPublicKey();
     }
 
     private AesUtil getAesUtil() {
@@ -224,7 +225,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed) {
         String beforeSign = timeStamp + "\n" + nonce + "\n" + body;
-        return RSASignUtil.verifySign(getPublicKey(), beforeSign, signed);
+        return verify(config.getMchSerialNo(), beforeSign.getBytes(), signed);
     }
 
     @Override
@@ -573,5 +574,24 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return DateFormatUtils.format(date, "yyyy-MM-dd");
     }
 
+    private boolean verify(X509Certificate certificate, byte[] message, String signature) {
+        try {
+            Signature sign = Signature.getInstance("SHA256withRSA");
+            sign.initVerify(certificate);
+            sign.update(message);
+            return sign.verify(Base64.getDecoder().decode(signature));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("当前Java环境不支持SHA256withRSA", e);
+        } catch (SignatureException e) {
+            throw new RuntimeException("签名验证过程发生了错误", e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException("无效的证书", e);
+        }
+    }
+
+    private boolean verify(String serialNumber, byte[] message, String signature) {
+        BigInteger val = new BigInteger(serialNumber, 16);
+        return certificates.containsKey(val) && verify(certificates.get(val), message, signature);
+    }
 
 }
