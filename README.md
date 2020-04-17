@@ -1,7 +1,9 @@
 #项目： 微信电商收付通工具包
+文档地址 [https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/guide.shtml](https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/guide.shtml)
 
 ##一、更新说明
 * 1.0.1 草稿包
+* 1.4.0 待接口调试包
 
 ##二、Maven引用方式
 ```xml

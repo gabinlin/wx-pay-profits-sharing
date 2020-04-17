@@ -1,4 +1,4 @@
-package top.gabin.tools;
+package top.gabin.tools.service;
 
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.*;
