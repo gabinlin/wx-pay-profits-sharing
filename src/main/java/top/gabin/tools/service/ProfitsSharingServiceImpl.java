@@ -1,6 +1,7 @@
 package top.gabin.tools.service;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
+import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -56,10 +57,9 @@ import top.gabin.tools.utils.RSASignUtil;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
@@ -69,13 +69,20 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     private final ProfitsSharingConfig config;
     private final HttpUtils httpUtils;
     private final AesUtil aesUtil;
+    private PrivateKey privateKey;
 
 
     public ProfitsSharingServiceImpl(ProfitsSharingConfig config, CacheService cacheService) {
         this.config = config;
+        try {
+            privateKey = PemUtil.loadPrivateKey(
+                    new ByteArrayInputStream(config.getPrivateKey().getBytes("utf-8")));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         httpUtils = new HttpUtils(config.getMchId(),
                 config.getMchSerialNo(),
-                config.getPrivateKey(),
+                privateKey,
                 config.getApiKey(),
                 cacheService);
         aesUtil = new AesUtil(config.getApiKey().getBytes());
@@ -216,9 +223,14 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed) {
-        String beforeSign = timeStamp + "\n" + nonce + "\n" + body;
-        return httpUtils.getVerifier().verify(config.getMchSerialNo(), beforeSign.getBytes(), signed);
+    public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed, String serialNo) {
+        String beforeSign = timeStamp + "\n" + nonce + "\n" + body + "\n";
+        try {
+            return httpUtils.getVerifier().verify(serialNo, beforeSign.getBytes("utf-8"), signed);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -469,7 +481,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 timestamp + "\n" +
                 nonce_str + "\n" +
                 "{\"filename\":\"" + filename + "\",\"sha256\":\"" + fileSha256 + "\"}" + "\n";
-        String sign = RSASignUtil.sign(getPrivateKey(), sb);
+        String sign = sign(sb);
 
         // 拼装http头的Authorization内容
         String authorization = "WECHATPAY2-SHA256-RSA2048 mchid=\"" + mchid + "\",nonce_str=\"" + nonce_str + "\",signature=\"" + sign + "\",timestamp=\"" + timestamp + "\",serial_no=\"" + serial_no + "\"";
@@ -507,7 +519,8 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             String timestampH = timestampHeader.getValue();
             String nonceH = nonceHeader.getValue();
             String signed = singedHear.getValue();
-            if (verifyNotifySign(timestampH, nonceH, responseText, signed)) {
+            Header serialHeader = response.getFirstHeader("Wechatpay-Serial");
+            if (verifyNotifySign(timestampH, nonceH, responseText, signed, serialHeader.getValue())) {
                 logger.info("签名验证成功");
             } else {
                 logger.info("签名验证失败");
@@ -520,6 +533,18 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             return Optional.empty();
         }
         return Optional.of(imageUploadResponse);
+    }
+
+    private String sign(String message) {
+        try {
+            Signature sign = Signature.getInstance("SHA256withRSA");
+            sign.initSign(privateKey);
+            sign.update(message.getBytes());
+            return Base64.getEncoder().encodeToString(sign.sign());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
     public static byte[] InputStreamTOByte(InputStream in) throws IOException {

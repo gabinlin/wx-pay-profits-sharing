@@ -107,7 +107,7 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed) {
+    public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed, String serialNo) {
         return false;
     }
 

@@ -307,9 +307,10 @@ public interface ProfitsSharingService {
      * @param nonce     随机串
      * @param body      请求实体
      * @param signed    已签名字符串
+     * @param serialNo  证书序列号
      * @return 验签结果
      */
-    boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed);
+    boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed, String serialNo);
 
     /**
      * 对通知的数据体进行解析

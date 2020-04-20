@@ -4,7 +4,6 @@ import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
 import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Credentials;
 import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Validator;
-import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -21,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import top.gabin.tools.auth.AutoUpdateInCloudCertificatesVerifier;
 import top.gabin.tools.auth.CacheService;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.PrivateKey;
@@ -30,14 +28,14 @@ public class HttpUtils {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private String mchId;       // 商户号
-    private String mchSerialNo; // 商户证书序列号
-    private String privateKey;  // 你的商户私钥
+    private String mchId;           // 商户号
+    private String mchSerialNo;     // 商户证书序列号
+    private PrivateKey privateKey;  // 你的商户私钥
     private String apiKey;
     private CloseableHttpClient httpClient;
     private volatile AutoUpdateInCloudCertificatesVerifier verifier;
 
-    public HttpUtils(String mchId, String mchSerialNo, String privateKey, String apiKey, CacheService cacheService) {
+    public HttpUtils(String mchId, String mchSerialNo, PrivateKey privateKey, String apiKey, CacheService cacheService) {
         this.mchId = mchId;
         this.mchSerialNo = mchSerialNo;
         this.privateKey = privateKey;
@@ -53,15 +51,13 @@ public class HttpUtils {
         return verifier;
     }
 
-    private void init(CacheService cacheService) throws IOException  {
-        PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(
-                new ByteArrayInputStream(privateKey.getBytes("utf-8")));
+    private void init(CacheService cacheService) throws IOException {
         // 不需要传入微信支付证书，将会自动更新
         verifier = new AutoUpdateInCloudCertificatesVerifier(
-                new WechatPay2Credentials(mchId, new PrivateKeySigner(mchSerialNo, merchantPrivateKey)),
+                new WechatPay2Credentials(mchId, new PrivateKeySigner(mchSerialNo, privateKey)),
                 apiKey.getBytes("utf-8"), cacheService);
         WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
-                .withMerchant(mchId, mchSerialNo, merchantPrivateKey)
+                .withMerchant(mchId, mchSerialNo, privateKey)
                 .withValidator(new WechatPay2Validator(verifier));
         httpClient = builder.build();
     }
