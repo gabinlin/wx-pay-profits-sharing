@@ -1,6 +1,9 @@
 package top.gabin.tools.utils;
 
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
+import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
+import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Credentials;
+import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Validator;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -15,13 +18,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.gabin.tools.auth.AutoUpdateInCloudCertificatesVerifier;
+import top.gabin.tools.auth.CacheService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 
 public class HttpUtils {
 
@@ -30,34 +33,37 @@ public class HttpUtils {
     private String mchId;       // 商户号
     private String mchSerialNo; // 商户证书序列号
     private String privateKey;  // 你的商户私钥
-    private String certificate; // 你的微信支付平台证书
+    private String apiKey;
     private CloseableHttpClient httpClient;
+    private volatile AutoUpdateInCloudCertificatesVerifier verifier;
 
-    public HttpUtils(String mchId, String mchSerialNo, String privateKey, String certificate) {
+    public HttpUtils(String mchId, String mchSerialNo, String privateKey, String apiKey, CacheService cacheService) {
         this.mchId = mchId;
         this.mchSerialNo = mchSerialNo;
         this.privateKey = privateKey;
-        this.certificate = certificate;
+        this.apiKey = apiKey;
         try {
-            init();
+            init(cacheService);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void init() throws IOException  {
+    public AutoUpdateInCloudCertificatesVerifier getVerifier() {
+        return verifier;
+    }
+
+    private void init(CacheService cacheService) throws IOException  {
         PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(
                 new ByteArrayInputStream(privateKey.getBytes("utf-8")));
-//        X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
-//                new ByteArrayInputStream(certificate.getBytes("utf-8")));
-
-        ArrayList<X509Certificate> listCertificates = new ArrayList<>();
-//        listCertificates.add(wechatpayCertificate);
-
-        httpClient = WechatPayHttpClientBuilder.create()
+        // 不需要传入微信支付证书，将会自动更新
+        verifier = new AutoUpdateInCloudCertificatesVerifier(
+                new WechatPay2Credentials(mchId, new PrivateKeySigner(mchSerialNo, merchantPrivateKey)),
+                apiKey.getBytes("utf-8"), cacheService);
+        WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
                 .withMerchant(mchId, mchSerialNo, merchantPrivateKey)
-                .withWechatpay(listCertificates)
-                .build();
+                .withValidator(new WechatPay2Validator(verifier));
+        httpClient = builder.build();
     }
 
     private <T> T request(Class<T> responseClass, HttpUriRequest request) {

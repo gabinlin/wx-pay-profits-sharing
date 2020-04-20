@@ -1,7 +1,6 @@
 package top.gabin.tools.service;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
-import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -17,6 +16,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.gabin.tools.auth.CacheService;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.*;
@@ -54,43 +54,35 @@ import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.cert.X509Certificate;
-import java.util.*;
+import java.security.GeneralSecurityException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final HashMap<BigInteger, X509Certificate> certificates = new HashMap<>();
     private final ProfitsSharingConfig config;
     private final HttpUtils httpUtils;
     private final AesUtil aesUtil;
 
 
-    public ProfitsSharingServiceImpl(ProfitsSharingConfig config) {
+    public ProfitsSharingServiceImpl(ProfitsSharingConfig config, CacheService cacheService) {
         this.config = config;
-        httpUtils = new HttpUtils(config.getMchId(), config.getMchSerialNo(), config.getPrivateKey(), config.getCertificate());
+        httpUtils = new HttpUtils(config.getMchId(),
+                config.getMchSerialNo(),
+                config.getPrivateKey(),
+                config.getApiKey(),
+                cacheService);
         aesUtil = new AesUtil(config.getApiKey().getBytes());
-        // 用于接收通知时的消息校验
-        try {
-            X509Certificate wechatpayCertificate = PemUtil.loadCertificate(
-                    new ByteArrayInputStream(config.getCertificate().getBytes("utf-8")));
-            certificates.put(wechatpayCertificate.getSerialNumber(), wechatpayCertificate);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
 
     private String getPrivateKey() {
         return config.getPrivateKey();
-    }
-
-    private AesUtil getAesUtil() {
-        return aesUtil;
     }
 
     @Override
@@ -226,7 +218,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed) {
         String beforeSign = timeStamp + "\n" + nonce + "\n" + body;
-        return verify(config.getMchSerialNo(), beforeSign.getBytes(), signed);
+        return httpUtils.getVerifier().verify(config.getMchSerialNo(), beforeSign.getBytes(), signed);
     }
 
     @Override
@@ -234,7 +226,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         if (StringUtils.isNoneBlank(notifyContent)) {
             CombineTransactionsNotifyRequest request = JsonUtils.json2Bean(CombineTransactionsNotifyRequest.class, notifyContent);
             CombineTransactionsNotifyRequest.Resource resource = request.getResource();
-            AesUtil aesUtil = getAesUtil();
             try {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
                 CombineTransactionsNotifyRequest1 request1 = JsonUtils.json2Bean(CombineTransactionsNotifyRequest1.class, json);
@@ -317,7 +308,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<ProfitSharingNotifyRequest1> parseProfitsSharingNotify(ProfitSharingNotifyRequest request) {
         if (request != null) {
             ProfitSharingNotifyRequest.Resource resource = request.getResource();
-            AesUtil aesUtil = getAesUtil();
             try {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
                 ProfitSharingNotifyRequest1 request1 = JsonUtils.json2Bean(ProfitSharingNotifyRequest1.class, json);
@@ -351,7 +341,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<RefundNotifyRequest1> parseRefundNotify(RefundNotifyRequest request) {
         if (request != null) {
             RefundNotifyRequest.Resource resource = request.getResource();
-            AesUtil aesUtil = getAesUtil();
             try {
                 String json = aesUtil.decryptToString(resource.getAssociatedData().getBytes(), resource.getNonce().getBytes(), resource.getCiphertext());
                 RefundNotifyRequest1 request1 = JsonUtils.json2Bean(RefundNotifyRequest1.class, json);
@@ -579,26 +568,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private String getFormatDate(Date date) {
         return DateFormatUtils.format(date, "yyyy-MM-dd");
-    }
-
-    private boolean verify(X509Certificate certificate, byte[] message, String signature) {
-        try {
-            Signature sign = Signature.getInstance("SHA256withRSA");
-            sign.initVerify(certificate);
-            sign.update(message);
-            return sign.verify(Base64.getDecoder().decode(signature));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("当前Java环境不支持SHA256withRSA", e);
-        } catch (SignatureException e) {
-            throw new RuntimeException("签名验证过程发生了错误", e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException("无效的证书", e);
-        }
-    }
-
-    private boolean verify(String serialNumber, byte[] message, String signature) {
-        BigInteger val = new BigInteger(serialNumber, 16);
-        return certificates.containsKey(val) && verify(certificates.get(val), message, signature);
     }
 
 }
