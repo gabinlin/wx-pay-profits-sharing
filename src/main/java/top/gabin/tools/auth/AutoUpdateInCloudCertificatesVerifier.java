@@ -9,6 +9,12 @@ import com.wechat.pay.contrib.apache.httpclient.auth.Verifier;
 import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Validator;
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,19 +28,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 在原有CertificatesVerifier基础上，增加自动更新证书功能
  */
 public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
 
-    private static final Logger log = LoggerFactory.getLogger(com.wechat.pay.contrib.apache.httpclient.auth.AutoUpdateCertificatesVerifier.class);
+    private static final Logger log = LoggerFactory.getLogger(AutoUpdateInCloudCertificatesVerifier.class);
+
+    private boolean cloud;
+
+    private final String UPDATE_TIME_CACHE_KEY = "UPDATE_TIME_CACHE_KEY";;
+    private final String NEW_CREDENTIALS_CACHE_KEY = "NEW_CREDENTIALS_CACHE_KEY";;
+
+    private CacheService cacheService;
 
     //证书下载地址
     private static final String CertDownloadPath = "https://api.mch.weixin.qq.com/v3/certificates";
@@ -45,7 +51,7 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
     //证书更新间隔时间，单位为分钟
     private int minutesInterval;
 
-    private CertificatesVerifier verifier;
+    private Verifier verifier;
 
     private Credentials credentials;
 
@@ -69,30 +75,62 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
     }
 
     public AutoUpdateInCloudCertificatesVerifier(Credentials credentials, byte[] apiV3Key) {
-        this(credentials, apiV3Key, com.wechat.pay.contrib.apache.httpclient.auth.AutoUpdateCertificatesVerifier.TimeInterval.OneHour.getMinutes());
+        this(credentials, apiV3Key, TimeInterval.OneHour.getMinutes(), null);
     }
 
-    public AutoUpdateInCloudCertificatesVerifier(Credentials credentials, byte[] apiV3Key, int minutesInterval) {
+    public AutoUpdateInCloudCertificatesVerifier(Credentials credentials, byte[] apiV3Key, CacheService cacheService) {
+        this(credentials, apiV3Key, TimeInterval.OneHour.getMinutes(), cacheService);
+    }
+
+    public AutoUpdateInCloudCertificatesVerifier(Credentials credentials, byte[] apiV3Key, int minutesInterval, CacheService cacheService) {
         this.credentials = credentials;
         this.apiV3Key = apiV3Key;
         this.minutesInterval = minutesInterval;
+        if (cacheService != null) {
+            setCacheService(cacheService);
+        }
         //构造时更新证书
         try {
             autoUpdateCert();
-            instant = Instant.now();
+            setInstant(Instant.now());
         } catch (IOException | GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public Instant getInstant() {
+        if (!cloud) {
+            return instant;
+        }
+        return cacheService.get(UPDATE_TIME_CACHE_KEY, Instant.class);
+    }
+
+    public void setInstant(Instant instant) {
+        if (cloud) {
+            cacheService.cache(UPDATE_TIME_CACHE_KEY, instant);
+        } else {
+            this.instant = instant;
+        }
+    }
+
+    public CacheService getCacheService() {
+        return cacheService;
+    }
+
+    public void setCacheService(CacheService cacheService) {
+        this.cacheService = cacheService;
+        cloud = true;
+        verifier = new CloudCertificatesVerifier(cacheService);
+    }
+
     @Override
     public boolean verify(String serialNumber, byte[] message, String signature) {
-        if (instant == null || Duration.between(instant, Instant.now()).toMinutes() >= minutesInterval) {
+        if (invalidInstant()) {
             if (lock.tryLock()) {
                 try {
                     autoUpdateCert();
                     //更新时间
-                    instant = Instant.now();
+                    setInstant(Instant.now());
                 } catch (GeneralSecurityException | IOException e) {
                     log.warn("Auto update cert failed, exception = " + e);
                 } finally {
@@ -103,10 +141,16 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
         return verifier.verify(serialNumber, message, signature);
     }
 
+    private boolean invalidInstant() {
+        Instant instant = getInstant();
+        return instant == null || Duration.between(instant, Instant.now()).toMinutes() >= minutesInterval;
+    }
+
     private void autoUpdateCert() throws IOException, GeneralSecurityException {
         CloseableHttpClient httpClient = WechatPayHttpClientBuilder.create()
                 .withCredentials(credentials)
-                .withValidator(verifier == null ? (response) -> true : new WechatPay2Validator(verifier))
+                // 先只校验更新时间，更新时间不符合条件的时候，当做首次下载证书
+                .withValidator(invalidInstant() ? (response) -> true : new WechatPay2Validator(verifier))
                 .build();
 
         HttpGet httpGet = new HttpGet(CertDownloadPath);
@@ -121,7 +165,11 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
                 log.warn("Cert list is empty");
                 return;
             }
-            this.verifier = new CertificatesVerifier(newCertList);
+            if (cloud) {
+                cacheService.cache(NEW_CREDENTIALS_CACHE_KEY, newCertList);
+            } else {
+                this.verifier = new CertificatesVerifier(newCertList);
+            }
         } else {
             log.warn("Auto update cert failed, statusCode = " + statusCode + ",body = " + body);
         }
