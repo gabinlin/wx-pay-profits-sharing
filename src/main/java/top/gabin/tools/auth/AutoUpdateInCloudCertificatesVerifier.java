@@ -59,6 +59,11 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
 
     private ReentrantLock lock = new ReentrantLock();
 
+    public String getSerialNo() {
+
+        return null;
+    }
+
     //时间间隔枚举，支持一小时、六小时以及十二小时
     public enum TimeInterval {
         OneHour(60), SixHours(60 * 6), TwelveHours(60 * 12);

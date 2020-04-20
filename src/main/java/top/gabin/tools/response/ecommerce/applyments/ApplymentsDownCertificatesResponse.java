@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import top.gabin.tools.response.AbstractResponse;
 
+import java.util.List;
+
 
 /**
  * <pre>
@@ -21,48 +23,96 @@ import top.gabin.tools.response.AbstractResponse;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ApplymentsDownCertificatesResponse extends AbstractResponse {
-	/**
-	 * <pre>
-	 * 字段名：返回状态码
-	 * 变量名：code
-	 * 是否必填：是
-	 * 类型：string(32)
-	 * 描述：
-	 *  错误码，枚举值见错误码列表 
-	 *  示例值：INVALID_REQUEST 
-	 * </pre>
-	 */
-	@JsonProperty(value = "code")
-	private String code;
+	@JsonProperty(value = "data")
+	private List<Data> data;
 
-	/**
-	 * <pre>
-	 * 字段名：返回信息
-	 * 变量名：message
-	 * 是否必填：否
-	 * 类型：string(256)
-	 * 描述：
-	 *  返回信息，如非空，为错误原因 
-	 *  示例值：参数格式校验错误 
-	 * </pre>
-	 */
-	@JsonProperty(value = "message")
-	private String message;
-
-	public String getCode() {
-		return this.code;
+	public List<Data> getData() {
+		return data;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setData(List<Data> data) {
+		this.data = data;
 	}
 
-	public String getMessage() {
-		return this.message;
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	public static class Data {
+		/**
+		 * <pre>
+		 * 字段名：序列号
+		 * 变量名：serial_no
+		 * 是否必填：是
+		 * 类型：string(32)
+		 * 描述：证书的序列号
+		 * </pre>
+		 */
+		@JsonProperty(value = "serial_no")
+		private String serialNo;
+
+		/**
+		 * <pre>
+		 * 字段名：证书
+		 * 变量名：encrypt_certificate
+		 * 是否必填：是
+		 * 类型：string(4096)
+		 * 描述：证书内容
+		 * </pre>
+		 */
+		@JsonProperty(value = "encrypt_certificate")
+		private EncryptCertificate encryptCertificate;
+
+		public String getSerialNo() {
+			return serialNo;
+		}
+
+		public void setSerialNo(String serialNo) {
+			this.serialNo = serialNo;
+		}
+
+		public EncryptCertificate getEncryptCertificate() {
+			return encryptCertificate;
+		}
+
+		public void EncryptCertificate(EncryptCertificate encryptCertificate) {
+			this.encryptCertificate = encryptCertificate;
+		}
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+	public static class EncryptCertificate {
+		private String algorithm;
+		private String nonce;
+		private String associated_data;
+		private String ciphertext;
 
+		public String getAlgorithm() {
+			return algorithm;
+		}
+
+		public void setAlgorithm(String algorithm) {
+			this.algorithm = algorithm;
+		}
+
+		public String getNonce() {
+			return nonce;
+		}
+
+		public void setNonce(String nonce) {
+			this.nonce = nonce;
+		}
+
+		public String getAssociated_data() {
+			return associated_data;
+		}
+
+		public void setAssociated_data(String associated_data) {
+			this.associated_data = associated_data;
+		}
+
+		public String getCiphertext() {
+			return ciphertext;
+		}
+
+		public void setCiphertext(String ciphertext) {
+			this.ciphertext = ciphertext;
+		}
+	}
 }

@@ -20,7 +20,10 @@ import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
-import top.gabin.tools.response.ecommerce.applyments.*;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsModifySettlementResponse;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsSettlementStatusResponse;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawForPlatformResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawForSubMchResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForPlatformResponse;
@@ -36,6 +39,7 @@ import top.gabin.tools.response.tool.ImageUploadResponse;
 
 import java.io.File;
 import java.io.InputStream;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -57,7 +61,7 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsDownCertificatesResponse> downloadCertificates() {
+    public Optional<X509Certificate> downloadCertificates() {
         return Optional.empty();
     }
 

@@ -54,11 +54,15 @@ import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
 import top.gabin.tools.utils.RSASignUtil;
 
+import javax.crypto.Cipher;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.Signature;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
+import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,7 +98,41 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     @Override
     public Optional<ApplymentsResponse> applyments(ApplymentsRequest request) {
-        return post(ApplymentsResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/applyments");
+
+        Optional<X509Certificate> x509Certificate = downloadCertificates();
+        if (x509Certificate.isPresent()) {
+            X509Certificate certificate = x509Certificate.get();
+            ApplymentsRequest.AccountInfo accountInfo = request.getAccountInfo();
+            accountInfo.setAccountName(rsaEncryptOAEP(accountInfo.getAccountName(), certificate));
+            accountInfo.setAccountNumber(rsaEncryptOAEP(accountInfo.getAccountNumber(), certificate));
+
+            ApplymentsRequest.ContactInfo contactInfo = request.getContactInfo();
+            contactInfo.setMobilePhone(rsaEncryptOAEP(contactInfo.getMobilePhone(), certificate));
+            contactInfo.setContactEmail(rsaEncryptOAEP(contactInfo.getContactEmail(), certificate));
+            contactInfo.setContactName(rsaEncryptOAEP(contactInfo.getContactName(), certificate));
+            contactInfo.setContactIdCardNumber(rsaEncryptOAEP(contactInfo.getContactIdCardNumber(), certificate));
+
+            ApplymentsRequest.IdCardInfo idCardInfo = request.getIdCardInfo();
+            idCardInfo.setIdCardNumber(rsaEncryptOAEP(idCardInfo.getIdCardNumber(), certificate));
+            idCardInfo.setIdCardName(rsaEncryptOAEP(idCardInfo.getIdCardName(), certificate));
+
+            return post(ApplymentsResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/applyments/", certificate);
+        }
+        return Optional.empty();
+    }
+
+    private String rsaEncryptOAEP(String message, X509Certificate x509Cert) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, x509Cert.getPublicKey());
+
+            byte[] data = message.getBytes("utf-8");
+            byte[] cipherdata = cipher.doFinal(data);
+            return Base64.getEncoder().encodeToString(cipherdata);
+        } catch (Exception  e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        }
     }
 
     @Override
@@ -110,8 +148,34 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsDownCertificatesResponse> downloadCertificates() {
-        return get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
+    public Optional<X509Certificate> downloadCertificates() {
+        Optional<ApplymentsDownCertificatesResponse> applymentsDownCertificatesResponse = get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
+        if (applymentsDownCertificatesResponse.isPresent()) {
+            ApplymentsDownCertificatesResponse.EncryptCertificate encryptCertificate = applymentsDownCertificatesResponse.get().getData().get(0).getEncryptCertificate();
+            String cert;
+            X509Certificate x509Cert;
+            try {
+                cert = aesUtil.decryptToString(
+                        encryptCertificate.getAssociated_data().replaceAll("\"", "")
+                                .getBytes("utf-8"),
+                        encryptCertificate.getNonce().replaceAll("\"", "")
+                                .getBytes("utf-8"),
+                        encryptCertificate.getCiphertext().replaceAll("\"", ""));
+                x509Cert = PemUtil
+                        .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
+                try {
+                    x509Cert.checkValidity();
+                } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+
+                }
+                return Optional.ofNullable(x509Cert);
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -566,6 +630,14 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
         T post = httpUtils.post(classZ, request, url);
+        if (post == null) {
+            return Optional.empty();
+        }
+        return Optional.of(post);
+    }
+
+    private <T> Optional<T> post(Class<T> classZ, Object request, String url, X509Certificate certificate) {
+        T post = httpUtils.post(classZ, request, url, certificate);
         if (post == null) {
             return Optional.empty();
         }

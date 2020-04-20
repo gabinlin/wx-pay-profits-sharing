@@ -23,6 +23,7 @@ import top.gabin.tools.auth.CacheService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
 
 public class HttpUtils {
 
@@ -103,6 +104,28 @@ public class HttpUtils {
         if (jsonData != null && !jsonData.equals("{}")) {
             httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
         }
+        return request(responseClass, httpPost);
+    }
+
+    public <T> T post(Class<T> responseClass, Object requestObj, String url, X509Certificate certificate) {
+        HttpPost httpPost = new HttpPost(url);
+        String jsonData = "";
+        //增加一个判断是否有Declared方法，要不JsonUtils.bean2Json(requestBody)会报异常
+        int methodsNum = requestObj.getClass().getDeclaredMethods().length;
+        if (requestObj instanceof String) {
+            jsonData = requestObj.toString();
+        } else if (methodsNum > 0) {
+            jsonData = JsonUtils.bean2Json(requestObj);
+        }
+        if (jsonData != null && !jsonData.equals("{}")) {
+            StringEntity reqEntity = new StringEntity(
+                    jsonData, ContentType.create("application/json", "utf-8"));
+            httpPost.setEntity(reqEntity);
+        }
+        if (jsonData != null && !jsonData.equals("{}")) {
+            httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
+        }
+        httpPost.addHeader("Wechatpay-Serial", certificate.getSerialNumber().toString(16).toUpperCase());
         return request(responseClass, httpPost);
     }
 
