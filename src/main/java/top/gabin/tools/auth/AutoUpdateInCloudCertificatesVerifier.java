@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
@@ -25,7 +26,9 @@ import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -196,6 +199,11 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
             }
             if (cloud) {
                 cacheService.cache(NEW_CREDENTIALS_CACHE_KEY, newCertList);
+                Map<BigInteger, X509Certificate> certificateMap = new HashMap<>();
+                for (X509Certificate x509Certificate : newCertList) {
+                    certificateMap.put(x509Certificate.getSerialNumber(), x509Certificate);
+                }
+                cacheService.cache(CloudCertificatesVerifier.CACHE_KEY, certificateMap);
             } else {
                 certificateList = newCertList;
                 this.verifier = new CertificatesVerifier(newCertList);

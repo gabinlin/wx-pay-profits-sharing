@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CloudCertificatesVerifier implements Verifier {
 
-    private final String CACHE_KEY = "CLOUD_CERTIFICATES_CACHE";
+    public static final String CACHE_KEY = "CLOUD_CERTIFICATES_CACHE";
 
     private CacheService cacheService;
 
