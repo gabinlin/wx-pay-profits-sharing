@@ -40,9 +40,7 @@ import top.gabin.tools.response.tool.ImageUploadResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     @Override
@@ -61,8 +59,8 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<X509Certificate> downloadCertificates() {
-        return Optional.empty();
+    public List<X509Certificate> downloadCertificates() {
+        return Collections.emptyList();
     }
 
     @Override
