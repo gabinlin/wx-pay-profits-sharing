@@ -9,15 +9,23 @@ import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsStatusRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
+import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
+import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
+import top.gabin.tools.response.ecommerce.fund.WithdrawForSubMchResponse;
+import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForSubMchResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.JsonUtils;
 
 import java.io.*;
 import java.security.cert.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class ProfitsSharingServiceTest {
@@ -97,8 +105,52 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testQueryPay() {
         Optional<CombineTransactionsStatusResponse> combineTransactionsStatusResponse =
-                profitsSharingService.combineTransactionsStatus("C_JS_11042020042114015215638");
+                profitsSharingService.combineTransactionsStatus("C_JS_11042020042115183415642");
         combineTransactionsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+    }
+
+    @Test
+    public void testProfitsSharing() {
+        ProfitSharingApplyRequest sharingApplyRequest = new ProfitSharingApplyRequest();
+        sharingApplyRequest.setTransactionId("4349500102202004213293235146");
+        List<ProfitSharingApplyRequest.Receivers> receiversList = new ArrayList<>();
+        ProfitSharingApplyRequest.Receivers receivers = new ProfitSharingApplyRequest.Receivers();
+        receivers.setAmount(1);
+        receivers.setReceiverMchid("1586045221");
+        receivers.setDescription("平台抽成");
+        receiversList.add(receivers);
+        sharingApplyRequest.setReceivers(receiversList);
+        sharingApplyRequest.setSubMchid("1587487911");
+        sharingApplyRequest.setOutOrderNo("232323232323223232332342");
+        sharingApplyRequest.setFinish(true);
+        profitsSharingService.applyProfitSharing(sharingApplyRequest);
+    }
+
+    @Test
+    public void testQueryOnlineBalance() {
+        Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount("1587487911");
+        response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
+    }
+
+    @Test
+    public void testWithdraw() {
+        WithdrawForSubMchRequest request = new WithdrawForSubMchRequest();
+        request.setAmount(1);
+        request.setOutRequestNo("20200421163501");
+        request.setBankMemo("我要提现");
+        request.setSubMchid("1587487911");
+        request.setRemark("我要提现");
+        Optional<WithdrawForSubMchResponse> withdraw = profitsSharingService.withdraw(request);
+        withdraw.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+    }
+
+    @Test
+    public void testQueryWithdraw() {
+        WithdrawStatusForSubMchRequest request = new WithdrawStatusForSubMchRequest();
+        request.setSubMchid("1587487911");
+        request.setWithdrawId("209000120133995202004211781163170");
+        Optional<WithdrawStatusForSubMchResponse> responseOptional = profitsSharingService.queryWithdrawStatus(request);
+        responseOptional.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
 
