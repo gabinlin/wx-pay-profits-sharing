@@ -238,15 +238,14 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         String nonceStr = timeStamp + "_app";
         params.put("timeStamp", timeStamp + "");
         params.put("nonceStr", nonceStr);
-        String packageStr = "prepay_id=" + prePayId;
-        params.put("package", packageStr);
+        params.put("package", "Sign=WXPay");
         params.put("signType", "RSA");
-        String singSource = String.format("%s\n%s\n%s\n%s",
+        String singSource = String.format("%s\n%s\n%s\n%s\n",
                 appId,
                 timeStamp,
                 nonceStr,
-                "prepay_id=" + prePayId);
-        String sign = RSASignUtil.sign(getPrivateKey(), singSource);
+                prePayId);
+        String sign = sign(singSource);
         params.put("paySign", sign);
         return params;
     }
@@ -263,12 +262,12 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         params.put("package", packageVal);
         String signType = "RSA";
         params.put("signType", signType);
-        String singSource = String.format("%s\n%s\n%s\n%s",
+        String singSource = String.format("%s\n%s\n%s\n%s\n",
                 appId,
                 timeStamp,
                 nonceStr,
                 packageVal);
-        String sign = RSASignUtil.sign(getPrivateKey(), singSource);
+        String sign = sign(singSource);
         params.put("paySign", sign);
         return params;
     }
@@ -279,23 +278,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     @Override
     public Map<String, String> getSmallPayParams(String prePayId, String appId) {
-        Map<String, String> params = getParams();
-        params.put("appId", appId);
-        long timeStamp = System.currentTimeMillis();
-        String nonceStr = timeStamp + "_small_app";
-        params.put("timeStamp", timeStamp + "");
-        params.put("nonceStr", nonceStr);
-        String packageVal = "prepay_id=" + prePayId;
-        params.put("package", packageVal);
-        params.put("signType", "RSA");
-        String singSource = String.format("%s\n%s\n%s\n%s",
-                appId,
-                timeStamp,
-                nonceStr,
-                prePayId);
-        String sign = RSASignUtil.sign(getPrivateKey(), singSource);
-        params.put("paySign", sign);
-        return params;
+        return getJsPayParams(prePayId, appId);
     }
 
     @Override
