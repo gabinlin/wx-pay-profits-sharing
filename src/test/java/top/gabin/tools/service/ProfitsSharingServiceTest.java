@@ -1,25 +1,23 @@
 package top.gabin.tools.service;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsStatusRequest;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.JsonUtils;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.cert.*;
-import java.util.Base64;
+import java.util.Date;
 import java.util.Optional;
 
 public class ProfitsSharingServiceTest {
@@ -70,12 +68,12 @@ public class ProfitsSharingServiceTest {
         }
     }
 
-//    @Test
+    //    @Test
     public void testApplyments() {
 
     }
 
-//    @Test
+    //    @Test
     public void testUploadImage() throws Exception {
         Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpeg"));
         imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
@@ -95,4 +93,13 @@ public class ProfitsSharingServiceTest {
 //        request.setSubOrders();
 //        profitsSharingService.combineTransactions(request);
     }
+
+    @Test
+    public void testQueryPay() {
+        Optional<CombineTransactionsStatusResponse> combineTransactionsStatusResponse =
+                profitsSharingService.combineTransactionsStatus("C_JS_11042020042114015215638");
+        combineTransactionsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+    }
+
+
 }
