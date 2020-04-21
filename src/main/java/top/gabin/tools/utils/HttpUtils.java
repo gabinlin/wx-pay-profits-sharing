@@ -92,7 +92,7 @@ public class HttpUtils {
             if (responseClass.isAssignableFrom(String.class)) {
                 return (T) responseText;
             }
-            System.out.println(responseText);
+            logger.info(responseText);
             return JsonUtils.json2Bean(responseClass, responseText);
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,12 +115,10 @@ public class HttpUtils {
             jsonData = JsonUtils.bean2Json(requestObj);
         }
         if (jsonData != null && !jsonData.equals("{}")) {
+            logger.info(jsonData);
             StringEntity reqEntity = new StringEntity(
                     jsonData, ContentType.create("application/json", "utf-8"));
             httpPost.setEntity(reqEntity);
-        }
-        if (jsonData != null && !jsonData.equals("{}")) {
-            httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
         }
         return request(responseClass, httpPost);
     }
@@ -136,6 +134,7 @@ public class HttpUtils {
             jsonData = JsonUtils.bean2Json(requestObj);
         }
         if (jsonData != null && !jsonData.equals("{}")) {
+            logger.info(jsonData);
             StringEntity reqEntity = new StringEntity(
                     jsonData, ContentType.create("application/json", "utf-8"));
             httpPost.setEntity(reqEntity);
