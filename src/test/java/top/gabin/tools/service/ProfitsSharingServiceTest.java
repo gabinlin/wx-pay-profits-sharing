@@ -132,7 +132,7 @@ public class ProfitsSharingServiceTest {
         response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
     }
 
-    @Test
+//    @Test
     public void testWithdraw() {
         WithdrawForSubMchRequest request = new WithdrawForSubMchRequest();
         request.setAmount(1);
