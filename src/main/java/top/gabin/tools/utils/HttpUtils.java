@@ -140,9 +140,6 @@ public class HttpUtils {
                     jsonData, ContentType.create("application/json", "utf-8"));
             httpPost.setEntity(reqEntity);
         }
-        if (jsonData != null && !jsonData.equals("{}")) {
-            httpPost.setEntity(new StringEntity(jsonData, "utf-8"));
-        }
         httpPost.addHeader("Wechatpay-Serial", certificate.getSerialNumber().toString(16).toUpperCase());
         return request(responseClass, httpPost);
     }
