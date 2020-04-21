@@ -59,9 +59,33 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
 
     private ReentrantLock lock = new ReentrantLock();
 
+    private List<X509Certificate> certificateList;
+
     public String getSerialNo() {
 
         return null;
+    }
+
+    public List<X509Certificate> getLastCertificateList() {
+        List<X509Certificate> certificateList = getCertificateList();
+        if (certificateList.isEmpty()) {
+            //构造时更新证书
+            try {
+                autoUpdateCert();
+                setInstant(Instant.now());
+            } catch (IOException | GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return getCertificateList();
+    }
+
+    private List<X509Certificate> getCertificateList() {
+        if (cloud) {
+            return cacheService.get(NEW_CREDENTIALS_CACHE_KEY, List.class);
+        } else {
+            return certificateList;
+        }
     }
 
     //时间间隔枚举，支持一小时、六小时以及十二小时
@@ -173,6 +197,7 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
             if (cloud) {
                 cacheService.cache(NEW_CREDENTIALS_CACHE_KEY, newCertList);
             } else {
+                certificateList = newCertList;
                 this.verifier = new CertificatesVerifier(newCertList);
             }
         } else {

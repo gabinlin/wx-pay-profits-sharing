@@ -44,34 +44,13 @@ public class ProfitsSharingServiceTest {
         profitsSharingService = new ProfitsSharingServiceImpl(config, null);
     }
 
-    private String rsaEncryptOAEP(String message, X509Certificate x509Cert)
-            throws IllegalBlockSizeException, IOException {
-        if (true) {
-            return message;
-        }
-        try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, x509Cert.getPublicKey());
-
-            byte[] data = message.getBytes("utf-8");
-            byte[] cipherdata = cipher.doFinal(data);
-            return Base64.getEncoder().encodeToString(cipherdata);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new RuntimeException("当前Java环境不支持RSA v1.5/OAEP", e);
-        } catch (InvalidKeyException e) {
-            throw new IllegalArgumentException("无效的证书", e);
-        } catch (IllegalBlockSizeException | BadPaddingException e) {
-            throw new IllegalBlockSizeException("加密原串的长度不能超过214字节");
-        }
-    }
-
     /**
      * 获取证书。
      *
      * @param filename 证书文件路径  (required)
      * @return X509证书
      */
-    public static X509Certificate getCertificate(String filename) throws IOException {
+    private static X509Certificate getCertificate(String filename) throws IOException {
         InputStream fis = new FileInputStream(filename);
         BufferedInputStream bis = new BufferedInputStream(fis);
 
@@ -108,5 +87,12 @@ public class ProfitsSharingServiceTest {
         request.setApplymentId("2000002140061723");
         Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus(request);
         applymentsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+    }
+
+    @Test
+    public void testPay() {
+//        CombineTransactionsJsRequest request = new CombineTransactionsJsRequest();
+//        request.setSubOrders();
+//        profitsSharingService.combineTransactions(request);
     }
 }

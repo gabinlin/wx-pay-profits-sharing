@@ -23,7 +23,11 @@ import top.gabin.tools.auth.CacheService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.PrivateKey;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HttpUtils {
 
@@ -61,6 +65,20 @@ public class HttpUtils {
                 .withMerchant(mchId, mchSerialNo, privateKey)
                 .withValidator(new WechatPay2Validator(verifier));
         httpClient = builder.build();
+    }
+
+    public List<X509Certificate> getLastCertificateList() {
+        List<X509Certificate> certificateList = verifier.getLastCertificateList().stream().filter(certificate -> {
+            try {
+                certificate.checkValidity();
+                return true;
+            } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }).collect(Collectors.toList());
+        logger.info("可用证书数量："  + certificateList.size());
+        return certificateList;
     }
 
     private <T> T request(Class<T> responseClass, HttpUriRequest request) {

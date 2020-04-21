@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -141,7 +142,7 @@ public interface ProfitsSharingService {
      *
      * @return .
      */
-    Optional<X509Certificate> downloadCertificates();
+    List<X509Certificate> downloadCertificates();
 
     /**
      * <pre>

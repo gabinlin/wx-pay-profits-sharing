@@ -98,8 +98,8 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     @Override
     public Optional<ApplymentsResponse> applyments(ApplymentsRequest request) {
-
-        Optional<X509Certificate> x509Certificate = downloadCertificates();
+        List<X509Certificate> certificateList = downloadCertificates();
+        Optional<X509Certificate> x509Certificate = certificateList.stream().findFirst();
         if (x509Certificate.isPresent()) {
             X509Certificate certificate = x509Certificate.get();
             ApplymentsRequest.AccountInfo accountInfo = request.getAccountInfo();
@@ -148,41 +148,53 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<X509Certificate> downloadCertificates() {
+    public List<X509Certificate> downloadCertificates() {
         Optional<ApplymentsDownCertificatesResponse> applymentsDownCertificatesResponse = get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
         if (applymentsDownCertificatesResponse.isPresent()) {
-            ApplymentsDownCertificatesResponse.EncryptCertificate encryptCertificate = applymentsDownCertificatesResponse.get().getData().get(0).getEncryptCertificate();
-            String cert;
-            X509Certificate x509Cert;
-            try {
-                cert = aesUtil.decryptToString(
-                        encryptCertificate.getAssociated_data().replaceAll("\"", "")
-                                .getBytes("utf-8"),
-                        encryptCertificate.getNonce().replaceAll("\"", "")
-                                .getBytes("utf-8"),
-                        encryptCertificate.getCiphertext().replaceAll("\"", ""));
-                x509Cert = PemUtil
-                        .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
+            List<X509Certificate> certificateList = new ArrayList<>();
+            for (ApplymentsDownCertificatesResponse.Data data : applymentsDownCertificatesResponse.get().getData()) {
+                ApplymentsDownCertificatesResponse.EncryptCertificate encryptCertificate = data.getEncryptCertificate();
+                String cert;
+                X509Certificate x509Cert;
                 try {
-                    x509Cert.checkValidity();
-                } catch (CertificateExpiredException | CertificateNotYetValidException e) {
-
+                    cert = aesUtil.decryptToString(
+                            encryptCertificate.getAssociated_data().replaceAll("\"", "")
+                                    .getBytes("utf-8"),
+                            encryptCertificate.getNonce().replaceAll("\"", "")
+                                    .getBytes("utf-8"),
+                            encryptCertificate.getCiphertext().replaceAll("\"", ""));
+                    x509Cert = PemUtil
+                            .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
+                    try {
+                        x509Cert.checkValidity();
+                        certificateList.add(x509Cert);
+                    } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+                        continue;
+                    }
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                return Optional.ofNullable(x509Cert);
-            } catch (GeneralSecurityException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
         }
-        return Optional.empty();
+        return Collections.emptyList();
     }
 
     @Override
     public Optional<ApplymentsModifySettlementResponse> modifySettlement(ApplymentsModifySettlementRequest request) {
-        return post(ApplymentsModifySettlementResponse.class, request,
-                String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/modify-settlement",
-                        request.getSubMchid()));
+        List<X509Certificate> certificateList = httpUtils.getLastCertificateList();
+        Optional<X509Certificate> x509Certificate = certificateList.stream().findFirst();
+        if (x509Certificate.isPresent()) {
+            X509Certificate certificate = x509Certificate.get();
+            String accountNumber = request.getAccountNumber();
+            request.setAccountNumber(rsaEncryptOAEP(accountNumber, certificate));
+            return post(ApplymentsModifySettlementResponse.class, request,
+                    String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/modify-settlement",
+                            request.getSubMchid()), certificate);
+        }
+        return Optional.empty();
     }
 
     @Override
