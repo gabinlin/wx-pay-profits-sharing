@@ -370,7 +370,7 @@ public class CombineTransactionsAppRequest {
 		 * <pre>
 		 * 字段名：是否指定分账
 		 * 变量名：profit_sharing
-		 * 是否必填：是
+		 * 是否必填：否
 		 * 类型：bool
 		 * 描述：
 		 *  是否指定分账，枚举值： 
@@ -562,7 +562,7 @@ public class CombineTransactionsAppRequest {
 		 * <pre>
 		 * 字段名：是否指定分账
 		 * 变量名：profit_sharing
-		 * 是否必填：可选
+		 * 是否必填：否
 		 * 类型：bool
 		 * 描述：
 		 *  是否分账，与外层profit_sharing同时存在时，以本字段为准。
@@ -578,7 +578,7 @@ public class CombineTransactionsAppRequest {
 		 * <pre>
 		 * 字段名：补差金额
 		 * 变量名：subsidy_amount
-		 * 是否必填：可选
+		 * 是否必填：否
 		 * 类型：int64
 		 * 描述：
 		 *  SettleInfo.profit_sharing为true时，该金额才生效。 

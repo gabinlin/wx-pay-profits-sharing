@@ -52,7 +52,7 @@ public class BuildDTOUtilsTest {
         // 进件-二级分销商
         params.add(new Params("ecommerce/applyments/chapter3_1.shtml", "Applyments"));
         params.add(new Params("ecommerce/applyments/chapter3_2.shtml", "ApplymentsStatus"));
-        params.add(new Params("ecommerce/applyments/chapter3_3.shtml", "ApplymentsDownCertificates"));
+//        params.add(new Params("ecommerce/applyments/chapter3_3.shtml", "ApplymentsDownCertificates"));
         params.add(new Params("ecommerce/applyments/chapter3_4.shtml", "ApplymentsModifySettlement"));
         params.add(new Params("ecommerce/applyments/chapter3_5.shtml", "ApplymentsSettlementStatus"));
 
