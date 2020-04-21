@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
+import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsStatusRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
@@ -130,6 +131,24 @@ public class ProfitsSharingServiceTest {
     public void testQueryOnlineBalance() {
         Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount("1587487911");
         response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
+    }
+
+    @Test
+    public void testQueryOnlineBalanceForPlatform() {
+        profitsSharingService.queryOnlineAmount(AccountType.BASIC).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        profitsSharingService.queryOnlineAmount(AccountType.FEES).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+//        profitsSharingService.queryOnlineAmount(AccountType.OPERATION).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+    }
+
+    @Test
+    public void testQueryDayEndBalance() {
+        Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount("1587487911");
+        response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
+    }
+
+    @Test
+    public void testQueryDayEndBalanceForPlatform() {
+        profitsSharingService.queryDayEndAmount(AccountType.BASIC, new Date()).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
 //    @Test
