@@ -13,21 +13,22 @@ import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
+import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingQueryApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
+import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
+import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
+import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsAppRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsCloseRequest;
-import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawForSubMchResponse;
 import top.gabin.tools.response.ecommerce.fund.WithdrawStatusForSubMchResponse;
-import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.JsonUtils;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.security.cert.*;
 import java.util.*;
 
@@ -135,30 +136,6 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.combineTransactions(getCombineTransactionsRequest()).ifPresent(this::logger);
     }
 
-    @Test
-    public void testQueryPay() {
-        profitsSharingService.combineTransactionsStatus("C_JS_11042020042118160415651").ifPresent(this::logger);
-    }
-
-    @Test
-    public void testClosePay() {
-        CombineTransactionsCloseRequest request = new CombineTransactionsCloseRequest();
-        request.setCombineAppid("wxb2bb0b1a0dcd2eed");
-        request.setCombineOutTradeNo("20200422123455485");
-        CombineTransactionsCloseRequest.SubOrders subOrders = new CombineTransactionsCloseRequest.SubOrders();
-        subOrders.setMchid(profitsSharingService.getPlatformId().orElse(null));
-        subOrders.setOutTradeNo("20200422123455");
-        subOrders.setSubMchid(getSubMchid());
-        request.setSubOrders(Collections.singletonList(subOrders));
-        profitsSharingService.combineTransactionsClose(request);
-    }
-
-    @Test
-    public void testGetCombineTransactionsParams() {
-        Map<String, String> jsPayParams = profitsSharingService.getJsPayParams("up_wx221223362624656ee60e9a8e1525699200", "wxb2bb0b1a0dcd2eed");
-        logger(jsPayParams);
-    }
-
     private CombineTransactionsAppRequest getCombineTransactionsRequest() {
         CombineTransactionsAppRequest request = new CombineTransactionsAppRequest();
         request.setCombineAppid("wxb2bb0b1a0dcd2eed");
@@ -201,33 +178,61 @@ public class ProfitsSharingServiceTest {
         return request;
     }
 
-    private String formatRFC3339ToString(Date date) {
-        java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US);
-        return dateFormat.format(date);
-    }
-
-    private void logger(Object obj) {
-        logger.info(JsonUtils.bean2Json(obj));
-    }
-
-    //    @Test
-    public void testUploadImage() throws Exception {
-        Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpeg"));
-        imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
-    }
-
-    @Test
-    public void testPay() {
-//        CombineTransactionsJsRequest request = new CombineTransactionsJsRequest();
-//        request.setSubOrders();
-//        profitsSharingService.combineTransactions(request);
-    }
-
     @Test
     public void testQueryPay() {
-        Optional<CombineTransactionsStatusResponse> combineTransactionsStatusResponse =
-                profitsSharingService.combineTransactionsStatus("C_JS_11042020042115183415642");
-        combineTransactionsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        profitsSharingService.combineTransactionsStatus("C_JS_11042020042118160415651").ifPresent(this::logger);
+    }
+
+    @Test
+    public void testClosePay() {
+        CombineTransactionsCloseRequest request = new CombineTransactionsCloseRequest();
+        request.setCombineAppid("wxb2bb0b1a0dcd2eed");
+        request.setCombineOutTradeNo("20200422123455485");
+        CombineTransactionsCloseRequest.SubOrders subOrders = new CombineTransactionsCloseRequest.SubOrders();
+        subOrders.setMchid(profitsSharingService.getPlatformId().orElse(null));
+        subOrders.setOutTradeNo("20200422123455");
+        subOrders.setSubMchid(getSubMchid());
+        request.setSubOrders(Collections.singletonList(subOrders));
+        profitsSharingService.combineTransactionsClose(request);
+    }
+
+    @Test
+    public void testGetCombineTransactionsParams() {
+        Map<String, String> jsPayParams = profitsSharingService.getJsPayParams("up_wx221223362624656ee60e9a8e1525699200", "wxb2bb0b1a0dcd2eed");
+        logger(jsPayParams);
+    }
+
+    @Test
+    public void subsidiesCreate() {
+        SubsidiesCreateRequest request = new SubsidiesCreateRequest();
+//        request.setRefundId("");
+        request.setTransactionId("4345600104202004211569820906");
+        request.setSubMchid(getSubMchid());
+        request.setDescription("补差");
+        request.setAmount(1);
+        profitsSharingService.subsidiesCreate(request).ifPresent(this::logger);
+    }
+
+    @Test
+    public void subsidiesRefund() {
+        SubsidiesRefundRequest request = new SubsidiesRefundRequest();
+        request.setRefundId("50300203942020042100201784878");
+        request.setOutOrderNo("202004221419");
+        request.setTransactionId("4345600104202004211569820906");
+        request.setSubMchid(getSubMchid());
+        request.setDescription("补差回退");
+        request.setAmount(1);
+        profitsSharingService.subsidiesRefund(request).ifPresent(this::logger);
+    }
+
+    @Test
+    public void subsidiesCancel() {
+        SubsidiesCancelRequest request = new SubsidiesCancelRequest();
+//        request.setRefundId("50300203942020042100201784878");
+        request.setTransactionId("4345600104202004211569820906");
+        request.setSubMchid(getSubMchid());
+        request.setDescription("取消补差");
+        profitsSharingService.subsidiesCancel(request).ifPresent(this::logger);
     }
 
     @Test
@@ -245,6 +250,21 @@ public class ProfitsSharingServiceTest {
         sharingApplyRequest.setOutOrderNo("232323232323223232332342");
         sharingApplyRequest.setFinish(true);
         profitsSharingService.applyProfitSharing(sharingApplyRequest);
+    }
+
+    @Test
+    public void queryProfitSharingStatus() {
+        ProfitSharingQueryApplyRequest request = new ProfitSharingQueryApplyRequest();
+        request.setSubMchid(getSubMchid());
+        request.setOutOrderNo("232323232323223232332342");
+        request.setTransactionId("4349500102202004213293235146");
+        profitsSharingService.queryProfitSharingStatus(request);
+    }
+
+    //    @Test
+    public void testUploadImage() throws Exception {
+        Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpeg"));
+        imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
@@ -308,6 +328,15 @@ public class ProfitsSharingServiceTest {
         request.setAmount(amount);
         request.setOutRefundNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
         profitsSharingService.refundApply(request).ifPresent(refundApplyResponse -> logger.info(JsonUtils.bean2Json(refundApplyResponse)));
+    }
+
+    private String formatRFC3339ToString(Date date) {
+        java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US);
+        return dateFormat.format(date);
+    }
+
+    private void logger(Object obj) {
+        logger.info(JsonUtils.bean2Json(obj));
     }
 
 
