@@ -2,6 +2,7 @@ package top.gabin.tools.service;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsAppRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
@@ -23,11 +26,9 @@ import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.JsonUtils;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.security.cert.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ProfitsSharingServiceTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -120,8 +121,75 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testQuerySettlement() {
         ApplymentsSettlementStatusRequest request = new ApplymentsSettlementStatusRequest();
-        request.setSubMchid("1587487911");
+        request.setSubMchid(getSubMchid());
         profitsSharingService.querySettlement(request).ifPresent(this::logger);
+    }
+
+    private String getSubMchid() {
+        return "1587487911";
+    }
+
+    @Test
+    public void testCombineTransactions() {
+        profitsSharingService.combineTransactions(getCombineTransactionsRequest()).ifPresent(this::logger);
+    }
+
+    @Test
+    public void testQueryPay() {
+        profitsSharingService.combineTransactionsStatus("C_JS_11042020042118160415651").ifPresent(this::logger);
+    }
+
+    @Test
+    public void testGetCombineTransactionsParams() {
+        Map<String, String> jsPayParams = profitsSharingService.getJsPayParams("up_wx221223362624656ee60e9a8e1525699200", "wxb2bb0b1a0dcd2eed");
+        logger(jsPayParams);
+    }
+
+    private CombineTransactionsAppRequest getCombineTransactionsRequest() {
+        CombineTransactionsAppRequest request = new CombineTransactionsAppRequest();
+        request.setCombineAppid("wxb2bb0b1a0dcd2eed");
+        String platformMchId = profitsSharingService.getPlatformId().orElse(null);
+        request.setCombineMchid(platformMchId);
+        request.setNotifyUrl("https://cab.gabin.top/refund/wx");
+
+        Date timeout = DateUtils.addMinutes(new Date(), 30);
+        request.setTimeExpire(formatRFC3339ToString(timeout));
+        CombineTransactionsAppRequest.SubOrders subOrders = new CombineTransactionsAppRequest.SubOrders();
+        request.setSubOrders(Collections.singletonList(subOrders));
+
+        CombineTransactionsAppRequest.SceneInfo sceneInfo = new CombineTransactionsAppRequest.SceneInfo();
+        request.setSceneInfo(sceneInfo);
+        sceneInfo.setPayerClientIp("127.0.0.1");
+
+        CombineTransactionsAppRequest.CombinePayerInfo combinePayerInfo = new CombineTransactionsAppRequest.CombinePayerInfo();
+        combinePayerInfo.setOpenid("ooVCYuPHSANi2SFlVcvoVnlbpnoI");
+        request.setCombinePayerInfo(combinePayerInfo);
+
+        CombineTransactionsAppRequest.Amount amount = new CombineTransactionsAppRequest.Amount();
+        amount.setCurrency("CNY");
+        amount.setTotalAmount(100);
+        subOrders.setAmount(amount);
+        subOrders.setOutTradeNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+        subOrders.setAttach("gabin");
+        subOrders.setMchid(platformMchId);
+        subOrders.setSubMchid(getSubMchid());
+
+        subOrders.setProfitSharing(true);
+        CombineTransactionsAppRequest.SettleInfo settleInfo = new CombineTransactionsAppRequest.SettleInfo();
+        settleInfo.setProfitSharing(true);
+        settleInfo.setSubsidyAmount(100);
+        subOrders.setSettleInfo(settleInfo);
+
+        String label = "软件设计费用";
+        subOrders.setDetail(label);
+        subOrders.setDescription(label);
+        request.setCombineOutTradeNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS"));
+        return request;
+    }
+
+    private String formatRFC3339ToString(Date date) {
+        java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US);
+        return dateFormat.format(date);
     }
 
     private void logger(Object obj) {
@@ -159,7 +227,7 @@ public class ProfitsSharingServiceTest {
         receivers.setDescription("平台抽成");
         receiversList.add(receivers);
         sharingApplyRequest.setReceivers(receiversList);
-        sharingApplyRequest.setSubMchid("1587487911");
+        sharingApplyRequest.setSubMchid(getSubMchid());
         sharingApplyRequest.setOutOrderNo("232323232323223232332342");
         sharingApplyRequest.setFinish(true);
         profitsSharingService.applyProfitSharing(sharingApplyRequest);
@@ -167,7 +235,7 @@ public class ProfitsSharingServiceTest {
 
     @Test
     public void testQueryOnlineBalance() {
-        Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount("1587487911");
+        Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount(getSubMchid());
         response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
     }
 
@@ -180,7 +248,7 @@ public class ProfitsSharingServiceTest {
 
     @Test
     public void testQueryDayEndBalance() {
-        Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount("1587487911");
+        Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount(getSubMchid());
         response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
     }
 
@@ -189,13 +257,13 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.queryDayEndAmount(AccountType.BASIC, new Date()).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
-//    @Test
+    //    @Test
     public void testWithdraw() {
         WithdrawForSubMchRequest request = new WithdrawForSubMchRequest();
         request.setAmount(1);
         request.setOutRequestNo("20200421163501");
         request.setBankMemo("我要提现");
-        request.setSubMchid("1587487911");
+        request.setSubMchid(getSubMchid());
         request.setRemark("我要提现");
         Optional<WithdrawForSubMchResponse> withdraw = profitsSharingService.withdraw(request);
         withdraw.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
@@ -204,7 +272,7 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testQueryWithdraw() {
         WithdrawStatusForSubMchRequest request = new WithdrawStatusForSubMchRequest();
-        request.setSubMchid("1587487911");
+        request.setSubMchid(getSubMchid());
         request.setWithdrawId("209000120133995202004211781163170");
         Optional<WithdrawStatusForSubMchResponse> responseOptional = profitsSharingService.queryWithdrawStatus(request);
         responseOptional.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
@@ -215,7 +283,7 @@ public class ProfitsSharingServiceTest {
         RefundApplyRequest request = new RefundApplyRequest();
         request.setTransactionId("4303500104202004210206956407");
 //        request.setOutTradeNo("");
-        request.setSubMchid("1587487911");
+        request.setSubMchid(getSubMchid());
         request.setSpAppid("wxb2bb0b1a0dcd2eed");
         request.setReason("退款");
         request.setNotifyUrl("https://cab.gabin.top/refund/wx/eco");
