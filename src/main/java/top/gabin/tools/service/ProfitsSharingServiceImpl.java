@@ -32,6 +32,7 @@ import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
 import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
 import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.*;
+import top.gabin.tools.response.AbstractResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
@@ -227,7 +228,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public void combineTransactionsClose(CombineTransactionsCloseRequest request) {
         String url = String.format("https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/%s/close", request.getCombineOutTradeNo());
-        post(String.class, request, url);
+        post(AbstractResponse.class, request, url);
     }
 
     @Override
@@ -623,7 +624,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
 
-    private <T> Optional<T> post(Class<T> classZ, Object request, String url) {
+    private <T extends AbstractResponse> Optional<T> post(Class<T> classZ, Object request, String url) {
         T post = httpUtils.post(classZ, request, url);
         if (post == null) {
             return Optional.empty();
@@ -631,7 +632,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return Optional.of(post);
     }
 
-    private <T> Optional<T> post(Class<T> classZ, Object request, String url, X509Certificate certificate) {
+    private <T extends AbstractResponse> Optional<T> post(Class<T> classZ, Object request, String url, X509Certificate certificate) {
         T post = httpUtils.post(classZ, request, url, certificate);
         if (post == null) {
             return Optional.empty();
@@ -639,7 +640,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return Optional.of(post);
     }
 
-    private <T> Optional<T> get(Class<T> classZ, String url) {
+    private <T extends AbstractResponse> Optional<T> get(Class<T> classZ, String url) {
         T value = httpUtils.get(classZ, url);
         if (value == null) {
             return Optional.empty();
@@ -647,7 +648,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         return Optional.of(value);
     }
 
-    private <T> Optional<T> get(Class<T> classZ, String url, Map<String, String> query) {
+    private <T extends AbstractResponse> Optional<T> get(Class<T> classZ, String url, Map<String, String> query) {
         if (query != null && !query.isEmpty()) {
             if (!url.contains("?")) {
                 url += "?";

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.auth.AutoUpdateInCloudCertificatesVerifier;
 import top.gabin.tools.auth.CacheService;
+import top.gabin.tools.response.AbstractResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,49 +82,41 @@ public class HttpUtils {
         return certificateList;
     }
 
-    private <T> T request(Class<T> responseClass, HttpUriRequest request) {
+    private <T extends AbstractResponse> T request(Class<T> responseClass, HttpUriRequest request) {
         request.addHeader("Content-Type", "application/json");
         request.addHeader("Accept", "application/json");
         try {
             HttpResponse response = httpClient.execute(request);
+            int statusCode = response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();
             String responseText = EntityUtils.toString(entity, "utf-8");
             EntityUtils.consume(entity);
-            if (responseClass.isAssignableFrom(String.class)) {
-                return (T) responseText;
-            }
             logger.info(responseText);
-            return JsonUtils.json2Bean(responseClass, responseText);
+            T responseInstance = JsonUtils.json2Bean(responseClass, responseText);
+            responseInstance.setHttpStatusCode(statusCode);
+            return responseInstance;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public <T> T get(Class<T> responseClass, String url) {
+    public <T extends AbstractResponse> T get(Class<T> responseClass, String url) {
         return request(responseClass, new HttpGet(url));
     }
 
-    public <T> T post(Class<T> responseClass, Object requestObj, String url) {
-        HttpPost httpPost = new HttpPost(url);
-        String jsonData = "";
-        //增加一个判断是否有Declared方法，要不JsonUtils.bean2Json(requestBody)会报异常
-        int methodsNum = requestObj.getClass().getDeclaredMethods().length;
-        if (requestObj instanceof String) {
-            jsonData = requestObj.toString();
-        } else if (methodsNum > 0) {
-            jsonData = JsonUtils.bean2Json(requestObj);
-        }
-        if (jsonData != null && !jsonData.equals("{}")) {
-            logger.info(jsonData);
-            StringEntity reqEntity = new StringEntity(
-                    jsonData, ContentType.create("application/json", "utf-8"));
-            httpPost.setEntity(reqEntity);
-        }
+    public <T extends AbstractResponse> T post(Class<T> responseClass, Object requestObj, String url) {
+        HttpPost httpPost = getHttpPost(requestObj, url);
         return request(responseClass, httpPost);
     }
 
-    public <T> T post(Class<T> responseClass, Object requestObj, String url, X509Certificate certificate) {
+    public <T extends AbstractResponse> T post(Class<T> responseClass, Object requestObj, String url, X509Certificate certificate) {
+        HttpPost httpPost = getHttpPost(requestObj, url);
+        httpPost.addHeader("Wechatpay-Serial", certificate.getSerialNumber().toString(16).toUpperCase());
+        return request(responseClass, httpPost);
+    }
+
+    private HttpPost getHttpPost(Object requestObj, String url) {
         HttpPost httpPost = new HttpPost(url);
         String jsonData = "";
         //增加一个判断是否有Declared方法，要不JsonUtils.bean2Json(requestBody)会报异常
@@ -139,8 +132,7 @@ public class HttpUtils {
                     jsonData, ContentType.create("application/json", "utf-8"));
             httpPost.setEntity(reqEntity);
         }
-        httpPost.addHeader("Wechatpay-Serial", certificate.getSerialNumber().toString(16).toUpperCase());
-        return request(responseClass, httpPost);
+        return httpPost;
     }
 
     public InputStream download(String downloadUrl) {

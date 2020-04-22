@@ -13,6 +13,7 @@ import top.gabin.tools.request.ecommerce.applyments.ApplymentsStatusRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
+import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
@@ -170,6 +171,24 @@ public class ProfitsSharingServiceTest {
         request.setWithdrawId("209000120133995202004211781163170");
         Optional<WithdrawStatusForSubMchResponse> responseOptional = profitsSharingService.queryWithdrawStatus(request);
         responseOptional.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+    }
+
+    @Test
+    public void testRefund() {
+        RefundApplyRequest request = new RefundApplyRequest();
+        request.setTransactionId("4303500104202004210206956407");
+//        request.setOutTradeNo("");
+        request.setSubMchid("1587487911");
+        request.setSpAppid("wxb2bb0b1a0dcd2eed");
+        request.setReason("退款");
+        request.setNotifyUrl("https://cab.gabin.top/refund/wx/eco");
+        RefundApplyRequest.Amount amount = new RefundApplyRequest.Amount();
+        amount.setCurrency("CNY");
+        amount.setTotal(2);
+        amount.setRefund(2);
+        request.setAmount(amount);
+        request.setOutRefundNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+        profitsSharingService.refundApply(request).ifPresent(refundApplyResponse -> logger.info(JsonUtils.bean2Json(refundApplyResponse)));
     }
 
 
