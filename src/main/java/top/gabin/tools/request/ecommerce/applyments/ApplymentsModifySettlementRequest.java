@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,6 +25,7 @@ public class ApplymentsModifySettlementRequest {
 	 *  示例值：1511101111 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -108,6 +110,7 @@ public class ApplymentsModifySettlementRequest {
 	@JsonProperty(value = "account_number")
 	private String accountNumber;
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}

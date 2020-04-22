@@ -89,7 +89,7 @@ public class HttpUtils {
             HttpResponse response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();
-            String responseText = EntityUtils.toString(entity, "utf-8");
+            String responseText = entity == null ? "{}" : EntityUtils.toString(entity, "utf-8");
             EntityUtils.consume(entity);
             logger.info(responseText);
             T responseInstance = JsonUtils.json2Bean(responseClass, responseText);
