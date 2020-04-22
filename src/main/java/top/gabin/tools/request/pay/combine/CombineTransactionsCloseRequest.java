@@ -1,5 +1,6 @@
 package top.gabin.tools.request.pay.combine;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -39,6 +40,7 @@ public class CombineTransactionsCloseRequest {
 	 *  示例值：P20150806125346 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "combine_out_trade_no")
 	private String combineOutTradeNo;
 
@@ -64,6 +66,7 @@ public class CombineTransactionsCloseRequest {
 		this.combineAppid = combineAppid;
 	}
 
+	@JsonIgnore
 	public String getCombineOutTradeNo() {
 		return this.combineOutTradeNo;
 	}

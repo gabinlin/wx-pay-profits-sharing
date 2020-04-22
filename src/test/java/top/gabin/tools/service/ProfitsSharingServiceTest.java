@@ -15,6 +15,7 @@ import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsAppRequest;
+import top.gabin.tools.request.pay.combine.CombineTransactionsCloseRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsJsRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
@@ -137,6 +138,19 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testQueryPay() {
         profitsSharingService.combineTransactionsStatus("C_JS_11042020042118160415651").ifPresent(this::logger);
+    }
+
+    @Test
+    public void testClosePay() {
+        CombineTransactionsCloseRequest request = new CombineTransactionsCloseRequest();
+        request.setCombineAppid("wxb2bb0b1a0dcd2eed");
+        request.setCombineOutTradeNo("20200422123455485");
+        CombineTransactionsCloseRequest.SubOrders subOrders = new CombineTransactionsCloseRequest.SubOrders();
+        subOrders.setMchid(profitsSharingService.getPlatformId().orElse(null));
+        subOrders.setOutTradeNo("20200422123455");
+        subOrders.setSubMchid(getSubMchid());
+        request.setSubOrders(Collections.singletonList(subOrders));
+        profitsSharingService.combineTransactionsClose(request);
     }
 
     @Test

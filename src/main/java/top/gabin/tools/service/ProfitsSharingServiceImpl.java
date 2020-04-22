@@ -37,7 +37,10 @@ import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountDayEndOfSubMchResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfPlatformResponse;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
-import top.gabin.tools.response.ecommerce.applyments.*;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsModifySettlementResponse;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsResponse;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsSettlementStatusResponse;
+import top.gabin.tools.response.ecommerce.applyments.ApplymentsStatusResponse;
 import top.gabin.tools.response.ecommerce.fund.*;
 import top.gabin.tools.response.ecommerce.profitsharing.*;
 import top.gabin.tools.response.ecommerce.refunds.RefundApplyResponse;
@@ -48,12 +51,12 @@ import top.gabin.tools.response.ecommerce.subsidies.SubsidiesRefundResponse;
 import top.gabin.tools.response.pay.bill.BillOfFundFlowResponse;
 import top.gabin.tools.response.pay.bill.BillOfTradeResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsAppResponse;
+import top.gabin.tools.response.pay.combine.CombineTransactionsCloseResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsJsResponse;
 import top.gabin.tools.response.pay.combine.CombineTransactionsStatusResponse;
 import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.HttpUtils;
 import top.gabin.tools.utils.JsonUtils;
-import top.gabin.tools.utils.RSASignUtil;
 
 import javax.crypto.Cipher;
 import java.io.*;
@@ -61,8 +64,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.Signature;
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -232,7 +233,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public void combineTransactionsClose(CombineTransactionsCloseRequest request) {
         String url = String.format("https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/%s/close", request.getCombineOutTradeNo());
-        post(AbstractResponse.class, request, url);
+        post(CombineTransactionsCloseResponse.class, request, url);
     }
 
     @Override
