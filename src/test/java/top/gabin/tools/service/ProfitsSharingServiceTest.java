@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
-import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
-import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
-import top.gabin.tools.request.ecommerce.applyments.ApplymentsStatusRequest;
-import top.gabin.tools.request.ecommerce.applyments.ApplymentsStatusRequest1;
+import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
@@ -118,6 +115,13 @@ public class ProfitsSharingServiceTest {
         request.setBankAddressCode("");
         request.setSubMchid("");
         profitsSharingService.modifySettlement(request).ifPresent(this::logger);
+    }
+
+    @Test
+    public void testQuerySettlement() {
+        ApplymentsSettlementStatusRequest request = new ApplymentsSettlementStatusRequest();
+        request.setSubMchid("1587487911");
+        profitsSharingService.querySettlement(request).ifPresent(this::logger);
     }
 
     private void logger(Object obj) {
