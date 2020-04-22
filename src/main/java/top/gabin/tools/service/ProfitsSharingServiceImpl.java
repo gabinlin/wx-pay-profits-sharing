@@ -99,8 +99,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     @Override
     public Optional<ApplymentsResponse> applyments(ApplymentsRequest request) {
-        List<X509Certificate> certificateList = downloadCertificates();
-        Optional<X509Certificate> x509Certificate = certificateList.stream().findFirst();
+        Optional<X509Certificate> x509Certificate = getFirstCertificate();
         if (x509Certificate.isPresent()) {
             X509Certificate certificate = x509Certificate.get();
             ApplymentsRequest.AccountInfo accountInfo = request.getAccountInfo();
@@ -150,43 +149,43 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
 
     @Override
     public List<X509Certificate> downloadCertificates() {
-        Optional<ApplymentsDownCertificatesResponse> applymentsDownCertificatesResponse = get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
-        if (applymentsDownCertificatesResponse.isPresent()) {
-            List<X509Certificate> certificateList = new ArrayList<>();
-            for (ApplymentsDownCertificatesResponse.Data data : applymentsDownCertificatesResponse.get().getData()) {
-                ApplymentsDownCertificatesResponse.EncryptCertificate encryptCertificate = data.getEncryptCertificate();
-                String cert;
-                X509Certificate x509Cert;
-                try {
-                    cert = aesUtil.decryptToString(
-                            encryptCertificate.getAssociated_data().replaceAll("\"", "")
-                                    .getBytes("utf-8"),
-                            encryptCertificate.getNonce().replaceAll("\"", "")
-                                    .getBytes("utf-8"),
-                            encryptCertificate.getCiphertext().replaceAll("\"", ""));
-                    x509Cert = PemUtil
-                            .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
-                    try {
-                        x509Cert.checkValidity();
-                        certificateList.add(x509Cert);
-                    } catch (CertificateExpiredException | CertificateNotYetValidException e) {
-                        continue;
-                    }
-                } catch (GeneralSecurityException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        return Collections.emptyList();
+        return httpUtils.getLastCertificateList(); // 和内置的工具统一出口
+//        Optional<ApplymentsDownCertificatesResponse> applymentsDownCertificatesResponse = get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
+//        if (applymentsDownCertificatesResponse.isPresent()) {
+//            List<X509Certificate> certificateList = new ArrayList<>();
+//            for (ApplymentsDownCertificatesResponse.Data data : applymentsDownCertificatesResponse.get().getData()) {
+//                ApplymentsDownCertificatesResponse.EncryptCertificate encryptCertificate = data.getEncryptCertificate();
+//                String cert;
+//                X509Certificate x509Cert;
+//                try {
+//                    cert = aesUtil.decryptToString(
+//                            encryptCertificate.getAssociated_data().replaceAll("\"", "")
+//                                    .getBytes("utf-8"),
+//                            encryptCertificate.getNonce().replaceAll("\"", "")
+//                                    .getBytes("utf-8"),
+//                            encryptCertificate.getCiphertext().replaceAll("\"", ""));
+//                    x509Cert = PemUtil
+//                            .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
+//                    try {
+//                        x509Cert.checkValidity();
+//                        certificateList.add(x509Cert);
+//                    } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+//                        continue;
+//                    }
+//                } catch (GeneralSecurityException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        }
+//        return Collections.emptyList();
     }
 
     @Override
     public Optional<ApplymentsModifySettlementResponse> modifySettlement(ApplymentsModifySettlementRequest request) {
-        List<X509Certificate> certificateList = httpUtils.getLastCertificateList();
-        Optional<X509Certificate> x509Certificate = certificateList.stream().findFirst();
+        Optional<X509Certificate> x509Certificate = getFirstCertificate();
         if (x509Certificate.isPresent()) {
             X509Certificate certificate = x509Certificate.get();
             String accountNumber = request.getAccountNumber();
@@ -196,6 +195,11 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                             request.getSubMchid()), certificate);
         }
         return Optional.empty();
+    }
+
+    private Optional<X509Certificate> getFirstCertificate() {
+        List<X509Certificate> lastCertificateList = downloadCertificates();
+        return lastCertificateList.stream().findFirst();
     }
 
     @Override
@@ -530,8 +534,8 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         // 时间戳
         String timestamp = Long.toString(System.currentTimeMillis() / 1000);
         // 随机数
-        String nonce_str = timestamp + "gabin";
-        //图片文件
+        String nonce_str = UUID.randomUUID().toString();
+        // 图片文件
         String filename = file.getName();//文件名
         String fileSha256 = DigestUtils.sha256Hex(new FileInputStream(file));//文件sha256
 
@@ -550,49 +554,53 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         String url = "https://api.mch.weixin.qq.com/v3/merchant/media/upload";
         HttpPost httpPost = new HttpPost(url);
 
-        //设置头部
+        // 设置头部
         httpPost.addHeader("Accept", "application/json");
         httpPost.addHeader("Content-Type", "multipart/form-data");
         httpPost.addHeader("Authorization", authorization);
-
-        //创建MultipartEntityBuilder
+        // 创建MultipartEntityBuilder
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.RFC6532);
-        //设置boundary
+        // 设置boundary
         multipartEntityBuilder.setBoundary("boundary");
         multipartEntityBuilder.setCharset(StandardCharsets.UTF_8);
-        //设置meta内容
+        // 设置meta内容
         multipartEntityBuilder.addTextBody("meta", "{\"filename\":\"" + filename + "\",\"sha256\":\"" + fileSha256 + "\"}", ContentType.APPLICATION_JSON);
-        //设置图片内容
+        // 设置图片内容
         multipartEntityBuilder.addBinaryBody("file", file, ContentType.create("image/jpg"), filename);
-        //放入内容
+        // 放入内容
         httpPost.setEntity(multipartEntityBuilder.build());
-
-        //获取返回内容
+        // 获取返回内容
         CloseableHttpResponse response = httpclient.execute(httpPost);
         HttpEntity httpEntity = response.getEntity();
         String responseText = new String(InputStreamTOByte(httpEntity.getContent()));
-        //验证微信支付返回签名
-        Header timestampHeader = response.getFirstHeader("Wechatpay-Timestamp");
-        Header nonceHeader = response.getFirstHeader("Wechatpay-Nonce");
-        Header singedHear = response.getFirstHeader("Wechatpay-Signature");
+        // 验证微信支付返回签名
+        String timestampHeader = getHeaderString(response, "Wechatpay-Timestamp");
+        String nonceHeader = getHeaderString(response, "Wechatpay-Nonce");
+        String singedHear = getHeaderString(response, "Wechatpay-Signature");
         if (timestampHeader != null && nonceHeader != null && singedHear != null) {
-            String timestampH = timestampHeader.getValue();
-            String nonceH = nonceHeader.getValue();
-            String signed = singedHear.getValue();
-            Header serialHeader = response.getFirstHeader("Wechatpay-Serial");
-            if (verifyNotifySign(timestampH, nonceH, responseText, signed, serialHeader.getValue())) {
-                logger.info("签名验证成功");
+            String serialHeader = getHeaderString(response, "Wechatpay-Serial");
+            if (verifyNotifySign(timestampHeader, nonceHeader, responseText, singedHear, serialHeader)) {
+                EntityUtils.consume(httpEntity);
+                response.close();
+                ImageUploadResponse imageUploadResponse = JsonUtils.json2Bean(ImageUploadResponse.class, responseText);
+                if (imageUploadResponse == null) {
+                    return Optional.empty();
+                }
+                imageUploadResponse.setHttpStatusCode(response.getStatusLine().getStatusCode());
+                return Optional.of(imageUploadResponse);
             } else {
                 logger.info("签名验证失败");
             }
         }
-        EntityUtils.consume(httpEntity);
-        response.close();
-        ImageUploadResponse imageUploadResponse = JsonUtils.json2Bean(ImageUploadResponse.class, responseText);
-        if (imageUploadResponse == null) {
-            return Optional.empty();
+        return Optional.empty();
+    }
+
+    private String getHeaderString(CloseableHttpResponse response, String name) {
+        Header firstHeader = response.getFirstHeader(name);
+        if (firstHeader != null) {
+            return firstHeader.getValue();
         }
-        return Optional.of(imageUploadResponse);
+        return null;
     }
 
     private String sign(String message) {
