@@ -13,6 +13,7 @@ import top.gabin.tools.request.ecommerce.applyments.*;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
+import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingFinishRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingQueryApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
@@ -205,20 +206,20 @@ public class ProfitsSharingServiceTest {
     @Test
     public void subsidiesCreate() {
         SubsidiesCreateRequest request = new SubsidiesCreateRequest();
-//        request.setRefundId("");
-        request.setTransactionId("4345600104202004211569820906");
+        request.setRefundId("50300704052020042200213151461");
+        request.setTransactionId("4345100103202004225603699095");
         request.setSubMchid(getSubMchid());
         request.setDescription("补差");
-        request.setAmount(1);
+        request.setAmount(475);
         profitsSharingService.subsidiesCreate(request).ifPresent(this::logger);
     }
 
     @Test
     public void subsidiesRefund() {
         SubsidiesRefundRequest request = new SubsidiesRefundRequest();
-        request.setRefundId("50300203942020042100201784878");
-        request.setOutOrderNo("202004221419");
-        request.setTransactionId("4345600104202004211569820906");
+        request.setRefundId("50300704052020042200213151461");
+        request.setOutOrderNo("2020042214193434");
+        request.setTransactionId("4345100103202004225603699095");
         request.setSubMchid(getSubMchid());
         request.setDescription("补差回退");
         request.setAmount(1);
@@ -229,7 +230,7 @@ public class ProfitsSharingServiceTest {
     public void subsidiesCancel() {
         SubsidiesCancelRequest request = new SubsidiesCancelRequest();
 //        request.setRefundId("50300203942020042100201784878");
-        request.setTransactionId("4345600104202004211569820906");
+        request.setTransactionId("4345100103202004225603699095");
         request.setSubMchid(getSubMchid());
         request.setDescription("取消补差");
         profitsSharingService.subsidiesCancel(request).ifPresent(this::logger);
@@ -238,7 +239,7 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testProfitsSharing() {
         ProfitSharingApplyRequest sharingApplyRequest = new ProfitSharingApplyRequest();
-        sharingApplyRequest.setTransactionId("4349500102202004213293235146");
+        sharingApplyRequest.setTransactionId("4345100103202004225603699095");
         List<ProfitSharingApplyRequest.Receivers> receiversList = new ArrayList<>();
         ProfitSharingApplyRequest.Receivers receivers = new ProfitSharingApplyRequest.Receivers();
         receivers.setAmount(1);
@@ -247,17 +248,27 @@ public class ProfitsSharingServiceTest {
         receiversList.add(receivers);
         sharingApplyRequest.setReceivers(receiversList);
         sharingApplyRequest.setSubMchid(getSubMchid());
-        sharingApplyRequest.setOutOrderNo("232323232323223232332342");
+        sharingApplyRequest.setOutOrderNo("345345345345435435");
         sharingApplyRequest.setFinish(true);
         profitsSharingService.applyProfitSharing(sharingApplyRequest);
+    }
+
+    @Test
+    public void finishProfitSharing() {
+        ProfitSharingFinishRequest request = new ProfitSharingFinishRequest();
+        request.setSubMchid(getSubMchid());
+        request.setDescription("直接结束分账");
+        request.setTransactionId("4345100103202004225603699095");
+        request.setOutOrderNo("345345345345435435344");
+        profitsSharingService.finishProfitSharing(request);
     }
 
     @Test
     public void queryProfitSharingStatus() {
         ProfitSharingQueryApplyRequest request = new ProfitSharingQueryApplyRequest();
         request.setSubMchid(getSubMchid());
-        request.setOutOrderNo("232323232323223232332342");
-        request.setTransactionId("4349500102202004213293235146");
+//        request.setOutOrderNo("2020042215524015662");
+        request.setTransactionId("4345100103202004225603699095");
         profitsSharingService.queryProfitSharingStatus(request);
     }
 
