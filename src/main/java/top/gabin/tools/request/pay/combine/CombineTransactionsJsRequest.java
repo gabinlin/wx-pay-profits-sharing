@@ -145,6 +145,7 @@ public class CombineTransactionsJsRequest {
 	 * 类型：array
 	 * 描述：
 	 *  指定支付方式 
+	 *  no_credit：指定不能使用信用卡支付
 	 *  特殊规则：长度最大限制32个字节 
 	 *  示例值：no_credit 
 	 * </pre>
