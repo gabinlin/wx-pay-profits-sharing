@@ -360,20 +360,21 @@ public class ProfitsSharingServiceTest {
         request.setAccountType("BASIC");
 //        request.setTarType("GZIP");
         profitsSharingService.downloadTradeBill(request).ifPresent(url -> {
-//            InputStream inputStream = profitsSharingService.downloadBillFile(url);
-//            File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".xlsx");
-//            FileWriter fileWriter = null;
-//            try {
-//                fileWriter = new FileWriter(file);
-//                int b;
-//                while ((b = inputStream.read()) > -1) {
-//                    fileWriter.write(b);
-//                }
-//                inputStream.close();
-//                fileWriter.flush();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            InputStream inputStream = profitsSharingService.downloadBillFile(url);
+            File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".csv");
+            try {
+                FileWriter writer = new FileWriter(file);
+                byte[] bytes = new byte[1024];
+                while (inputStream.read(bytes) != -1) {
+                    String content = new String(bytes);
+//                    content = content.replaceAll("`", "");
+                    writer.write(content);
+                }
+                inputStream.close();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
