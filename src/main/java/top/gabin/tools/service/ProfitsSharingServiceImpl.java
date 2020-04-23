@@ -104,25 +104,31 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         if (x509Certificate.isPresent()) {
             X509Certificate certificate = x509Certificate.get();
             ApplymentsRequest.AccountInfo accountInfo = request.getAccountInfo();
-            accountInfo.setAccountName(rsaEncryptOAEP(accountInfo.getAccountName(), certificate));
-            accountInfo.setAccountNumber(rsaEncryptOAEP(accountInfo.getAccountNumber(), certificate));
-
+            if (accountInfo != null) {
+                accountInfo.setAccountName(rsaEncryptOAEP(accountInfo.getAccountName(), certificate));
+                accountInfo.setAccountNumber(rsaEncryptOAEP(accountInfo.getAccountNumber(), certificate));
+            }
             ApplymentsRequest.ContactInfo contactInfo = request.getContactInfo();
-            contactInfo.setMobilePhone(rsaEncryptOAEP(contactInfo.getMobilePhone(), certificate));
-            contactInfo.setContactEmail(rsaEncryptOAEP(contactInfo.getContactEmail(), certificate));
-            contactInfo.setContactName(rsaEncryptOAEP(contactInfo.getContactName(), certificate));
-            contactInfo.setContactIdCardNumber(rsaEncryptOAEP(contactInfo.getContactIdCardNumber(), certificate));
-
+            if (contactInfo != null) {
+                contactInfo.setMobilePhone(rsaEncryptOAEP(contactInfo.getMobilePhone(), certificate));
+                contactInfo.setContactEmail(rsaEncryptOAEP(contactInfo.getContactEmail(), certificate));
+                contactInfo.setContactName(rsaEncryptOAEP(contactInfo.getContactName(), certificate));
+                contactInfo.setContactIdCardNumber(rsaEncryptOAEP(contactInfo.getContactIdCardNumber(), certificate));
+            }
             ApplymentsRequest.IdCardInfo idCardInfo = request.getIdCardInfo();
-            idCardInfo.setIdCardNumber(rsaEncryptOAEP(idCardInfo.getIdCardNumber(), certificate));
-            idCardInfo.setIdCardName(rsaEncryptOAEP(idCardInfo.getIdCardName(), certificate));
-
+            if (idCardInfo != null) {
+                idCardInfo.setIdCardNumber(rsaEncryptOAEP(idCardInfo.getIdCardNumber(), certificate));
+                idCardInfo.setIdCardName(rsaEncryptOAEP(idCardInfo.getIdCardName(), certificate));
+            }
             return post(ApplymentsResponse.class, request, "https://api.mch.weixin.qq.com/v3/ecommerce/applyments/", certificate);
         }
         return Optional.empty();
     }
 
     private String rsaEncryptOAEP(String message, X509Certificate x509Cert) {
+        if (StringUtils.isBlank(message)) {
+            return message;
+        }
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, x509Cert.getPublicKey());
@@ -130,7 +136,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             byte[] data = message.getBytes("utf-8");
             byte[] cipherdata = cipher.doFinal(data);
             return Base64.getEncoder().encodeToString(cipherdata);
-        } catch (Exception  e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;
         }
