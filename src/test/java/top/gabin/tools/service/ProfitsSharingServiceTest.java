@@ -19,6 +19,8 @@ import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCancelRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesCreateRequest;
 import top.gabin.tools.request.ecommerce.subsidies.SubsidiesRefundRequest;
+import top.gabin.tools.request.pay.bill.BillOfFundFlowRequest;
+import top.gabin.tools.request.pay.bill.BillOfTradeRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsAppRequest;
 import top.gabin.tools.request.pay.combine.CombineTransactionsCloseRequest;
 import top.gabin.tools.response.ecommerce.amount.AmountOnlineOfSubMchResponse;
@@ -339,6 +341,40 @@ public class ProfitsSharingServiceTest {
         request.setAmount(amount);
         request.setOutRefundNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
         profitsSharingService.refundApply(request).ifPresent(refundApplyResponse -> logger.info(JsonUtils.bean2Json(refundApplyResponse)));
+    }
+
+    @Test
+    public void downloadTradeBill() {
+        BillOfTradeRequest request = new BillOfTradeRequest();
+        request.setBillDate("2020-04-22");
+        request.setSubMchid(getSubMchid());
+        request.setBillType("ALL");
+        request.setTarType("GZIP");
+        profitsSharingService.downloadTradeBill(request).ifPresent(this::logger);
+    }
+
+    @Test
+    public void downloadTradeBill1() {
+        BillOfFundFlowRequest request = new BillOfFundFlowRequest();
+        request.setBillDate("2020-04-22");
+        request.setAccountType("BASIC");
+//        request.setTarType("GZIP");
+        profitsSharingService.downloadTradeBill(request).ifPresent(url -> {
+//            InputStream inputStream = profitsSharingService.downloadBillFile(url);
+//            File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".xlsx");
+//            FileWriter fileWriter = null;
+//            try {
+//                fileWriter = new FileWriter(file);
+//                int b;
+//                while ((b = inputStream.read()) > -1) {
+//                    fileWriter.write(b);
+//                }
+//                inputStream.close();
+//                fileWriter.flush();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+        });
     }
 
     private String formatRFC3339ToString(Date date) {

@@ -39,6 +39,7 @@ public class HttpUtils {
     private PrivateKey privateKey;  // 你的商户私钥
     private String apiKey;
     private CloseableHttpClient httpClient;
+    private CloseableHttpClient httpClientNotVerify;
     private volatile AutoUpdateInCloudCertificatesVerifier verifier;
 
     public HttpUtils(String mchId, String mchSerialNo, PrivateKey privateKey, String apiKey, CacheService cacheService) {
@@ -66,6 +67,11 @@ public class HttpUtils {
                 .withMerchant(mchId, mchSerialNo, privateKey)
                 .withValidator(new WechatPay2Validator(verifier));
         httpClient = builder.build();
+
+        builder = WechatPayHttpClientBuilder.create()
+                .withMerchant(mchId, mchSerialNo, privateKey)
+                .withValidator(response -> true);
+        httpClientNotVerify = builder.build();
     }
 
     public List<X509Certificate> getLastCertificateList() {
@@ -78,7 +84,7 @@ public class HttpUtils {
                 return false;
             }
         }).collect(Collectors.toList());
-        logger.info("可用证书数量："  + certificateList.size());
+        logger.info("可用证书数量：" + certificateList.size());
         return certificateList;
     }
 
@@ -139,12 +145,13 @@ public class HttpUtils {
         HttpGet httpGet = new HttpGet(downloadUrl);
         httpGet.addHeader("Accept", "application/json");
 
-        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+        try (CloseableHttpResponse response = httpClientNotVerify.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
-            String body = EntityUtils.toString(response.getEntity());
             if (statusCode == 200) {
                 return response.getEntity().getContent();
             } else {
+                String body = EntityUtils.toString(response.getEntity());
+                logger.info(body);
                 throw new IOException("request failed");
             }
         } catch (ClientProtocolException e) {

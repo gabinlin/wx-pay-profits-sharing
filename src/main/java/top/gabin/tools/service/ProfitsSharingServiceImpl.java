@@ -516,7 +516,10 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
         Map<String, String> query = new HashMap<>();
         query.put("bill_date", request.getBillDate());
         query.put("account_type", request.getAccountType());
-        query.put("tar_type", request.getTarType());
+        String tarType = request.getTarType();
+        if (StringUtils.isNoneBlank(tarType)) {
+            query.put("tar_type", tarType);
+        }
         Optional<BillOfFundFlowResponse> response = get(BillOfFundFlowResponse.class, "https://api.mch.weixin.qq.com/v3/bill/fundflowbill", query);
         return response.map(BillOfFundFlowResponse::getDownloadUrl);
     }
