@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
     <name>wx-pay-profits-sharing</name>
     <description>>wx-pay-profits-sharing</description>
-    <url>git@e.coding.net:gabinlin/wx-pay-profits-sharing.git</url>
+    <url>https://github.com/gabinlin/wx-pay-profits-sharing</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -28,9 +28,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git@e.coding.net:gabinlin/wx-pay-profits-sharing.git</connection>
-        <developerConnection>https://e.coding.net/gabinlin/wx-pay-profits-sharing.git</developerConnection>
-        <url>https://e.coding.net/gabinlin/wx-pay-profits-sharing.git</url>
+        <connection>scm:https://github.com/gabinlin/wx-pay-profits-sharing</connection>
+        <developerConnection>https://github.com/gabinlin/wx-pay-profits-sharing</developerConnection>
+        <url>https://github.com/gabinlin/wx-pay-profits-sharing</url>
     </scm>
     <parent>
         <groupId>org.sonatype.oss</groupId>
