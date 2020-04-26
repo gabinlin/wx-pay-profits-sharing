@@ -333,7 +333,7 @@ public class ProfitsSharingServiceTest {
         BillOfFundFlowRequest request = new BillOfFundFlowRequest();
         request.setBillDate("2020-04-22");
         request.setAccountType("BASIC");
-        request.setTarType("GZIP");
+//        request.setTarType("GZIP");
         profitsSharingService.downloadTradeBill(request).ifPresent(url -> {
             if ("GZIP".equals(request.getTarType())) {
                 InputStream inputStream = profitsSharingService.downloadBillFile(url);
