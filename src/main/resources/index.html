@@ -1,0 +1,43 @@
+<html>
+<meta charset="utf-8"/>
+<script src="forge.js"></script>
+<script>
+    // 加密示例，目前仅用在进件和修改结算账户接口
+    // 这边可以用微信支付平台的公钥证书来加密，然后在java代码用私钥尝试解密，看是否一致。
+    var cert = forge.pki.certificateFromPem(`-----BEGIN CERTIFICATE-----
+    -----END CERTIFICATE-----`);
+    var name = forge.util.encodeUtf8('张飞')
+    var encrypted = cert.publicKey.encrypt(name, 'RSA-OAEP');
+    encrypted = forge.util.encode64(encrypted);
+    console.log(encrypted);
+
+    // 证书下载后解密示例
+    let key = '3453l2kaSDF4kdjf5sjlfjslfjsjdfls';
+    let nonce = '92fe64f4e397';
+    let associated_data = 'certificate';
+    let ciphertext = 'crXkljARPNXC4KNUrAWbI3V80lVIciJ6+XLjr9+vM+kqZFjteF982WmDamzsKCBrSxFCGMmtcZaYleiH9mLQ3JNFFq/W0IyRuJ5tstbRiGA30lBtGBGR+xOoHe5ZwL2Iwom0D84gx+44KZ2yu8UlUsb/sGTE08o/PorY9FCp0splNET2ooGZ7zxrrUl/DFfKOdoMxkwu2fVe4b9U6/dDUe2geV9f5ew2EeszeWV3ByFIjv84bP0fIUHy+2GKXJ76rlr2b6zKCYIbiec9RxPnfkXt/pVUmgvrseOGxtPPaIXBtcx/SLumyJzojuL4XJdXI24fuiq92NVSHVYou4Dkx4/HtqOXIutXuxXfi8reNHsYNCpXEzf2jyjGLdVsBOaWPuRjiZoelcWoYLQJfDPvXPwwuf+HF5QMNaWL7X+xS+WFpF8QN5ClF7xs5Z1Vm9Sm0kcIH+eUlArgoegAzU5vBgKU2oeRossyFn7t/uBNQfCOQoGHESFsFFoT7+OdfLv3mNn6EESzSsWAmMcO2Omqc/POX2Hpx/1VNtTSrQE0jPBKolZOSg1KA8Vxj1yQcXYHnQFHYpQp6YZ7x6kNeVe6TW3vnq9BiUnVj8O7/0USN6nHOr0mrV84t/m5wAizzeXXcoOgSlpwiiKpAVNcndPXhwL305GZFFmXqDKFBQzZyxTirMTTm9KCOyfqFbqgKLKgNfTmDddXrKjpwa+pV2bHQOV7b4NypfidXFOmp8PYVUGPXNbP5oHlYegfXSvkQGBbdPHcq6sCUtpHiEx2Pl7Ew+atDP4o0qZhg3AYboH1cfrmXdVgjqdu/laDbplmP2tRxGYQ8GkudYyBvcDtd3fMHJtpSa3iYHRfwsRQv0Fd/gUnKqECWzL87SU/rOgRVO6iLGbAl4CkdsJtE0A6xLtgIV9U4p2lOz7aetcM3tQjhTYb/z4jtmizJ8TGo9FELqRA0KCMyQGsa4KMIB0sbYzA1RSJT4aCQLA5fBNT7GrKHWzMLiHs/q86Mol6pLxwwzn6bxODXuSOYJxmMvTuA3DTERhBSOUxgi7thiXbGbTiEEFPKn2bJ4SWs4SdntKmujhtNpAWGIs1WtMpkx6GfGNev8kSxEiwR5fFEG6lqHe1nw6wkCq8UoSw7K4hXZc8FN5DfTxzO5KSeGnrsmvj02jmxMGegxf7n9NFsDu/bwofVv2rO8ZLQ8UE2HaXqXg1BvrShXhUdilmUwf1MwBqPc5Fzdvy97SVrrKNTVtiNGW1qR2IZ74M0m0pk/6os6QWR0ERaMreS/6dNOmAKiupBoOG7NT8JiLC5UJ4HhBpY6BzJ4k6ui66LmaL2Oj++Pc470HcSIamEaUuBO6tx2YyyHtYD3VPlmjzzw6HxuBLXMmlSbcJWXo5WpLECWQLtrWutISq5lXhpeIpKTIFHI4rOITQ9Q7fHE1EPq7fQDUHGXiaTjrFFVbjckw5sf4hbETAUDX6MP81ypxmByuYVjiGOjxsXG1uJDOyU5dZa1foMczBBKhxFk/bqKPa8xDSUyViWcasrPcnAA34W+V1vc99Lgnv6YxQEltFZ61lJs8yUNur6RfMbkbK+fZF3ER8GMBHUiB6TuZJEGyAQWbRNzUHjLhbebt2P4Kdrb3fTXUJdrtxfeG8lye9WC1255KsgAuGscEFfMnizE9U2tElOswdbDmlI1umpAARXQrn9dObhZj6FWWuJpH9Q8b+9NXdUtyR6Jw50Umpe6kKeeU1Q5Q4wbvdbP2K37AKiXSIutXdXXT2LDD0z9aIY/M/Y+Br9N/H9PPHvTn8R5alHWJdKuO/g+XgmCCDXeDevDyFTy3u2NAr2CboXTGuq2vYGkeLmtAjq/0vUCcyBDBQIbp97zWvzAqngNXXZrFn5A==';
+    let iv = forge.util.createBuffer(nonce)
+    associated_data = forge.util.createBuffer(associated_data)
+    let tag = forge.util.decode64(ciphertext).slice(-16);
+    tag = forge.util.createBuffer(tag);
+    let data = forge.util.decode64(ciphertext).slice(0, -16);
+    console.log(forge.util.encode64(data))
+    data = forge.util.createBuffer(data);
+    // decrypt some bytes using GCM mode
+    let decipher = forge.cipher.createDecipher('AES-GCM', key);
+    decipher.start({
+        iv: iv,
+        additionalData: associated_data, // optional
+        tagLength: 128, // optional, defaults to 128 bits
+        tag: tag // authentication tag from encryption
+    });
+    decipher.update(data);
+    var pass = decipher.finish();
+    // pass is false if there was a failure (eg: authentication tag didn't match)
+    if (pass) {
+        // outputs decrypted hex
+        // -----BEGIN CERTIFICATE----- 证书内容 -----END CERTIFICATE-----
+        console.log(decipher.output.data);
+    }
+</script>
+</html>
