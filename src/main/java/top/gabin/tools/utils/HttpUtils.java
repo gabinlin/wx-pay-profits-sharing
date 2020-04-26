@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.auth.AutoUpdateInCloudCertificatesVerifier;
 import top.gabin.tools.auth.CacheService;
+import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.response.AbstractResponse;
 
 import java.io.IOException;
@@ -34,19 +35,13 @@ public class HttpUtils {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private String mchId;           // 商户号
-    private String mchSerialNo;     // 商户证书序列号
-    private PrivateKey privateKey;  // 你的商户私钥
-    private String apiKey;
+    private ProfitsSharingConfig config;
     private CloseableHttpClient httpClient;
     private CloseableHttpClient httpClientNotVerify;
     private volatile AutoUpdateInCloudCertificatesVerifier verifier;
 
-    public HttpUtils(String mchId, String mchSerialNo, PrivateKey privateKey, String apiKey, CacheService cacheService) {
-        this.mchId = mchId;
-        this.mchSerialNo = mchSerialNo;
-        this.privateKey = privateKey;
-        this.apiKey = apiKey;
+    public HttpUtils(ProfitsSharingConfig config, CacheService cacheService) {
+        this.config = config;
         try {
             init(cacheService);
         } catch (IOException e) {
@@ -59,6 +54,10 @@ public class HttpUtils {
     }
 
     private void init(CacheService cacheService) throws IOException {
+        String mchId = config.getMchId();
+        String apiKey = config.getApiKey();
+        String mchSerialNo = config.getMchSerialNo();
+        PrivateKey privateKey = config.getPrivateKey();
         // 不需要传入微信支付证书，将会自动更新
         verifier = new AutoUpdateInCloudCertificatesVerifier(
                 new WechatPay2Credentials(mchId, new PrivateKeySigner(mchSerialNo, privateKey)),

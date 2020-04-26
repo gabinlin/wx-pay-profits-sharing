@@ -1,7 +1,6 @@
 package top.gabin.tools.service;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
-import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -75,26 +74,15 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     private final ProfitsSharingConfig config;
     private final HttpUtils httpUtils;
     private final AesUtil aesUtil;
-    private PrivateKey privateKey;
 
 
     public ProfitsSharingServiceImpl(ProfitsSharingConfig config, CacheService cacheService) {
         this.config = config;
-        try {
-            privateKey = PemUtil.loadPrivateKey(
-                    new ByteArrayInputStream(config.getPrivateKey().getBytes("utf-8")));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        httpUtils = new HttpUtils(config.getMchId(),
-                config.getMchSerialNo(),
-                privateKey,
-                config.getApiKey(),
-                cacheService);
+        httpUtils = new HttpUtils(config, cacheService);
         aesUtil = new AesUtil(config.getApiKey().getBytes());
     }
 
-    private String getPrivateKey() {
+    private PrivateKey getPrivateKey() {
         return config.getPrivateKey();
     }
 
@@ -157,37 +145,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public List<X509Certificate> downloadCertificates() {
         return httpUtils.getLastCertificateList(); // 和内置的工具统一出口
-//        Optional<ApplymentsDownCertificatesResponse> applymentsDownCertificatesResponse = get(ApplymentsDownCertificatesResponse.class, "https://api.mch.weixin.qq.com/v3/certificates");
-//        if (applymentsDownCertificatesResponse.isPresent()) {
-//            List<X509Certificate> certificateList = new ArrayList<>();
-//            for (ApplymentsDownCertificatesResponse.Data data : applymentsDownCertificatesResponse.get().getData()) {
-//                ApplymentsDownCertificatesResponse.EncryptCertificate encryptCertificate = data.getEncryptCertificate();
-//                String cert;
-//                X509Certificate x509Cert;
-//                try {
-//                    cert = aesUtil.decryptToString(
-//                            encryptCertificate.getAssociated_data().replaceAll("\"", "")
-//                                    .getBytes("utf-8"),
-//                            encryptCertificate.getNonce().replaceAll("\"", "")
-//                                    .getBytes("utf-8"),
-//                            encryptCertificate.getCiphertext().replaceAll("\"", ""));
-//                    x509Cert = PemUtil
-//                            .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
-//                    try {
-//                        x509Cert.checkValidity();
-//                        certificateList.add(x509Cert);
-//                    } catch (CertificateExpiredException | CertificateNotYetValidException e) {
-//                        continue;
-//                    }
-//                } catch (GeneralSecurityException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        }
-//        return Collections.emptyList();
     }
 
     @Override
@@ -616,7 +573,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     private String sign(String message) {
         try {
             Signature sign = Signature.getInstance("SHA256withRSA");
-            sign.initSign(privateKey);
+            sign.initSign(getPrivateKey());
             sign.update(message.getBytes());
             return Base64.getEncoder().encodeToString(sign.sign());
         } catch (Exception e) {

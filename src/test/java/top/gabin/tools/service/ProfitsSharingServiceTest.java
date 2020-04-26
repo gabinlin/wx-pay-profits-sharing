@@ -1,5 +1,6 @@
 package top.gabin.tools.service;
 
+import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -32,7 +33,7 @@ import top.gabin.tools.response.tool.ImageUploadResponse;
 import top.gabin.tools.utils.JsonUtils;
 
 import java.io.*;
-import java.security.cert.*;
+import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
@@ -50,38 +51,11 @@ public class ProfitsSharingServiceTest {
         config.setMchId(FileUtils.readFileToString(new File("/Users/linjiabin/cert/wxPayForEco/mchId.txt"), "UTF-8").trim());
         apiKey = FileUtils.readFileToString(new File("/Users/linjiabin/cert/wxPayForEco/api3Key.txt"), "UTF-8").trim();
         config.setApiKey(apiKey);
-        certificate = getCertificate("/Users/linjiabin/cert/wxPayForEco/apiclient_cert.pem");
+        certificate = PemUtil.loadCertificate(new FileInputStream("/Users/linjiabin/cert/wxPayForEco/apiclient_cert.pem"));
         String serialNo = certificate.getSerialNumber().toString(16).toUpperCase();
         config.setMchSerialNo(serialNo);
-        String privateKeyStr = FileUtils.readFileToString(new File("/Users/linjiabin/cert/wxPayForEco/apiclient_key.pem"), "UTF-8");
-        config.setPrivateKey(privateKeyStr);
+        config.setPrivateKey(PemUtil.loadPrivateKey(new FileInputStream("/Users/linjiabin/cert/wxPayForEco/apiclient_key.pem")));
         profitsSharingService = new ProfitsSharingServiceImpl(config, null);
-    }
-
-    /**
-     * 获取证书。
-     *
-     * @param filename 证书文件路径  (required)
-     * @return X509证书
-     */
-    private static X509Certificate getCertificate(String filename) throws IOException {
-        InputStream fis = new FileInputStream(filename);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-
-        try {
-            CertificateFactory cf = CertificateFactory.getInstance("X509");
-            X509Certificate cert = (X509Certificate) cf.generateCertificate(bis);
-            cert.checkValidity();
-            return cert;
-        } catch (CertificateExpiredException e) {
-            throw new RuntimeException("证书已过期", e);
-        } catch (CertificateNotYetValidException e) {
-            throw new RuntimeException("证书尚未生效", e);
-        } catch (CertificateException e) {
-            throw new RuntimeException("无效的证书文件", e);
-        } finally {
-            bis.close();
-        }
     }
 
     //    @Test
