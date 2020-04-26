@@ -34,6 +34,7 @@ import top.gabin.tools.utils.JsonUtils;
 import java.io.*;
 import java.security.cert.*;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 
 public class ProfitsSharingServiceTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -358,22 +359,50 @@ public class ProfitsSharingServiceTest {
         BillOfFundFlowRequest request = new BillOfFundFlowRequest();
         request.setBillDate("2020-04-22");
         request.setAccountType("BASIC");
-//        request.setTarType("GZIP");
+        request.setTarType("GZIP");
         profitsSharingService.downloadTradeBill(request).ifPresent(url -> {
-            InputStream inputStream = profitsSharingService.downloadBillFile(url);
-            File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".csv");
-            try {
-                FileWriter writer = new FileWriter(file);
-                byte[] bytes = new byte[1024];
-                while (inputStream.read(bytes) != -1) {
-                    String content = new String(bytes);
-//                    content = content.replaceAll("`", "");
-                    writer.write(content);
+            if ("GZIP".equals(request.getTarType())) {
+                InputStream inputStream = profitsSharingService.downloadBillFile(url);
+                File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".gz");
+                try {
+                    StringBuilder sb = new StringBuilder();
+                    GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
+                    FileOutputStream out = new FileOutputStream(file);
+//                    GZIPOutputStream writer = new GZIPOutputStream(out);
+                    byte[] bytes = new byte[1024];
+                    int off = 0;
+                    int count = 0;
+                    while ((count = gzipInputStream.read(bytes, off, bytes.length)) != -1) {
+                        sb.append(new String(bytes));
+                        off += count;
+                        out.write(bytes, 0, count);
+                    }
+                    logger.info(sb.toString());
+                    gzipInputStream.close();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                inputStream.close();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                return;
+            } else {
+                InputStream inputStream = profitsSharingService.downloadBillFile(url);
+                File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".csv");
+                try {
+                    StringBuilder sb = new StringBuilder();
+                    FileWriter writer = new FileWriter(file);
+                    byte[] bytes = new byte[1024];
+                    while (inputStream.read(bytes) != -1) {
+                        String content = new String(bytes);
+//                    content = content.replaceAll("`", "");
+                        writer.write(content);
+                        sb.append(content);
+                    }
+                    logger.info(sb.toString());
+                    inputStream.close();
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
