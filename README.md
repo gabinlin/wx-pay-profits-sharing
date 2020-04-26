@@ -39,7 +39,8 @@ libraryDependencies += "top.gabin" % "wx-pay-profits-sharing" % "1.5.4"
 - 基本上通过ProfitsSharingService接口调用
 - 实现类ProfitsSharingServiceImpl
 ```
- // config包含了基本的参数配置，cacheService可用于实现获取的证书信息缓存，通过重写这两个实现，可以自行定制集群或分布式的支持
+ // config包含了基本的参数配置，cacheService可用于实现获取的证书信息缓存
+ // 通过重写这两个实现，可以自行定制集群或分布式的支持
  ProfitsSharingService service = new ProfitsSharingService(config, cacheService);
 ```
 ***
