@@ -1,0 +1,1377 @@
+{
+	"info": {
+		"_postman_id": "cc3149f7-d822-4ef9-8695-89a5dbe85fbc",
+		"name": "wechatpay-apiv3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "进件(要先调用一次证书下载)",
+			"item": [
+				{
+					"name": "证书下载",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c87fc639-e246-48a1-9edd-ac3c7f7e6f9a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"// 把responseBody转为json字符串",
+									"var responseJson = JSON.parse(responseBody);",
+									"// 设置环境变量token，供后面的接口引用",
+									" ",
+									"var certData = responseJson.data && responseJson.data[0] || {};",
+									"pm.environment.set(\"serialNo\", certData.serial_no);",
+									"",
+									"let key = `3453lnkaAAFskdjflsjlfjslfjsjdfo3`;  // 解密key 上面提到的商户keys（APIv3 secret）",
+									"let encrypt_certificate = certData.encrypt_certificate;",
+									"let nonce = encrypt_certificate.nonce;  // 加密使用的随机串",
+									"let associated_data = encrypt_certificate.associated_data;  // 加密用的附加数据",
+									"let ciphertext = encrypt_certificate.ciphertext;  // 加密体 base64",
+									"",
+									"pm.sendRequest(\"https://wx.gtimg.com/pay/js/apiv3/libs/node-forge@0.7.6/forge.min.js\", function (err, res) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"    } else {",
+									"        eval(res.text());",
+									"        var iv = forge.util.createBuffer(nonce)",
+									"        associated_data = forge.util.createBuffer(associated_data)",
+									"        var tag = forge.util.decode64(ciphertext).slice(-16);",
+									"        console.log(forge.util.encode64(tag))",
+									"        tag = forge.util.createBuffer(tag);",
+									"        var data = forge.util.decode64(ciphertext).slice(0, -16);",
+									"        console.log(forge.util.encode64(data))",
+									"        data = forge.util.createBuffer(data);",
+									"        // decrypt some bytes using GCM mode",
+									"        var decipher = forge.cipher.createDecipher('AES-GCM', key);",
+									"        decipher.start({",
+									"            iv: iv,",
+									"            additionalData: associated_data, // optional",
+									"            tagLength: 128, // optional, defaults to 128 bits",
+									"            tag: tag // authentication tag from encryption",
+									"        });",
+									"        decipher.update(data);",
+									"        var pass = decipher.finish();",
+									"        // pass is false if there was a failure (eg: authentication tag didn't match)",
+									"        if (pass) {",
+									"            // outputs decrypted hex",
+									"            var cert = forge.pki.certificateFromPem(decipher.output.data);",
+									"            var encodeFunc = function(name, value) {",
+									"                value = forge.util.encodeUtf8(value)",
+									"                value = cert.publicKey.encrypt(value, 'RSA-OAEP');",
+									"                value = forge.util.encode64(value);",
+									"                console.log(value);",
+									"                pm.environment.set(name, value);   ",
+									"            }",
+									"            encodeFunc(\"myName\", \"张飞\");",
+									"            encodeFunc(\"idCard\", \"350598398509890833\");",
+									"            encodeFunc(\"tel\", \"13514098790\");",
+									"            encodeFunc(\"mail\", \"13514098790@163.com\");",
+									"            encodeFunc(\"accountNo\", \"6217000937037393949\");",
+									"            encodeFunc(\"accountNoNew\", \"6224680078086984096\");",
+									"        }",
+									"        ",
+									"    }",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7293bbef-2f06-40a5-93a1-05acd40c4f6f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/certificates",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"certificates"
+							],
+							"query": [
+								{
+									"key": "p",
+									"value": "1+2",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "3/4",
+									"disabled": true
+								}
+							]
+						},
+						"description": "查询订单"
+					},
+					"response": []
+				},
+				{
+					"name": "二级商户进件API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2ec3e540-e391-42d9-9918-35b0fb9d0eec",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"value": "{{serialNo}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"out_request_no\": \"20200424015442\",\n    \"organization_type\": \"2401\",\n    \"id_doc_type\": \"IDENTIFICATION_TYPE_MAINLAND_IDCARD\",\n    \"id_card_info\": {\n        \"id_card_copy\": \"2eAyJgRWvDii7SggcAp5AuEEaXNmYJl4wRhMmZEsscQy-iOqNj1b1ZgMwWhxpXoyzVOrDWm50K1_jFqS6aNkI_jJqJWHJvzlvaOF0vpSR8A\",\n        \"id_card_national\": \"2eAyJgRWvDii7SggcAp5Ag62EUEWyqMh9LOnlYo_qIbqmbgP3uM8CkviGqvcQbddNwHMRzZmYFIEh5yhTtvGAf4aPeqNU9kwgbAy5esP9tA\",\n        \"id_card_name\": \"{{myName}}\",\n        \"id_card_number\": \"{{idCard}}\",\n        \"id_card_valid_time\": \"2026-01-18\"\n    },\n    \"need_account_info\": true,\n    \"account_info\": {\n        \"bank_account_type\": \"75\",\n        \"account_bank\": \"建设银行\",\n        \"account_name\": \"{{myName}}\",\n        \"bank_address_code\": \"350200\",\n        \"account_number\": \"{{accountNo}}\"\n    },\n    \"contact_info\": {\n        \"contact_type\": \"65\",\n        \"contact_name\": \"{{myName}}\",\n        \"contact_id_card_number\": \"{{idCard}}\",\n        \"mobile_phone\": \"{{tel}}\",\n        \"contact_email\": \"{{mail}}\"\n    },\n    \"sales_scene_info\": {\n        \"store_name\": \"淡蓝软件开发设计个人工作室\",\n        \"store_url\": \"https://www.aircub.vip/payeeReceiveMoneyQRCode/linkUrl.html?receiveCustomerId=1576\"\n    },\n    \"merchant_shortname\": \"软件开发设计\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/applyments/",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"applyments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "二级商户进件申请查询",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "064689a8-781d-45f7-9c00-f2e620c41f3c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/applyments/2000002140476406",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"applyments",
+								"2000002140476406"
+							],
+							"query": [
+								{
+									"key": "p",
+									"value": "1+2",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "3/4",
+									"disabled": true
+								}
+							]
+						},
+						"description": "查询订单"
+					},
+					"response": []
+				},
+				{
+					"name": "修改结算帐号API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account_type\": \"ACCOUNT_TYPE_PRIVATE\",\n    \"account_bank\": \"农业银行\",\n    \"bank_address_code\": \"350200\",\n    \"account_number\": \"{{accountNoNew}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/{{sub_mchid}}/modify-settlement",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"apply4sub",
+								"sub_merchants",
+								"{{sub_mchid}}",
+								"modify-settlement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询结算账户API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "064689a8-781d-45f7-9c00-f2e620c41f3c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/{{sub_mchid}}/settlement",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"apply4sub",
+								"sub_merchants",
+								"{{sub_mchid}}",
+								"settlement"
+							],
+							"query": [
+								{
+									"key": "p",
+									"value": "1+2",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "3/4",
+									"disabled": true
+								}
+							]
+						},
+						"description": "查询订单"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "合单",
+			"item": [
+				{
+					"name": "合单查询订单API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "064689a8-781d-45f7-9c00-f2e620c41f3c",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/combine-transactions/out-trade-no/C_JS_11042020042118160415651",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"combine-transactions",
+								"out-trade-no",
+								"C_JS_11042020042118160415651"
+							],
+							"query": [
+								{
+									"key": "p",
+									"value": "1+2",
+									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "3/4",
+									"disabled": true
+								}
+							]
+						},
+						"description": "查询订单"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "补差",
+			"item": [
+				{
+					"name": "请求补差API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sub_mchid\": \"{{sub_mchid}}\",\n  \"transaction_id\": \"4345100103202004225603699095\",\n  \"amount\": 475,\n  \"description\": \"补差\",\n  \"refund_id\": \"50300704052020042200213151461\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/create",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"subsidies",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "请求补差回退API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sub_mchid\": \"{{sub_mchid}}\",\n  \"out_order_no\": \"20200422141934342\",\n  \"transaction_id\": \"4345100103202004225603699095\",\n  \"refund_id\": \"50300704052020042200213151461\",\n  \"amount\": 1,\n  \"description\": \"补差回退\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/return",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"subsidies",
+								"return"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取消补差API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sub_mchid\": \"{{sub_mchid}}\",\n  \"refund_id\": \"50300203942020042100201784878\",\n  \"transaction_id\": \"4345100103202004225603699095\",\n  \"description\": \"订单退款,取消补差\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/subsidies/cancel",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"subsidies",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "分账",
+			"item": [
+				{
+					"name": "请求分账API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"sub_mchid\": \"{{sub_mchid}}\",\n \"transaction_id\": \"4345100103202004225603699095\",\n \"out_order_no\": \"2015080612534623232\",\n \"receivers\": [\n   {\n     \"receiver_mchid\": \"1586045221\",\n     \"amount\": 1,\n     \"description\": \"平台抽成\"\n   }\n ],\n \"finish\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/orders",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"profitsharing",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询分账结果API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"sub_mchid\": \"{{sub_mchid}}\",\n \"transaction_id\": \"4345100103202004225603699095\",\n \"out_order_no\": \"2015080612534623232\",\n \"receivers\": [\n   {\n     \"receiver_mchid\": \"1586045221\",\n     \"amount\": 1,\n     \"description\": \"平台抽成\"\n   }\n ],\n \"finish\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/orders?sub_mchid={{sub_mchid}}&transaction_id=4313000103202004224842261175&out_order_no=2020042217523715667",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"profitsharing",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "sub_mchid",
+									"value": "{{sub_mchid}}"
+								},
+								{
+									"key": "transaction_id",
+									"value": "4313000103202004224842261175"
+								},
+								{
+									"key": "out_order_no",
+									"value": "2020042217523715667"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "完结分账API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									"pm.environment.set(\"myName\", \"111\");",
+									"pm.sendRequest(\"https://wx.gtimg.com/pay/js/apiv3/libs/node-forge@0.7.6/forge.min.js\", function (err, res) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"    } else {",
+									"        eval(res.text());",
+									"        // var forge = pm.environment.get(\"forge\");",
+									"        var cert = forge.pki.certificateFromPem(pm.environment.get(\"cert\"));",
+									"        var encrypted = cert.publicKey.encrypt(forge.util.encodeUtf8('林嘉斌'), 'RSAES-PKCS1-V1_5');",
+									"        encrypted = forge.util.encode64(encrypted);",
+									"        pm.environment.set(\"myName\", encrypted);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"sub_mchid\": \"{{sub_mchid}}\",\n \"transaction_id\": \"4345100103202004225603699095\",\n \"out_order_no\": \"P2015080612534632\",\n \"description\": \"分账完结\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/profitsharing/finish-order",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"profitsharing",
+								"finish-order"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "余额",
+			"item": [
+				{
+					"name": "查询二级商户账户实时余额API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/fund/balance/{{sub_mchid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"fund",
+								"balance",
+								"{{sub_mchid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询二级商户账户日终余额API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/fund/enddaybalance/{{sub_mchid}}?date=2020-04-25",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"fund",
+								"enddaybalance",
+								"{{sub_mchid}}"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2020-04-25"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询电商平台账户实时余额API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/merchant/fund/balance/BASIC",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"merchant",
+								"fund",
+								"balance",
+								"BASIC"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询电商平台账户日终余额API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/merchant/fund/dayendbalance/BASIC?date=2020-04-25",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"merchant",
+								"fund",
+								"dayendbalance",
+								"BASIC"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2020-04-25"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "提现",
+			"item": [
+				{
+					"name": "账户余额提现API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"sub_mchid\": \"{{sub_mchid}}\",\n \"out_request_no\": \"20200611222222222200000\",\n \"amount\": 1,\n \"remark\": \"交易提现\",\n \"bank_memo\": \"咖贝平台提现\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"fund",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "二级商户查询提现状态API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"sub_mchid\": \"{{sub_mchid}}\",\n \"transaction_id\": \"4345100103202004225603699095\",\n \"out_order_no\": \"2015080612534623232\",\n \"receivers\": [\n   {\n     \"receiver_mchid\": \"1586045221\",\n     \"amount\": 1,\n     \"description\": \"平台抽成\"\n   }\n ],\n \"finish\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/209000120133995202004261787576175?sub_mchid={{sub_mchid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"ecommerce",
+								"fund",
+								"withdraw",
+								"209000120133995202004261787576175"
+							],
+							"query": [
+								{
+									"key": "sub_mchid",
+									"value": "{{sub_mchid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "电商平台提现API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n  \"out_request_no\": \"202006112222222222000000000121\",\n  \"amount\": 1,\n  \"remark\": \"交易提现\",\n  \"bank_memo\": \"咖贝平台提现\",\n  \"account_type\": \"BASIC\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"merchant",
+								"fund",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "电商平台查询提现状态API",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2bb91266-e03e-456b-9a6e-0d62f97edc2f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Wechatpay-Serial",
+								"type": "text",
+								"value": "{{serialNo}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"sub_mchid\": \"{{sub_mchid}}\",\n \"transaction_id\": \"4345100103202004225603699095\",\n \"out_order_no\": \"2015080612534623232\",\n \"receivers\": [\n   {\n     \"receiver_mchid\": \"1586045221\",\n     \"amount\": 1,\n     \"description\": \"平台抽成\"\n   }\n ],\n \"finish\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw/out-request-no/202006112222222222000000000121",
+							"protocol": "https",
+							"host": [
+								"api",
+								"mch",
+								"weixin",
+								"qq",
+								"com"
+							],
+							"path": [
+								"v3",
+								"merchant",
+								"fund",
+								"withdraw",
+								"out-request-no",
+								"202006112222222222000000000121"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a0e0bbb9-a86e-4325-acfb-d42a94f4fc9c",
+				"type": "text/javascript",
+				"exec": [
+					"// 全局定义二级商户ID",
+					"pm.environment.set(\"sub_mchid\", \"\");   ",
+					"const private_key = `-----BEGIN PRIVATE KEY-----",
+					"-----END PRIVATE KEY-----`;",
+					"",
+					"const mchid = \"\";",
+					"const serialNo = \"\";",
+					"",
+					"let sdk = require('postman-collection');",
+					"",
+					"// request data does not resolve variables which makes sign-error",
+					"// see https://github.com/postmanlabs/postman-app-support/issues/3322",
+					"function replaceVariables(templateString) {",
+					"    let tokens = _.uniq(templateString.match(/{{\\w*}}/g))",
+					"    ",
+					"    _.forEach(tokens, t => {",
+					"       let variable = t.replace(/[{}]/g, '') ",
+					"       let value = environment[variable] || globals[variable]",
+					"       templateString = templateString.replace(new RegExp(t,'g'), value)",
+					"    });",
+					"    ",
+					"    return templateString",
+					"}",
+					"",
+					"var newUrl = new sdk.Url(replaceVariables(request.url));",
+					"",
+					"var now = Date.now();",
+					"var timeStamp = Math.round(now / 1000);",
+					"var nonceStr = now;",
+					"",
+					"var method = request.method;",
+					"",
+					"var data = \"\";",
+					"if (method == 'POST' || method == 'PUT' || method == 'PATCH') {",
+					"    var data = pm.request.body.raw; ",
+					"    data = replaceVariables(data);",
+					"}",
+					"",
+					"var canonicalUrl = newUrl.getPathWithQuery();",
+					"",
+					"var message = method + \"\\n\"",
+					"+ canonicalUrl + \"\\n\"",
+					"+ timeStamp + \"\\n\"",
+					"+ nonceStr + \"\\n\"",
+					"+ data + \"\\n\";",
+					"",
+					"pm.sendRequest(\"https://wx.gtimg.com/pay/js/apiv3/libs/node-forge@0.7.6/forge.min.js\", function (err, res) {",
+					"        if (err) {",
+					"            console.log(err);}",
+					"        else {",
+					"            eval(res.text());",
+					"            ",
+					"            var privateKey = forge.pki.privateKeyFromPem(private_key);",
+					"            var sha256 = forge.md.sha256.create();",
+					"            sha256.update(forge.util.encodeUtf8(message));",
+					"            var signature = forge.util.encode64(privateKey.sign(sha256));",
+					"            ",
+					"            console.log(`message=[${message}]`);",
+					"            ",
+					"            var auth = `WECHATPAY2-SHA256-RSA2048 mchid=\"${mchid}\",serial_no=\"${serialNo}\",nonce_str=\"${nonceStr}\",timestamp=\"${timeStamp}\",signature=\"${signature}\"`;",
+					"            pm.environment.set(\"auth\", auth);",
+					"        }",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0f258c6b-15c7-42cf-b30a-189f2d15cf99",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
