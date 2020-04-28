@@ -62,3 +62,7 @@ libraryDependencies += "top.gabin" % "wx-pay-profits-sharing" % "1.5.4"
     wechatpay-apiv3.postman_collection_share.json
     wechapay-api3-upload-image.postman_collection_share.json
 </pre>
+注：需要创建环境才可以正常使用，因为用到了环境变量
+
+```变量
+```
