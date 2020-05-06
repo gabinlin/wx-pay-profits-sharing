@@ -1,5 +1,6 @@
 package top.gabin.tools.request.pay.bill;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,6 +25,7 @@ public class BillOfTradeRequest {
 	 *  示例值：2019-06-11 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "bill_date")
 	private String billDate;
 
@@ -43,6 +45,7 @@ public class BillOfTradeRequest {
 	 *  示例值：1900000001 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -61,6 +64,7 @@ public class BillOfTradeRequest {
 	 *  示例值：ALL 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "bill_type")
 	private String billType;
 
@@ -77,6 +81,7 @@ public class BillOfTradeRequest {
 	 *  示例值：GZIP 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "tar_type")
 	private String tarType;
 
