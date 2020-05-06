@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
-import top.gabin.tools.request.ecommerce.applyments.*;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsSettlementStatusRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
@@ -58,24 +60,20 @@ public class ProfitsSharingServiceTest {
         profitsSharingService = new ProfitsSharingServiceImpl(config, null);
     }
 
-    //    @Test
+        @Test
     public void testApplyments() {
 
     }
 
     @Test
     public void testQueryApplyments() {
-        ApplymentsStatusRequest request = new ApplymentsStatusRequest();
-        request.setApplymentId("2000002140061723");
-        Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus(request);
+        Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus("2000002140061723");
         applymentsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
     public void testQueryApplyments1() {
-        ApplymentsStatusRequest1 request = new ApplymentsStatusRequest1();
-        request.setOutRequestNo("20200420054724");
-        Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus(request);
+        Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus("20200420054724");
         applymentsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
@@ -248,7 +246,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.queryProfitSharingStatus(request);
     }
 
-    //    @Test
+        @Test
     public void testUploadImage() throws Exception {
         Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpeg"));
         imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
@@ -278,7 +276,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.queryDayEndAmount(AccountType.BASIC, new Date()).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
-    //    @Test
+        @Test
     public void testWithdraw() {
         WithdrawForSubMchRequest request = new WithdrawForSubMchRequest();
         request.setAmount(1);

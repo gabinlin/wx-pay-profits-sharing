@@ -85,10 +85,10 @@ public interface ProfitsSharingService {
      * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
-     * @param request 请求对象
+     * @param applymentId 提交申请返回的ID
      * @return .
      */
-    Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest request);
+    Optional<ApplymentsStatusResponse> queryApplymentsStatus(String applymentId);
 
     /**
      * <pre>
@@ -111,10 +111,10 @@ public interface ProfitsSharingService {
      * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
-     * @param request 请求对象
+     * @param outRequestNo 业务编号
      * @return .
      */
-    Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest1 request);
+    Optional<ApplymentsStatusResponse> queryApplymentsStatusByOutNo(String outRequestNo);
 
     /**
      * <pre>

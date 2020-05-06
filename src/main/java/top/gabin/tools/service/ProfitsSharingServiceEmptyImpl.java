@@ -49,12 +49,12 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest request) {
+    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(String applymentId) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest1 request) {
+    public Optional<ApplymentsStatusResponse> queryApplymentsStatusByOutNo(String outRequestNo) {
         return Optional.empty();
     }
 

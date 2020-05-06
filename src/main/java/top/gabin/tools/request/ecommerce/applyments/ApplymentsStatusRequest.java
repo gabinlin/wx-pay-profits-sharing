@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,7 @@ public class ApplymentsStatusRequest {
 	 *  示例值：2000002124775691 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "applyment_id")
 	private String applymentId;
 

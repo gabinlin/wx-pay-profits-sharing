@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import top.gabin.tools.auth.CacheService;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
-import top.gabin.tools.request.ecommerce.applyments.*;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsSettlementStatusRequest;
 import top.gabin.tools.request.ecommerce.fund.*;
 import top.gabin.tools.request.ecommerce.profitsharing.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
@@ -131,15 +133,15 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest request) {
+    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(String applymentId) {
         return get(ApplymentsStatusResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/%s",
-                request.getApplymentId()));
+                applymentId));
     }
 
     @Override
-    public Optional<ApplymentsStatusResponse> queryApplymentsStatus(ApplymentsStatusRequest1 request) {
+    public Optional<ApplymentsStatusResponse> queryApplymentsStatusByOutNo(String outRequestNo) {
         return get(ApplymentsStatusResponse.class, String.format("https://api.mch.weixin.qq.com/v3/ecommerce/applyments/out-request-no/%s",
-                request.getOutRequestNo()));
+                outRequestNo));
     }
 
     @Override

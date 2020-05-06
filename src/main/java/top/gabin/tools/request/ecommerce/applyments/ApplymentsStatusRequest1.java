@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,6 +25,7 @@ public class ApplymentsStatusRequest1 {
 	 *  示例值：APPLYMENT_00000000001 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
 
