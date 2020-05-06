@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,7 @@ public class ProfitSharingQueryApplyRequest {
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -37,6 +39,7 @@ public class ProfitSharingQueryApplyRequest {
 	 *  示例值： 4208450740201411110007820472 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "transaction_id")
 	private String transactionId;
 
@@ -51,6 +54,7 @@ public class ProfitSharingQueryApplyRequest {
 	 *  示例值：P20150806125346 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "out_order_no")
 	private String outOrderNo;
 
