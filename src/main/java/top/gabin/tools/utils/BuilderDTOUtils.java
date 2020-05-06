@@ -104,7 +104,7 @@ public class BuilderDTOUtils {
         Elements tables = document.select("table");
         tables.forEach(table -> {
             List<DTO> list = getDtos(table);
-
+            boolean containsPathParams = containsPathParams(list);
             String text = table.parent().parent().select("h3").text();
             boolean request = isRequest(text);
             boolean response = isResponse(text);
@@ -125,6 +125,9 @@ public class BuilderDTOUtils {
                 FileWriter fileWriter = new FileWriter(sourcePath + "/" + newFileName + ".java");
                 fileWriter.write("package " + sourcePath.replaceAll("src/main/java/", "").replaceAll("/", ".") + ";\n\n");
 
+                if (containsPathParams) {
+                    fileWriter.write("import com.fasterxml.jackson.annotation.JsonIgnore;\n");
+                }
                 fileWriter.write("import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
                         "import com.fasterxml.jackson.annotation.JsonProperty;\n\n");
 
@@ -187,6 +190,9 @@ public class BuilderDTOUtils {
                     String field = dto.getField();
                     content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
                     fileWriter.write(content);
+                    if (isPathParams(dto)) {
+                        fileWriter.write("\t@JsonIgnore\n");
+                    }
                     fileWriter.write(String.format("\t@JsonProperty(value = \"%s\")\n", field));
                     fileWriter.write("\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
                 }
@@ -221,6 +227,14 @@ public class BuilderDTOUtils {
             }
         });
 
+    }
+
+    private boolean containsPathParams(List<DTO> list) {
+        return list.stream().anyMatch(this::isPathParams);
+    }
+
+    private boolean isPathParams(DTO dto) {
+        return dto.getDesc().contains("path");
     }
 
     private boolean isResponse(String text) {
