@@ -42,6 +42,7 @@ public class AmountDayEndOfSubMchRequest {
 	@JsonProperty(value = "date")
 	private String date;
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}

@@ -27,6 +27,7 @@ public class ApplymentsSettlementStatusRequest {
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}

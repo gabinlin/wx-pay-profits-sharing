@@ -58,6 +58,7 @@ public class ProfitSharingQueryApplyRequest {
 	@JsonProperty(value = "out_order_no")
 	private String outOrderNo;
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}
@@ -66,6 +67,7 @@ public class ProfitSharingQueryApplyRequest {
 		this.subMchid = subMchid;
 	}
 
+	@JsonIgnore
 	public String getTransactionId() {
 		return this.transactionId;
 	}
@@ -74,6 +76,7 @@ public class ProfitSharingQueryApplyRequest {
 		this.transactionId = transactionId;
 	}
 
+	@JsonIgnore
 	public String getOutOrderNo() {
 		return this.outOrderNo;
 	}

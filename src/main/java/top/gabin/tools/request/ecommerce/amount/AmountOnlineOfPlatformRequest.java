@@ -31,6 +31,7 @@ public class AmountOnlineOfPlatformRequest {
 	@JsonProperty(value = "account_type")
 	private String accountType;
 
+	@JsonIgnore
 	public String getAccountType() {
 		return this.accountType;
 	}

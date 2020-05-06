@@ -28,6 +28,7 @@ public class ApplymentsStatusRequest {
 	@JsonProperty(value = "applyment_id")
 	private String applymentId;
 
+	@JsonIgnore
 	public String getApplymentId() {
 		return this.applymentId;
 	}

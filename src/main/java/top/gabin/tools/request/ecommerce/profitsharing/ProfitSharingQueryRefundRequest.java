@@ -70,6 +70,7 @@ public class ProfitSharingQueryRefundRequest {
 	@JsonProperty(value = "out_return_no")
 	private String outReturnNo;
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}
@@ -78,6 +79,7 @@ public class ProfitSharingQueryRefundRequest {
 		this.subMchid = subMchid;
 	}
 
+	@JsonIgnore
 	public String getOrderId() {
 		return this.orderId;
 	}
@@ -94,6 +96,7 @@ public class ProfitSharingQueryRefundRequest {
 		this.outOrderNo = outOrderNo;
 	}
 
+	@JsonIgnore
 	public String getOutReturnNo() {
 		return this.outReturnNo;
 	}

@@ -43,6 +43,7 @@ public class RefundQueryStatusRequest {
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
+	@JsonIgnore
 	public String getRefundId() {
 		return this.refundId;
 	}
@@ -51,6 +52,7 @@ public class RefundQueryStatusRequest {
 		this.refundId = refundId;
 	}
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}

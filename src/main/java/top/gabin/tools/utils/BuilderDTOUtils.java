@@ -198,6 +198,9 @@ public class BuilderDTOUtils {
                     String sourceField = dto.getField();
                     String field = getTopUppercaseField(sourceField);
                     String param = getField(sourceField);
+                    if (isPathParams(dto)) {
+                        fileWriter.write("\t@JsonIgnore\n");
+                    }
                     String getString = String.format("\tpublic %s get%s() {\n\t\treturn this.%s;\n\t}\n\n", getType(dto), field, param);
                     String setString = String.format("\tpublic void set%s(%s %s) {\n\t\tthis.%s = %s;\n\t}\n\n", field, getType(dto), param, param, param);
                     fileWriter.write(getString);
@@ -253,6 +256,9 @@ public class BuilderDTOUtils {
                 String field = dto.getField();
                 content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
                 fileWriter.write(content);
+                if (isPathParams(dto)) {
+                    fileWriter.write("\t\t@JsonIgnore\n");
+                }
                 fileWriter.write(String.format("\t\t@JsonProperty(value = \"%s\")\n", field));
                 fileWriter.write("\t\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
             }
@@ -260,6 +266,9 @@ public class BuilderDTOUtils {
                 String sourceField = dto.getField();
                 String field = getTopUppercaseField(sourceField);
                 String param = getField(sourceField);
+                if (isPathParams(dto)) {
+                    fileWriter.write("\t\t@JsonIgnore\n");
+                }
                 String getString = String.format("\t\tpublic %s get%s() {\n\t\t\treturn this.%s;\n\t\t}\n\n", getType(dto), field, param);
                 String setString = String.format("\t\tpublic void set%s(%s %s) {\n\t\t\tthis.%s = %s;\n\t\t}\n\n", field, getType(dto), param, param, param);
                 fileWriter.write(getString);

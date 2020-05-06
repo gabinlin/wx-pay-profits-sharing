@@ -45,6 +45,7 @@ public class AmountDayEndOfPlatformRequest {
 	@JsonProperty(value = "date")
 	private String date;
 
+	@JsonIgnore
 	public String getAccountType() {
 		return this.accountType;
 	}

@@ -28,6 +28,7 @@ public class CombineTransactionsStatusRequest {
 	@JsonProperty(value = "combine_out_trade_no")
 	private String combineOutTradeNo;
 
+	@JsonIgnore
 	public String getCombineOutTradeNo() {
 		return this.combineOutTradeNo;
 	}

@@ -29,6 +29,7 @@ public class ApplymentsStatusRequest1 {
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
 
+	@JsonIgnore
 	public String getOutRequestNo() {
 		return this.outRequestNo;
 	}

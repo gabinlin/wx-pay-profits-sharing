@@ -28,6 +28,7 @@ public class WithdrawStatusForPlatformRequest {
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
 
+	@JsonIgnore
 	public String getOutRequestNo() {
 		return this.outRequestNo;
 	}

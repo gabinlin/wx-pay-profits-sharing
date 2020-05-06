@@ -43,6 +43,7 @@ public class WithdrawStatusForSubMchRequest1 {
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}
@@ -51,6 +52,7 @@ public class WithdrawStatusForSubMchRequest1 {
 		this.subMchid = subMchid;
 	}
 
+	@JsonIgnore
 	public String getOutRequestNo() {
 		return this.outRequestNo;
 	}

@@ -61,6 +61,7 @@ public class WithdrawExceptionLogRequest {
 	@JsonProperty(value = "tar_type")
 	private String tarType;
 
+	@JsonIgnore
 	public String getBillType() {
 		return this.billType;
 	}
@@ -69,6 +70,7 @@ public class WithdrawExceptionLogRequest {
 		this.billType = billType;
 	}
 
+	@JsonIgnore
 	public String getBillDate() {
 		return this.billDate;
 	}
@@ -77,6 +79,7 @@ public class WithdrawExceptionLogRequest {
 		this.billDate = billDate;
 	}
 
+	@JsonIgnore
 	public String getTarType() {
 		return this.tarType;
 	}

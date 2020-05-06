@@ -80,6 +80,7 @@ public class BillOfTradeRequest {
 	@JsonProperty(value = "tar_type")
 	private String tarType;
 
+	@JsonIgnore
 	public String getBillDate() {
 		return this.billDate;
 	}
@@ -88,6 +89,7 @@ public class BillOfTradeRequest {
 		this.billDate = billDate;
 	}
 
+	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}
@@ -96,6 +98,7 @@ public class BillOfTradeRequest {
 		this.subMchid = subMchid;
 	}
 
+	@JsonIgnore
 	public String getBillType() {
 		return this.billType;
 	}
@@ -104,6 +107,7 @@ public class BillOfTradeRequest {
 		this.billType = billType;
 	}
 
+	@JsonIgnore
 	public String getTarType() {
 		return this.tarType;
 	}
