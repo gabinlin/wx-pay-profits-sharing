@@ -186,10 +186,10 @@ public interface ProfitsSharingService {
      * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
-     * @param request 请求对象
+     * @param subMchid 二级商户ID
      * @return .
      */
-    Optional<ApplymentsSettlementStatusResponse> querySettlement(ApplymentsSettlementStatusRequest request);
+    Optional<ApplymentsSettlementStatusResponse> querySettlement(String subMchid);
 
     /**
      * <pre>

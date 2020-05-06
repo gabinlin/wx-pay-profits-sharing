@@ -169,10 +169,9 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsSettlementStatusResponse> querySettlement(ApplymentsSettlementStatusRequest request) {
+    public Optional<ApplymentsSettlementStatusResponse> querySettlement(String subMchid) {
         return get(ApplymentsSettlementStatusResponse.class,
-                String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/settlement",
-                        request.getSubMchid()));
+                String.format("https://api.mch.weixin.qq.com/v3/apply4sub/sub_merchants/%s/settlement", subMchid));
     }
 
     @Override

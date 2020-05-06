@@ -69,7 +69,7 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ApplymentsSettlementStatusResponse> querySettlement(ApplymentsSettlementStatusRequest request) {
+    public Optional<ApplymentsSettlementStatusResponse> querySettlement(String subMchid) {
         return Optional.empty();
     }
 

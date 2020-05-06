@@ -12,7 +12,6 @@ import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
-import top.gabin.tools.request.ecommerce.applyments.ApplymentsSettlementStatusRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingFinishRequest;
@@ -97,9 +96,7 @@ public class ProfitsSharingServiceTest {
 
     @Test
     public void testQuerySettlement() {
-        ApplymentsSettlementStatusRequest request = new ApplymentsSettlementStatusRequest();
-        request.setSubMchid(getSubMchid());
-        profitsSharingService.querySettlement(request).ifPresent(this::logger);
+        profitsSharingService.querySettlement(getSubMchid()).ifPresent(this::logger);
     }
 
     private String getSubMchid() {

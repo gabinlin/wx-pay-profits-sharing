@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,6 +25,7 @@ public class ApplymentsSettlementStatusRequest {
 	 *  示例值：1900006491 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
