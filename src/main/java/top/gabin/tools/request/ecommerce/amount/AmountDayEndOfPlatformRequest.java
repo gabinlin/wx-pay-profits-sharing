@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.amount;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,6 +27,7 @@ public class AmountDayEndOfPlatformRequest {
 	 *  示例值：BASIC 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "account_type")
 	private String accountType;
 
