@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.refunds;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,7 @@ public class RefundQueryStatusRequest1 {
 	 *  示例值： 1217752501201407033233368018 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "out_refund_no")
 	private String outRefundNo;
 
@@ -37,6 +39,7 @@ public class RefundQueryStatusRequest1 {
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
