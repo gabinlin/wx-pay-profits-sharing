@@ -244,7 +244,7 @@ public class ProfitsSharingServiceTest {
 
         @Test
     public void testUploadImage() throws Exception {
-        Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpeg"));
+        Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpg"));
         imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
