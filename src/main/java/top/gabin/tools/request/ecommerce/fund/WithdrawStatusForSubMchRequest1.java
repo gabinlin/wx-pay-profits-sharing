@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.fund;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,7 @@ public class WithdrawStatusForSubMchRequest1 {
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -37,6 +39,7 @@ public class WithdrawStatusForSubMchRequest1 {
 	 *  示例值：20190611222222222200000000012122 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
 

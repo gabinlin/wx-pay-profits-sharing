@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.fund;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +24,7 @@ public class WithdrawExceptionLogRequest {
 	 *  示例值：NO_SUCC 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "bill_type")
 	private String billType;
 
@@ -38,6 +40,7 @@ public class WithdrawExceptionLogRequest {
 	 *  示例值：2019-08-17 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "bill_date")
 	private String billDate;
 
@@ -54,6 +57,7 @@ public class WithdrawExceptionLogRequest {
 	 *  示例值：GZIP 
 	 * </pre>
 	 */
+	@JsonIgnore
 	@JsonProperty(value = "tar_type")
 	private String tarType;
 

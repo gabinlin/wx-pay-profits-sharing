@@ -1,8 +1,13 @@
 package top.gabin.tools.service;
 
 import top.gabin.tools.constant.AccountType;
-import top.gabin.tools.request.ecommerce.applyments.*;
-import top.gabin.tools.request.ecommerce.fund.*;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
+import top.gabin.tools.request.ecommerce.applyments.ApplymentsSettlementStatusRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawExceptionLogRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawForPlatformRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest1;
 import top.gabin.tools.request.ecommerce.profitsharing.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
@@ -420,10 +425,10 @@ public interface ProfitsSharingService {
     Optional<ProfitSharingApplyResponse> applyProfitSharing(ProfitSharingApplyRequest request);
 
     /**
-     *
      * @return 平台的商户ID
      */
     Optional<String> getPlatformId();
+
     /**
      * <pre>
      * 详见 https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_2.shtml
@@ -819,10 +824,11 @@ public interface ProfitsSharingService {
      *
      * </pre>
      *
-     * @param request 请求对象
+     * @param subMchId   二级商户号
+     * @param withdrawId 提现记录ID
      * @return .
      */
-    Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest request);
+    Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(String subMchId, String withdrawId);
 
     /**
      * <pre>
@@ -845,10 +851,11 @@ public interface ProfitsSharingService {
      *
      * </pre>
      *
-     * @param request 请求对象
+     * @param subMchId     二级商户ID
+     * @param outRequestNo 业务编号
      * @return .
      */
-    Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest1 request);
+    Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatusByOutNo(String subMchId, String outRequestNo);
 
     /**
      * <pre>
@@ -895,10 +902,10 @@ public interface ProfitsSharingService {
      * 接口规则：https://wechatpay-api.gitbook.io/wechatpay-api-v3
      * </pre>
      *
-     * @param request 请求对象
+     * @param outRequestNo 业务编号
      * @return .
      */
-    Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(WithdrawStatusForPlatformRequest request);
+    Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(String outRequestNo);
 
     /**
      * <pre>
@@ -1009,6 +1016,7 @@ public interface ProfitsSharingService {
      * path 指该参数需在请求URL传参
      * query 指该参数需在请求JSON传参
      * </pre>
+     *
      * @param file 文件
      * @return .
      */

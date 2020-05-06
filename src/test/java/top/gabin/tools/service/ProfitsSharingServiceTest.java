@@ -14,7 +14,6 @@ import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRe
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsSettlementStatusRequest;
 import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
-import top.gabin.tools.request.ecommerce.fund.WithdrawStatusForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingApplyRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingFinishRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.ProfitSharingQueryApplyRequest;
@@ -290,10 +289,7 @@ public class ProfitsSharingServiceTest {
 
     @Test
     public void testQueryWithdraw() {
-        WithdrawStatusForSubMchRequest request = new WithdrawStatusForSubMchRequest();
-        request.setSubMchid(getSubMchid());
-        request.setWithdrawId("209000120133995202004211781163170");
-        Optional<WithdrawStatusForSubMchResponse> responseOptional = profitsSharingService.queryWithdrawStatus(request);
+        Optional<WithdrawStatusForSubMchResponse> responseOptional = profitsSharingService.queryWithdrawStatus(getSubMchid(), "209000120133995202004211781163170");
         responseOptional.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 

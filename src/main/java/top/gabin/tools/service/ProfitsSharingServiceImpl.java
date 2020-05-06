@@ -427,19 +427,19 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest request) {
+    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(String subMchId, String withdrawId) {
         return get(WithdrawStatusForSubMchResponse.class,
                 String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/%s?sub_mchid=%s",
-                        request.getWithdrawId(),
-                        request.getSubMchid()));
+                        withdrawId,
+                        subMchId));
     }
 
     @Override
-    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest1 request) {
+    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatusByOutNo(String subMchId, String outRequestNo) {
         return get(WithdrawStatusForSubMchResponse.class,
                 String.format("https://api.mch.weixin.qq.com/v3/ecommerce/fund/withdraw/out-request-no/%s?sub_mchid=%s",
-                        request.getOutRequestNo(),
-                        request.getSubMchid()));
+                        outRequestNo,
+                        subMchId));
     }
 
     @Override
@@ -448,10 +448,10 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(WithdrawStatusForPlatformRequest request) {
+    public Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(String outRequestNo) {
         return get(WithdrawStatusForPlatformResponse.class,
                 String.format("https://api.mch.weixin.qq.com/v3/merchant/fund/withdraw/out-request-no/%s",
-                        request.getOutRequestNo()));
+                        outRequestNo));
     }
 
     @Override

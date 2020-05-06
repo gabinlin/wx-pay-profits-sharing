@@ -224,12 +224,7 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest request) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(WithdrawStatusForSubMchRequest1 request) {
+    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatusByOutNo(String subMchId, String outRequestNo) {
         return Optional.empty();
     }
 
@@ -239,7 +234,12 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(WithdrawStatusForPlatformRequest request) {
+    public Optional<WithdrawStatusForSubMchResponse> queryWithdrawStatus(String subMchId, String withdrawId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<WithdrawStatusForPlatformResponse> queryWithdrawStatus(String outRequestNo) {
         return Optional.empty();
     }
 
