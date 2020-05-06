@@ -12,15 +12,11 @@ import top.gabin.tools.response.AbstractResponse;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_5.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEM_ERROR	系统错误	系统异常，请使用相同参数稍后重新调用
- * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
- * 400	INVALID_REQUEST	参数错误	请使用正确的参数重新调用
- * 分账金额超限	分账金额不能大于可分金额或大于最大分账比例金额，请调整分账金额		
- * 分账接收方非法	分账接收方在分账之前需要进行添加		
- * 请求参数不符合参数格式	请求参数错误，检查原交易号是否存在或发起支付交易接口返回失败		
- * 订单处理中，暂时无法分账	订单处理中，暂时无法分账，请稍后再试		
- * 不是分账订单，无法分账	发起支付交易接口时请用分账的合适参数		
- * 429	FREQUENCY_LIMITED	频率限制	请降低频率后重试
- * 403	NO_AUTH	未开通分账权限	请开通商户号分账权限
+ * 400	PARAM_ERROR	订单号格式不正确	请使用正确的参数重新调用
+ * 400	INVALID_REQUEST	非分账订单不支持完结分账	请根据返回的错误信息确认违反的业务规则
+ * 429	FREQUENCY_LIMITED	对同笔订单分账频率过高	请降低频率后重试
+ * 403	NOT_ENOUGH	分账金额为0	分账已完成，无需再请求分账完结
+ * 403	NO_AUTH	商户无权限	请开通商户号分账权限
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -14,15 +14,9 @@ import java.util.List;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_2.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEM_ERROR	系统错误	系统异常，请使用相同参数稍后重新调用
- * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
- * 400	INVALID_REQUEST	参数错误	请使用正确的参数重新调用
- * 分账金额超限	分账金额不能大于可分金额或大于最大分账比例金额，请调整分账金额		
- * 分账接收方非法	分账接收方在分账之前需要进行添加		
- * 请求参数不符合参数格式	请求参数错误，检查原交易号是否存在或发起支付交易接口返回失败		
- * 订单处理中，暂时无法分账	订单处理中，暂时无法分账，请稍后再试		
- * 不是分账订单，无法分账	发起支付交易接口时请用分账的合适参数		
+ * 400	PARAM_ERROR	商户号未设置	请使用正确的参数重新调用
  * 429	FREQUENCY_LIMITED	频率限制	请降低频率后重试
- * 403	NO_AUTH	未开通分账权限	请开通商户号分账权限
+ * 404	RESOURCE_NOT_EXISTS	记录不存在	请检查请求的单号是否正确
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -232,7 +226,7 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	public static class Receivers {
 		/**
 		 * <pre>
-		 * 字段名：分账接受商户号
+		 * 字段名：分账接收商户号
 		 * 变量名：receiver_mchid
 		 * 是否必填：是
 		 * 类型：string(32)
@@ -322,6 +316,38 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		@JsonProperty(value = "fail_reason")
 		private String failReason;
 
+		/**
+		 * <pre>
+		 * 字段名：分账接收方类型
+		 * 变量名：type
+		 * 是否必填：是
+		 * 类型：string（32）
+		 * 描述：
+		 *  分账接收方类型，枚举值： 
+		 *  MERCHANT_ID：商户
+		 *  PERSONAL_OPENID：个人
+		 *  示例值：MERCHANT_ID 
+		 * </pre>
+		 */
+		@JsonProperty(value = "type")
+		private String type;
+
+		/**
+		 * <pre>
+		 * 字段名：分账接收方账号
+		 * 变量名：receiver_account
+		 * 是否必填：是
+		 * 类型：string （64）
+		 * 描述：
+		 *  分账接收方账号：
+		 *  类型是MERCHANT_ID时，是商户ID
+		 *  类型是PERSONAL_OPENID时，是个人openid 
+		 *  示例值：1900000109 
+		 * </pre>
+		 */
+		@JsonProperty(value = "receiver_account")
+		private String receiverAccount;
+
 		public String getReceiverMchid() {
 			return this.receiverMchid;
 		}
@@ -368,6 +394,22 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 
 		public void setFailReason(String failReason) {
 			this.failReason = failReason;
+		}
+
+		public String getType() {
+			return this.type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getReceiverAccount() {
+			return this.receiverAccount;
+		}
+
+		public void setReceiverAccount(String receiverAccount) {
+			this.receiverAccount = receiverAccount;
 		}
 
 	}

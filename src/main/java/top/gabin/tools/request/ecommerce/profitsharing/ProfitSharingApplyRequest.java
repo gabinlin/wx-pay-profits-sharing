@@ -16,6 +16,20 @@ import java.util.List;
 public class ProfitSharingApplyRequest {
 	/**
 	 * <pre>
+	 * 字段名：公众账号ID
+	 * 变量名：appid
+	 * 是否必填：否
+	 * 类型：string(32)
+	 * 描述：
+	 *  微信分配的公众账号ID。 
+	 *  示例值：wx8888888888888888 
+	 * </pre>
+	 */
+	@JsonProperty(value = "appid")
+	private String appid;
+
+	/**
+	 * <pre>
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
@@ -84,6 +98,14 @@ public class ProfitSharingApplyRequest {
 	@JsonProperty(value = "finish")
 	private Boolean finish;
 
+	public String getAppid() {
+		return this.appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+
 	public String getSubMchid() {
 		return this.subMchid;
 	}
@@ -128,12 +150,45 @@ public class ProfitSharingApplyRequest {
 	public static class Receivers {
 		/**
 		 * <pre>
-		 * 字段名：分账接受商户号
+		 * 字段名：分账接收方类型
+		 * 变量名：type
+		 * 是否必填：否
+		 * 类型：string（32）
+		 * 描述：
+		 *  分账接收方类型，枚举值： 
+		 *  MERCHANT_ID：商户
+		 *  PERSONAL_OPENID：个人
+		 *  示例值：MERCHANT_ID 
+		 * </pre>
+		 */
+		@JsonProperty(value = "type")
+		private String type;
+
+		/**
+		 * <pre>
+		 * 字段名：分账接收方账号
+		 * 变量名：receiver_account
+		 * 是否必填：否
+		 * 类型：string （64）
+		 * 描述：
+		 *  分账接收方账号：
+		 *  类型是MERCHANT_ID时，是商户ID
+		 *  类型是PERSONAL_OPENID时，是个人openid 
+		 *  示例值：1900000109 
+		 * </pre>
+		 */
+		@JsonProperty(value = "receiver_account")
+		private String receiverAccount;
+
+		/**
+		 * <pre>
+		 * 字段名：分账接收商户号
 		 * 变量名：receiver_mchid
 		 * 是否必填：是
 		 * 类型：string(32)
 		 * 描述：
-		 *  填写微信支付分配的商户号，仅支持通过添加分账接收方添加的商户号；电商平台商户已默认添加到分账接收方，无需重复添加。
+		 *  接收方类型为MERCHANT_ID时，填入微信支付分配的商户号。
+		 *  如果填写了字段receiver_account，则无需填写本字段
 		 *  示例值：1900000109 
 		 * </pre>
 		 */
@@ -167,6 +222,22 @@ public class ProfitSharingApplyRequest {
 		 */
 		@JsonProperty(value = "description")
 		private String description;
+
+		public String getType() {
+			return this.type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getReceiverAccount() {
+			return this.receiverAccount;
+		}
+
+		public void setReceiverAccount(String receiverAccount) {
+			this.receiverAccount = receiverAccount;
+		}
 
 		public String getReceiverMchid() {
 			return this.receiverMchid;

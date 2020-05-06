@@ -137,22 +137,6 @@ public class CombineTransactionsJsRequest {
 	@JsonProperty(value = "notify_url")
 	private String notifyUrl;
 
-	/**
-	 * <pre>
-	 * 字段名：指定支付方式
-	 * 变量名：limit_pay
-	 * 是否必填：否
-	 * 类型：array
-	 * 描述：
-	 *  指定支付方式 
-	 *  no_credit：指定不能使用信用卡支付
-	 *  特殊规则：长度最大限制32个字节 
-	 *  示例值：no_credit 
-	 * </pre>
-	 */
-	@JsonProperty(value = "limit_pay")
-	private List<String> limitPay;
-
 	public String getCombineAppid() {
 		return this.combineAppid;
 	}
@@ -225,14 +209,6 @@ public class CombineTransactionsJsRequest {
 		this.notifyUrl = notifyUrl;
 	}
 
-	public List<String> getLimitPay() {
-		return this.limitPay;
-	}
-
-	public void setLimitPay(List<String> limitPay) {
-		this.limitPay = limitPay;
-	}
-
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class SceneInfo {
 		/**
@@ -301,7 +277,7 @@ public class CombineTransactionsJsRequest {
 
 		/**
 		 * <pre>
-		 * 字段名：附加信息
+		 * 字段名：附加数据
 		 * 变量名：attach
 		 * 是否必填：是
 		 * 类型：string(128)
@@ -369,26 +345,10 @@ public class CombineTransactionsJsRequest {
 
 		/**
 		 * <pre>
-		 * 字段名：是否指定分账
-		 * 变量名：profit_sharing
-		 * 是否必填：是
-		 * 类型：bool
-		 * 描述：
-		 *  是否指定分账 
-		 *  true：是 
-		 *  false：否 
-		 *  示例值：true 
-		 * </pre>
-		 */
-		@JsonProperty(value = "profit_sharing")
-		private Boolean profitSharing;
-
-		/**
-		 * <pre>
 		 * 字段名：商品描述
 		 * 变量名：description
 		 * 是否必填：是
-		 * 类型：string(128)
+		 * 类型：string(127)
 		 * 描述：
 		 *  商品简单描述。需传入应用市场上的APP名字-实际商品名称，例如：天天爱消除-游戏充值。 
 		 *  示例值：腾讯充值中心-QQ会员充值 
@@ -455,14 +415,6 @@ public class CombineTransactionsJsRequest {
 
 		public void setDetail(String detail) {
 			this.detail = detail;
-		}
-
-		public Boolean getProfitSharing() {
-			return this.profitSharing;
-		}
-
-		public void setProfitSharing(Boolean profitSharing) {
-			this.profitSharing = profitSharing;
 		}
 
 		public String getDescription() {
@@ -566,7 +518,7 @@ public class CombineTransactionsJsRequest {
 		 * 是否必填：否
 		 * 类型：bool
 		 * 描述：
-		 *  是否分账，与外层profit_sharing同时存在时，以本字段为准。
+		 *  是否指定分账，枚举值：
 		 *  true：是 
 		 *  false：否 
 		 *  示例值：true 

@@ -14,14 +14,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ProfitSharingRemoveReceiverRequest {
 	/**
 	 * <pre>
+	 * 字段名：公众账号ID
+	 * 变量名：appid
+	 * 是否必填：是
+	 * 类型：string（32）
+	 * 描述：
+	 *   微信分配的公众账号ID 
+	 *  示例值：wx8888888888888888 
+	 * </pre>
+	 */
+	@JsonProperty(value = "appid")
+	private String appid;
+
+	/**
+	 * <pre>
 	 * 字段名：接收方类型
 	 * 变量名：type
 	 * 是否必填：是
 	 * 类型：string（32）
 	 * 描述：
-	 *   分账接收方的类型，当前仅支持： 
-	 *  MERCHANT_ID（商户号），填写微信支付分配的商户号。电商平台系统已默认添加为分账接收方，无需重复添加 
-	 *  示例值：3008450740201411110007820472 
+	 *   分账接收方的类型，枚举值： 
+	 *  MERCHANT_ID：商户
+	 *  PERSONAL_OPENID：个人 
+	 *  示例值：MERCHANT_ID 
 	 * </pre>
 	 */
 	@JsonProperty(value = "type")
@@ -34,12 +49,22 @@ public class ProfitSharingRemoveReceiverRequest {
 	 * 是否必填：是
 	 * 类型：string（64）
 	 * 描述：
-	 *   分账接收方的账号，当type为MERCHANT_ID时，接收方账号是商户号。 
+	 *   分账接收方的账号
+	 *  类型是MERCHANT_ID时，是商户号
+	 *  类型是PERSONAL_OPENID时，是个人openid 
 	 *  示例值：190001001 
 	 * </pre>
 	 */
 	@JsonProperty(value = "account")
 	private String account;
+
+	public String getAppid() {
+		return this.appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
 
 	public String getType() {
 		return this.type;

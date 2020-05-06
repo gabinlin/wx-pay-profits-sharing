@@ -143,7 +143,6 @@ public class ProfitsSharingServiceTest {
         subOrders.setMchid(platformMchId);
         subOrders.setSubMchid(getSubMchid());
 
-        subOrders.setProfitSharing(true);
         CombineTransactionsAppRequest.SettleInfo settleInfo = new CombineTransactionsAppRequest.SettleInfo();
         settleInfo.setProfitSharing(true);
         settleInfo.setSubsidyAmount(100);

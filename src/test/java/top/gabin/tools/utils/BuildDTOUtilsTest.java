@@ -46,7 +46,7 @@ public class BuildDTOUtilsTest {
         }
     }
 
-//    @Test
+    @Test
     public void buildEntity() throws IOException {
         List<Params> params = new ArrayList<>();
         // 进件-二级分销商

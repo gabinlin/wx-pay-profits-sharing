@@ -27,9 +27,10 @@ public class ProfitSharingAddReceiverResponse extends AbstractResponse {
 	 * 是否必填：是
 	 * 类型：string（32）
 	 * 描述：
-	 *  分账接收方的类型，当前仅支持： 
-	 *  MERCHANT_ID（商户号）。 
-	 *  示例值： 3008450740201411110007820472 
+	 *  分账接收方的类型，枚举值： 
+	 *  MERCHANT_ID：商户
+	 *  PERSONAL_OPENID：个人 
+	 *  示例值：MERCHANT_ID 
 	 * </pre>
 	 */
 	@JsonProperty(value = "type")
@@ -42,7 +43,9 @@ public class ProfitSharingAddReceiverResponse extends AbstractResponse {
 	 * 是否必填：是
 	 * 类型：string（64）
 	 * 描述：
-	 *  分账接收方的账号，当type为MERCHANT_ID时，接收方账号是商户号。 
+	 *  分账接收方的账号
+	 *  类型是MERCHANT_ID时，是商户号
+	 *  类型是PERSONAL_OPENID时，是个人openid 
 	 *  示例值：190001001 
 	 * </pre>
 	 */

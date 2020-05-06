@@ -262,7 +262,7 @@ public class CombineTransactionsStatusResponse extends AbstractResponse {
 
 		/**
 		 * <pre>
-		 * 字段名：附加信息
+		 * 字段名：附加数据
 		 * 变量名：attach
 		 * 是否必填：是
 		 * 类型：string(128)

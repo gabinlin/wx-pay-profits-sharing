@@ -198,7 +198,9 @@ public class ProfitSharingNotifyRequest1 {
 		 * 是否必填：是
 		 * 类型：string(32)
 		 * 描述：
-		 *  分账接收方类型，枚举值：MERCHANT_ID：商户ID 
+		 *  分账接收方的类型，枚举值： 
+		 *  MERCHANT_ID：商户
+		 *  PERSONAL_OPENID：个人 
 		 *  示例值：MERCHANT_ID 
 		 * </pre>
 		 */
@@ -212,8 +214,10 @@ public class ProfitSharingNotifyRequest1 {
 		 * 是否必填：是
 		 * 类型：string(64)
 		 * 描述：
-		 *  1、申请本功能商户号 
-		 *  示例值：1900000100 
+		 *  分账接收方的账号
+		 *  类型是MERCHANT_ID时，是商户号
+		 *  类型是PERSONAL_OPENID时，是个人openid 
+		 *  示例值：190001001 
 		 * </pre>
 		 */
 		@JsonProperty(value = "account")
