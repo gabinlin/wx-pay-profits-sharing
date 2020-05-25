@@ -13,7 +13,7 @@ import top.gabin.tools.response.AbstractResponse;
  * 状态码	错误码	描述	解决方案
  * 403	NO_AUTH	当前商户号没有使用该接口的权限	请确认是否已经开通相关权限
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
- * 404	ORDER_NOT_EXISTS	该提现单号不存在	请检查订单号是否正确
+ * 404	ORDER_NOT_EXIST	该提现单号不存在	请检查订单号是否正确
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

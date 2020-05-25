@@ -15,7 +15,7 @@ import top.gabin.tools.response.AbstractResponse;
  * 电商服务商非电商类型	当前商户号没有使用该接口的权限，请确认是否已开通相关权限		
  * 电商特约商户非电商类型	当前商户号没有使用该接口的权限，请确认是否已开通相关权限		
  * 电商服务商和电商特约商户受理关系不存在	请确认电商平台商户号和二级商户商户号是否存在受理关系		
- * 404	ORDER_NOT_EXISTS	该提现单号不存在	请检查订单号是否正确
+ * 404	ORDER_NOT_EXIST	该提现单号不存在	请检查订单号是否正确
  * </pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

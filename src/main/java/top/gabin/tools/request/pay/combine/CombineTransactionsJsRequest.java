@@ -333,18 +333,6 @@ public class CombineTransactionsJsRequest {
 
 		/**
 		 * <pre>
-		 * 字段名：商品详情
-		 * 变量名：detail
-		 * 是否必填：否
-		 * 类型：string(6000)
-		 * 描述：商品详细描述（商品列表) 
-		 * </pre>
-		 */
-		@JsonProperty(value = "detail")
-		private String detail;
-
-		/**
-		 * <pre>
 		 * 字段名：商品描述
 		 * 变量名：description
 		 * 是否必填：是
@@ -409,14 +397,6 @@ public class CombineTransactionsJsRequest {
 			this.subMchid = subMchid;
 		}
 
-		public String getDetail() {
-			return this.detail;
-		}
-
-		public void setDetail(String detail) {
-			this.detail = detail;
-		}
-
 		public String getDescription() {
 			return this.description;
 		}
@@ -471,6 +451,7 @@ public class CombineTransactionsJsRequest {
 		 * 类型：int64
 		 * 描述：
 		 *  子单金额，单位为分。 
+		 *  境外场景下，标价金额要超过商户结算币种的最小单位金额，例如结算币种为美元，则标价金额必须大于1美分
 		 *  示例值：100 
 		 * </pre>
 		 */

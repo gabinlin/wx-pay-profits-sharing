@@ -16,25 +16,49 @@ public class WithdrawStatusForPlatformRequest {
 	/**
 	 * <pre>
 	 * 字段名：商户提现单号
-	 * 变量名：out_request_no
+	 * 变量名：withdraw_id
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string（128）
 	 * 描述：
-	 *  path 商户提现单号，由商户自定义生成。 
+	 *  path 微信支付系统生成的提现单号。 
 	 *  示例值：20190611222222222200000000012122 
 	 * </pre>
 	 */
 	@JsonIgnore
-	@JsonProperty(value = "out_request_no")
-	private String outRequestNo;
+	@JsonProperty(value = "withdraw_id")
+	private String withdrawId;
+
+	/**
+	 * <pre>
+	 * 字段名：电商平台特约商户号
+	 * 变量名：sub_mchid
+	 * 是否必填：是
+	 * 类型：string（32）
+	 * 描述：
+	 *  path 电商平台特约商户号，由微信支付生成并下发。 
+	 *  示例值：200000000012122 
+	 * </pre>
+	 */
+	@JsonIgnore
+	@JsonProperty(value = "sub_mchid")
+	private String subMchid;
 
 	@JsonIgnore
-	public String getOutRequestNo() {
-		return this.outRequestNo;
+	public String getWithdrawId() {
+		return this.withdrawId;
 	}
 
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
+	public void setWithdrawId(String withdrawId) {
+		this.withdrawId = withdrawId;
+	}
+
+	@JsonIgnore
+	public String getSubMchid() {
+		return this.subMchid;
+	}
+
+	public void setSubMchid(String subMchid) {
+		this.subMchid = subMchid;
 	}
 
 }

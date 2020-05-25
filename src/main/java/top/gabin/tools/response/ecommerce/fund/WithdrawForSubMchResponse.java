@@ -15,7 +15,7 @@ import top.gabin.tools.response.AbstractResponse;
  * 403	REQUEST_BLOCKED	二级商户未开启手动提现权限	二级商户号提现权限被冻结，无法发起提现
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用，电商平台提交相同商户单号的请求但参数和历史提交的参数不一致
- * 404	ORDER_NOT_EXISTS	提现单号不存在	请检查订单号是否正确
+ * 404	ORDER_NOT_EXIST	提现单号不存在	请检查订单号是否正确
  * 403	NOT_ENOUGH	二级商户号账户可用余额不足	二级商户号账户可用余额不足
  * 403	NO_AUTH	无接口使用权限	请开通商户号相关权限
  * 400	INVALID_REQUEST	二级商户未开启手动提现权限	请确认电商平台商户号和二级商户商户号是否存在受理关系

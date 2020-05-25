@@ -35,12 +35,12 @@ public class ApplymentsRequest {
 	 * 是否必填：是
 	 * 类型：string(4)
 	 * 描述：
-	 *  枚举值：
-	 *  2401：小微商户，指无营业执照的商户。
+	 *  非小微的主体类型需与营业执照/登记证书上一致，可参考选择主体指引，枚举值如下。
+	 *  2401：小微商户，指无营业执照的个人卖家。
 	 *  4：个体工商户，营业执照上的主体类型一般为个体户、个体工商户、个体经营。
 	 *  2：企业，营业执照上的主体类型一般为有限公司、有限责任公司。
-	 *  3：党政、机关及事业单位，包括国内各级、各类政府机构、事业单位等（如：公安、党团、司法、交通、旅游、工商税务、市政、医疗、教育、学校等机构）。
-	 *  1708：其他组织，不属于企业、政府/事业单位的组织机构（如社会团体、民办非企业、基金会），要求机构已办理组织机构代码证。
+	 *  3：党政、机关及事业单位，包括国内各级、各类政府机构、事业单位等（如：公安、党 团、司法、交通、旅游、工商税务、市政、医疗、教育、学校等机构）。
+	 *  1708：其他组织，不属于企业、政府/事业单位的组织机构（如社会团体、民办非企业、基 金会），要求机构已办理组织机构代码证。
 	 *  示例值：2401 
 	 * </pre>
 	 */
@@ -125,14 +125,15 @@ public class ApplymentsRequest {
 
 	/**
 	 * <pre>
-	 * 字段名：是否填写结算账户信息
+	 * 字段名：是否填写结算银行账户
 	 * 变量名：need_account_info
 	 * 是否必填：是
 	 * 类型：bool
 	 * 描述：
-	 *  可根据实际情况，填写“true”或“false”。
-	 *  1、若为“true”，则需填写结算账户信息。
-	 *  2、若为“false”，则无需填写结算账户信息。 
+	 *  1、可根据实际情况，填写“true”或“false”。
+	 *  1）若为“true”，则需填写结算银行账户。
+	 *  2）若为“false”，则无需填写结算银行账户。 
+	 *  2、若入驻时未填写结算银行账户，则需入驻后调用修改结算账户API补充信息，才能发起提现。
 	 *  示例值：true 
 	 * </pre>
 	 */
@@ -141,7 +142,7 @@ public class ApplymentsRequest {
 
 	/**
 	 * <pre>
-	 * 字段名：+结算账户信息
+	 * 字段名：+结算银行账户
 	 * 变量名：account_info
 	 * 是否必填：条件选填
 	 * 类型：object
@@ -179,6 +180,21 @@ public class ApplymentsRequest {
 
 	/**
 	 * <pre>
+	 * 字段名：小程序AppID
+	 * 变量名：mini_program_sub_appid
+	 * 是否必填：否
+	 * 类型：string(256)
+	 * 描述：
+	 *  1、可填写已认证的小程序AppID，认证主体需与二级商户主体一致；
+	 *  2、完成入驻后， 系统发起二级商户号与该AppID的绑定（即配置为sub_appid，可在发起支付时传入） 
+	 *  示例值：wxd678efh567hg6787 
+	 * </pre>
+	 */
+	@JsonProperty(value = "mini_program_sub_appid")
+	private String miniProgramSubAppid;
+
+	/**
+	 * <pre>
 	 * 字段名：商户简称
 	 * 变量名：merchant_shortname
 	 * 是否必填：是
@@ -198,7 +214,7 @@ public class ApplymentsRequest {
 	 * 是否必填：否
 	 * 类型：string(1024)
 	 * 描述：
-	 *  1、若店铺业务包含互联网售药，则需上传特殊资质-《互联网药品交易服务证》。
+	 *  1、若从事互联网售药，则需提供 《互联网药品交易服务证》；
 	 *  2、最多可上传5张照片，请填写通过图片上传接口预先上传图片生成好的MediaID 。 
 	 *  示例值：[\"jTpGmxUX3FBWVQ5NJInE4d2I6_H7I4\"] 
 	 * </pre>
@@ -320,6 +336,14 @@ public class ApplymentsRequest {
 
 	public void setSalesSceneInfo(SalesSceneInfo salesSceneInfo) {
 		this.salesSceneInfo = salesSceneInfo;
+	}
+
+	public String getMiniProgramSubAppid() {
+		return this.miniProgramSubAppid;
+	}
+
+	public void setMiniProgramSubAppid(String miniProgramSubAppid) {
+		this.miniProgramSubAppid = miniProgramSubAppid;
 	}
 
 	public String getMerchantShortname() {

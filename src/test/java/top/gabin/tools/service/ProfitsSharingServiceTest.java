@@ -143,7 +143,6 @@ public class ProfitsSharingServiceTest {
         subOrders.setSettleInfo(settleInfo);
 
         String label = "软件设计费用";
-        subOrders.setDetail(label);
         subOrders.setDescription(label);
         request.setCombineOutTradeNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmssSSS"));
         return request;
