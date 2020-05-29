@@ -1,4 +1,4 @@
-#项目： 微信电商收付通工具包
+# 微信电商收付通工具包
 官方文档地址： [https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/guide.shtml](https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/guide.shtml)
 
 ## 一、更新说明
@@ -62,3 +62,7 @@ libraryDependencies += "top.gabin" % "wx-pay-profits-sharing" % "1.5.6"
     wechatpay-apiv3.postman_collection_share.json
     wechapay-api3-upload-image.postman_collection_share.json
 </pre>
+注：需要创建环境才可以正常使用，因为用到了环境变量
+
+```变量
+```
