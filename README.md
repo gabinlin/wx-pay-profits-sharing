@@ -15,25 +15,25 @@
  <dependency>
    <groupId>top.gabin</groupId>
    <artifactId>wx-pay-profits-sharing</artifactId>
-   <version>1.5.4</version>
+   <version>1.5.6</version>
  </dependency>
 ```
 - Gradle Groovy DSL
 ```
-implementation 'top.gabin:wx-pay-profits-sharing:1.5.4'
+implementation 'top.gabin:wx-pay-profits-sharing:1.5.6'
 ```
 
 - Gradle Kotlin DSL
 ```
-implementation("top.gabin:wx-pay-profits-sharing:1.5.4")
+implementation("top.gabin:wx-pay-profits-sharing:1.5.6")
 ```
 
 - Scala SBT
 ```
-libraryDependencies += "top.gabin" % "wx-pay-profits-sharing" % "1.5.4"
+libraryDependencies += "top.gabin" % "wx-pay-profits-sharing" % "1.5.6"
 ```
 
-- [更多](https://search.maven.org/artifact/top.gabin/wx-pay-profits-sharing/1.5.4/jar)
+- [更多](https://search.maven.org/artifact/top.gabin/wx-pay-profits-sharing/1.5.6/jar)
 ***
 ## 三、主程序入口
 - 基本上通过ProfitsSharingService接口调用
