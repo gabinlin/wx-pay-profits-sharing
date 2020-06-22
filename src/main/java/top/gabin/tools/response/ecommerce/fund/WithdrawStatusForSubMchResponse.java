@@ -8,7 +8,7 @@ import top.gabin.tools.response.AbstractResponse;
 
 /**
  * <pre>
- * 电商平台通过查询提现状态API查询二级商户提现单的提现结果。
+ * 电商平台通过查询提现状态API查询二级商户提现单的提现结果。 该查询服务提供两种查询方式（两种查询方式返回结果一致）： 方式1：微信支付提现单号查询； 方式2：商户提现单号查询。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_3.shtml
  * 状态码	错误码	描述	解决方案
  * 403	NO_AUTH	电商特约商户不存在	请确认电商平台商户号和二级商户商户号是否存在受理关系

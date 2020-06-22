@@ -8,7 +8,7 @@ import top.gabin.tools.response.AbstractResponse;
 
 /**
  * <pre>
- * 电商平台通过该接口查询其提现结果
+ * 电商平台通过该接口查询其提现结果，该查询服务提供两种查询方式（两种查询方式返回结果一致）： 方式1：微信支付提现单号查询； 方式2：商户提现单号查询。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_6.shtml
  * 状态码	错误码	描述	解决方案
  * 403	NO_AUTH	当前商户号没有使用该接口的权限	请确认是否已经开通相关权限

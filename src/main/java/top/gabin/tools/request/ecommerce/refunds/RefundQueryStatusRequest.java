@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * <pre>
- * 提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
+ * 提交退款申请后，通过调用该接口查询退款状态。该查询服务提供两种查询方式（两种查询方式返回结果一致）： 方式1：通过微信支付退款单号查询退款； 方式2：通过商户退款单号查询退款。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_2.shtml
  * </pre>
  */

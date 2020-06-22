@@ -168,12 +168,12 @@ public class ProfitSharingApplyRequest {
 		 * <pre>
 		 * 字段名：分账接收方账号
 		 * 变量名：receiver_account
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：string （64）
 		 * 描述：
 		 *  分账接收方账号：
 		 *  类型是MERCHANT_ID时，是商户ID
-		 *  类型是PERSONAL_OPENID时，是个人openid 
+		 *  类型是PERSONAL_OPENID时，是个人openid，openid获取方法 
 		 *  示例值：1900000109 
 		 * </pre>
 		 */
@@ -184,7 +184,7 @@ public class ProfitSharingApplyRequest {
 		 * <pre>
 		 * 字段名：分账接收商户号
 		 * 变量名：receiver_mchid
-		 * 是否必填：是
+		 * 是否必填：否
 		 * 类型：string(32)
 		 * 描述：
 		 *  接收方类型为MERCHANT_ID时，填入微信支付分配的商户号。

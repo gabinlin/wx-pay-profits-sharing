@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <pre>
- * 电商平台通过查询申请状态API查询二级商户入驻申请结果。
+ * 电商平台通过查询申请状态API查询二级商户入驻申请结果。该查询服务提供两种查询方式（两种查询方式返回结果一致）： 方式1：业务申请编号查询申请状态； 方式2：申请单号查询申请状态。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_2.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEMERROR	系统错误	系统异常，请使用相同参数稍后重新调用

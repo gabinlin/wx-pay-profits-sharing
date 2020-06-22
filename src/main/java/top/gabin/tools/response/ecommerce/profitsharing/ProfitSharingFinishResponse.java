@@ -8,7 +8,7 @@ import top.gabin.tools.response.AbstractResponse;
 
 /**
  * <pre>
- * 不需要进行分账的订单，可直接调用本接口将订单的金额全部解冻给特约商户。
+ * 不需要进行分账的订单，可直接调用本接口将订单的金额全部解冻给二级商户。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_5.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEM_ERROR	系统错误	系统异常，请使用相同参数稍后重新调用

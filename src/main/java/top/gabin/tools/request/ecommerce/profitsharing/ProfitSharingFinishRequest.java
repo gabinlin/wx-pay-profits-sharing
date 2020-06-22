@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * <pre>
- * 不需要进行分账的订单，可直接调用本接口将订单的金额全部解冻给特约商户。
+ * 不需要进行分账的订单，可直接调用本接口将订单的金额全部解冻给二级商户。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_5.shtml
  * </pre>
  */

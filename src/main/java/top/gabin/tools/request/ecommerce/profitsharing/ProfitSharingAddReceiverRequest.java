@@ -51,7 +51,7 @@ public class ProfitSharingAddReceiverRequest {
 	 * 描述：
 	 *   分账接收方的账号
 	 *  类型是MERCHANT_ID时，是商户号
-	 *  类型是PERSONAL_OPENID时，是个人openid 
+	 *  类型是PERSONAL_OPENID时，是个人openid，openid获取方法 
 	 *  示例值：190001001 
 	 * </pre>
 	 */

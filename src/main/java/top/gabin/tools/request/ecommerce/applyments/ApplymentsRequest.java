@@ -36,7 +36,8 @@ public class ApplymentsRequest {
 	 * 类型：string(4)
 	 * 描述：
 	 *  非小微的主体类型需与营业执照/登记证书上一致，可参考选择主体指引，枚举值如下。
-	 *  2401：小微商户，指无营业执照的个人卖家。
+	 *  2401：小微商户，指无营业执照的个人商家。
+	 *  2500：个人卖家，指无营业执照，已持续从事电子商务经营活动满6个月，且期间经营收入累计超过20万元的个人商家。（若选择该主体，请在“补充说明”填写相关描述）
 	 *  4：个体工商户，营业执照上的主体类型一般为个体户、个体工商户、个体经营。
 	 *  2：企业，营业执照上的主体类型一般为有限公司、有限责任公司。
 	 *  3：党政、机关及事业单位，包括国内各级、各类政府机构、事业单位等（如：公安、党 团、司法、交通、旅游、工商税务、市政、医疗、教育、学校等机构）。
@@ -54,7 +55,7 @@ public class ApplymentsRequest {
 	 * 是否必填：条件选填
 	 * 类型：object
 	 * 描述：
-	 *  1、主体为“小微”时，不填。
+	 *  1、主体为“小微/个人卖家”时，不填。
 	 *  2、主体为“个体工商户/企业”时，请上传营业执照。
 	 *  3、主体为“党政、机关及事业单位/其他组织”时，请上传登记证书。 
 	 * </pre>
@@ -68,7 +69,7 @@ public class ApplymentsRequest {
 	 * 变量名：organization_cert_info
 	 * 是否必填：条件选填
 	 * 类型：object
-	 * 描述：主体为企业/党政、机关及事业单位/其他组织，且证件号码不是18位时必填。 
+	 * 描述：主体为“企业/党政、机关及事业单位/其他组织”，且营业执照/登记证书号码不是18位时必填。 
 	 * </pre>
 	 */
 	@JsonProperty(value = "organization_cert_info")
@@ -81,8 +82,8 @@ public class ApplymentsRequest {
 	 * 是否必填：否
 	 * 类型：string(64)
 	 * 描述：
-	 *  1、主体为“小微”，只可选择：身份证。
-	 *  2、主体为“个体户/企业/党政、机关及事业单位/其他组织”，可选择：任一证件类型。
+	 *  1、主体为“小微/个人卖家”，可选择：身份证。
+	 *  2、主体为“个体户/企业/党政、机关及事业单位/其他组织”，可选择：以下任一证件类型。
 	 *  3、若没有填写，系统默认选择：身份证。
 	 *  枚举值:
 	 *  IDENTIFICATION_TYPE_MAINLAND_IDCARD：中国大陆居民-身份证
@@ -180,21 +181,6 @@ public class ApplymentsRequest {
 
 	/**
 	 * <pre>
-	 * 字段名：小程序AppID
-	 * 变量名：mini_program_sub_appid
-	 * 是否必填：否
-	 * 类型：string(256)
-	 * 描述：
-	 *  1、可填写已认证的小程序AppID，认证主体需与二级商户主体一致；
-	 *  2、完成入驻后， 系统发起二级商户号与该AppID的绑定（即配置为sub_appid，可在发起支付时传入） 
-	 *  示例值：wxd678efh567hg6787 
-	 * </pre>
-	 */
-	@JsonProperty(value = "mini_program_sub_appid")
-	private String miniProgramSubAppid;
-
-	/**
-	 * <pre>
 	 * 字段名：商户简称
 	 * 变量名：merchant_shortname
 	 * 是否必填：是
@@ -243,7 +229,8 @@ public class ApplymentsRequest {
 	 * 是否必填：否
 	 * 类型：string(256)
 	 * 描述：
-	 *   可填写512字以内 。 
+	 *   1、可填写512字以内 。 
+	 *  2、若主体为“个人卖家”，则需填写描述“ 该商户已持续从事电子商务经营活动满6个月，且期间经营收入累计超过20万元。”。
 	 *  示例值：特殊情况，说明原因 
 	 * </pre>
 	 */
@@ -336,14 +323,6 @@ public class ApplymentsRequest {
 
 	public void setSalesSceneInfo(SalesSceneInfo salesSceneInfo) {
 		this.salesSceneInfo = salesSceneInfo;
-	}
-
-	public String getMiniProgramSubAppid() {
-		return this.miniProgramSubAppid;
-	}
-
-	public void setMiniProgramSubAppid(String miniProgramSubAppid) {
-		this.miniProgramSubAppid = miniProgramSubAppid;
 	}
 
 	public String getMerchantShortname() {
@@ -642,7 +621,7 @@ public class ApplymentsRequest {
 		 * 类型：string(256)
 		 * 描述：
 		 *  1、请填写经营者/法定代表人对应身份证的姓名，2~30个中文字符、英文字符、符号。
-		 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  示例值：pVd1HJ6v/69bDnuC4EL5Kz4jBHLiCa8MRtelw/wDa4SzfeespQO/0kjiwfqdfg== 
 		 *  字段加密:使用APIv3定义的方式加密 
 		 * </pre>
@@ -658,7 +637,7 @@ public class ApplymentsRequest {
 		 * 类型：string(18)
 		 * 描述：
 		 *  1、请填写经营者/法定代表人对应身份证的号码。
-		 *  2、15位数字或17位数字+1位数字|X ，该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  2、15位数字或17位数字+1位数字|X ，该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  示例值：zV+BEmytMNQCqQ8juwEc4P4TG5xzchG/5IL9DBd+Z0zZXkw==4 
 		 *  特殊规则：长度最小15个字节 
 		 * </pre>
@@ -829,8 +808,8 @@ public class ApplymentsRequest {
 		 * 类型：string(2)
 		 * 描述：
 		 *  1、若主体为企业/党政、机关及事业单位/其他组织，可填写：74-对公账户。
-		 *  2、若主体为小微，可填写：75-对私账户。
-		 *  3、若主体为个体工商户，可填写：74-对公账户或75-对私账户。
+		 *  2、主体为“小微/个人卖家”，可选择：75-对私账户。
+		 *  3、若主体为个体工商户，可填写：74-对公账户、75-对私账户。
 		 *  示例值：75 
 		 * </pre>
 		 */
@@ -860,7 +839,7 @@ public class ApplymentsRequest {
 		 * 描述：
 		 *  1、选择经营者个人银行卡时，开户名称必须与身份证姓名一致。
 		 *  2、选择对公账户时，开户名称必须与营业执照上的“商户名称”一致。
-		 *  3、该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  3、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  示例值：AOZdYGISxo4yw96uY1Pk7Rq79Jtt7+I8juwEc4P4TG5xzchG/5IL9DBd+Z0zZXkw== 
 		 * </pre>
 		 */
@@ -920,7 +899,7 @@ public class ApplymentsRequest {
 		 * 类型：string(128)
 		 * 描述：
 		 *  1、数字，长度遵循系统支持的对公/对私卡号长度要求表。
-		 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。 
+		 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial) 
 		 *  示例值： d+xT+MQCvrLHUVDWv/8MR/dB7TkXLVfSrUxMPZy6jWWYzpRrEEaYQE8ZRGYoeorwC+w== 
 		 * </pre>
 		 */
@@ -994,8 +973,8 @@ public class ApplymentsRequest {
 		 * 是否必填：是
 		 * 类型：string(2)
 		 * 描述：
-		 *  1、小微商户，选择：65-法人/经营者。
-		 *  2、个体工商户/企业/党政、机关及事业单位/其他组织，可选择：65-法人/经营者、66- 负责人。 （负责人：经商户授权办理微信支付业务的人员，授权范围包括但不限于签约，入驻过程需完成账户验证）。
+		 *  1、主体为“小微/个人卖家 ”，可选择：65-经营者/法人。
+		 *  2、主体为“个体工商户/企业/党政、机关及事业单位/其他组织”，可选择：65-经营者/法人、66- 负责人。 （负责人：经商户授权办理微信支付业务的人员，授权范围包括但不限于签约，入驻过程需完成账户验证）。
 		 *  示例值：65 
 		 * </pre>
 		 */
@@ -1011,7 +990,7 @@ public class ApplymentsRequest {
 		 * 描述：
 		 *  1、若管理员类型为“法人”，则该姓名需与法人身份证姓名一致。
 		 *  2、若管理员类型为“经办人”，则可填写实际经办人的姓名。
-		 *  3、该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  3、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  （后续该管理员需使用实名微信号完成签约） 
 		 *  示例值： pVd1HJ6zyvPedzGaV+X3IdGdbDnuC4Eelw/wDa4SzfeespQO/0kjiwfqdfg== 
 		 * </pre>
@@ -1029,7 +1008,7 @@ public class ApplymentsRequest {
 		 *  1、若管理员类型为法人，则该身份证号码需与法人身份证号码一致。若管理员类型为经办人，则可填写实际经办人的身份证号码。
 		 *  2、可传身份证、来往内地通行证、来往大陆通行证、护照等证件号码。
 		 *  3、超级管理员签约时，校验微信号绑定的银行卡实名信息，是否与该证件号码一致。
-		 *  4、该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  4、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  示例值：pVd1HJ6zmty7/mYNxLMpRSvMRtelw/wDa4SzfeespQO/0kjiwfqdfg== 
 		 * </pre>
 		 */
@@ -1044,7 +1023,7 @@ public class ApplymentsRequest {
 		 * 类型：string(256)
 		 * 描述：
 		 *  1、请填写管理员的手机号，11位数字， 用于接收微信支付的重要管理信息及日常操作验证码 。 
-		 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  示例值：pVd1HJ6zyvPedzGaV+X3qtmrq9bb9tPROvwia4ibL+F6mfjbzQIzfb3HHLEjZ4YiNWWNeespQO/0kjiwfqdfg== 
 		 * </pre>
 		 */
@@ -1060,7 +1039,7 @@ public class ApplymentsRequest {
 		 * 描述：
 		 *  1、用于接收微信支付的开户邮件及日常业务通知。 
 		 *  2、需要带@，遵循邮箱格式校验 。 
-		 *  3、该字段需进行加密处理，加密方法详见敏感信息加密说明。
+		 *  3、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial)
 		 *  示例值：pVd1HJ6zyvPedzGaV+X3qtmrq9bb9tPROvwia4ibL+FWWNUlw/wDa4SzfeespQO/0kjiwfqdfg== 
 		 * </pre>
 		 */
@@ -1152,6 +1131,21 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "store_qr_code")
 		private String storeQrCode;
 
+		/**
+		 * <pre>
+		 * 字段名：小程序AppID
+		 * 变量名：mini_program_sub_appid
+		 * 是否必填：否
+		 * 类型：string(256)
+		 * 描述：
+		 *  1、可填写已认证的小程序AppID，认证主体需与二级商户主体一致；
+		 *  2、完成入驻后， 系统发起二级商户号与该AppID的绑定（即配置为sub_appid，可在发起支付时传入） 
+		 *  示例值：wxd678efh567hg6787 
+		 * </pre>
+		 */
+		@JsonProperty(value = "mini_program_sub_appid")
+		private String miniProgramSubAppid;
+
 		public String getStoreName() {
 			return this.storeName;
 		}
@@ -1174,6 +1168,14 @@ public class ApplymentsRequest {
 
 		public void setStoreQrCode(String storeQrCode) {
 			this.storeQrCode = storeQrCode;
+		}
+
+		public String getMiniProgramSubAppid() {
+			return this.miniProgramSubAppid;
+		}
+
+		public void setMiniProgramSubAppid(String miniProgramSubAppid) {
+			this.miniProgramSubAppid = miniProgramSubAppid;
 		}
 
 	}
