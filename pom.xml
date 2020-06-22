@@ -6,7 +6,7 @@
 
     <groupId>top.gabin</groupId>
     <artifactId>wx-pay-profits-sharing</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7</version>
     <packaging>jar</packaging>
     <name>wx-pay-profits-sharing</name>
     <description>>wx-pay-profits-sharing</description>
