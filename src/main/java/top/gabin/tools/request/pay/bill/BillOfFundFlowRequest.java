@@ -18,9 +18,9 @@ public class BillOfFundFlowRequest {
 	 * 字段名：账单日期
 	 * 变量名：bill_date
 	 * 是否必填：是
-	 * 类型：string(10)
+	 * 类型：string[1,10]
 	 * 描述：
-	 *  path 格式YYYY-MM-DD 
+	 *   格式YYYY-MM-DD 
 	 *  仅支持三个月内的账单下载申请。 
 	 *  示例值：2019-06-11 
 	 * </pre>
@@ -34,9 +34,9 @@ public class BillOfFundFlowRequest {
 	 * 字段名：资金账户类型
 	 * 变量名：account_type
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path 不填则默认是BASIC 
+	 *   不填则默认是BASIC 
 	 *  枚举值：
 	 *  BASIC：基本账户 
 	 *  OPERATION：运营账户 
@@ -53,9 +53,9 @@ public class BillOfFundFlowRequest {
 	 * 字段名：压缩类型
 	 * 变量名：tar_type
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path 不填则默认是数据流 
+	 *   不填则默认是数据流 
 	 *  枚举值：
 	 *  GZIP：返回格式为.gzip的压缩包账单 
 	 *  示例值：GZIP 

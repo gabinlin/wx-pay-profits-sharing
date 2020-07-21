@@ -20,9 +20,9 @@ public class CombineTransactionsCloseRequest {
 	 * 字段名：合单商户appid
 	 * 变量名：combine_appid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  合单发起方的appid。 
+	 *  body 合单发起方的appid。 
 	 *  示例值：wxd678efh567hg6787 
 	 * </pre>
 	 */
@@ -34,7 +34,7 @@ public class CombineTransactionsCloseRequest {
 	 * 字段名：合单商户订单号
 	 * 变量名：combine_out_trade_no
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  path 合单支付总订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。 
 	 *  示例值：P20150806125346 
@@ -51,7 +51,7 @@ public class CombineTransactionsCloseRequest {
 	 * 是否必填：是
 	 * 类型：array
 	 * 描述：
-	 *  最多支持子单条数：50 
+	 *  body 最多支持子单条数：50 
 	 *  
 	 * </pre>
 	 */
@@ -90,7 +90,7 @@ public class CombineTransactionsCloseRequest {
 		 * 字段名：子单商户号
 		 * 变量名：mchid
 		 * 是否必填：是
-		 * 类型：string(32)
+		 * 类型：string[1,32]
 		 * 描述：
 		 *  子单发起方商户号，必须与发起方appid有绑定关系。 
 		 *  示例值：1900000109 
@@ -104,10 +104,9 @@ public class CombineTransactionsCloseRequest {
 		 * 字段名：子单商户订单号
 		 * 变量名：out_trade_no
 		 * 是否必填：是
-		 * 类型：string(32)
+		 * 类型：string[6,32]
 		 * 描述：
 		 *  商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。 
-		 *  特殊规则：最小字符长度为6 
 		 *  示例值：20150806125346 
 		 * </pre>
 		 */
@@ -119,7 +118,7 @@ public class CombineTransactionsCloseRequest {
 		 * 字段名：二级商户号
 		 * 变量名：sub_mchid
 		 * 是否必填：是
-		 * 类型：string(32)
+		 * 类型：string[1,32]
 		 * 描述：
 		 *  二级商户商户号，由微信支付生成并下发。 
 		 *  注意：仅适用于电商平台 服务商

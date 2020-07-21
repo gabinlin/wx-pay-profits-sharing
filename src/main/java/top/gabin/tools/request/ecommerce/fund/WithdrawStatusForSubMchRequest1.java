@@ -18,7 +18,7 @@ public class WithdrawStatusForSubMchRequest1 {
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  path 电商平台二级商户号，由微信支付生成并下发。 
 	 *  示例值：1900000109 
@@ -33,9 +33,9 @@ public class WithdrawStatusForSubMchRequest1 {
 	 * 字段名：商户提现单号
 	 * 变量名：out_request_no
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path 商户提现单号，由商户自定义生成。 
+	 *   商户提现单号，由商户自定义生成。 
 	 *  示例值：20190611222222222200000000012122 
 	 * </pre>
 	 */

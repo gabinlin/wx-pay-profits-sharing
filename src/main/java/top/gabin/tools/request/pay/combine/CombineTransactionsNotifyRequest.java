@@ -17,7 +17,7 @@ public class CombineTransactionsNotifyRequest {
 	 * 字段名：通知ID
 	 * 变量名：id
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  通知的唯一ID 
 	 *  示例值：EV-2018022511223320873 
@@ -31,7 +31,7 @@ public class CombineTransactionsNotifyRequest {
 	 * 字段名：通知创建时间
 	 * 变量名：create_time
 	 * 是否必填：是
-	 * 类型：string(16)
+	 * 类型：string[1,16]
 	 * 描述：
 	 *  通知创建的时间，格式为yyyyMMddHHmmss 
 	 *  示例值：20180225112233 
@@ -45,7 +45,7 @@ public class CombineTransactionsNotifyRequest {
 	 * 字段名：通知类型
 	 * 变量名：event_type
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  通知的类型，支付成功通知的类型为TRANSACTION.SUCCESS 
 	 *  示例值：TRANSACTION.SUCCESS 
@@ -59,7 +59,7 @@ public class CombineTransactionsNotifyRequest {
 	 * 字段名：通知数据类型
 	 * 变量名：resource_type
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  通知的资源数据类型，支付成功通知为encrypt-resource 
 	 *  示例值：encrypt-resource 
@@ -129,7 +129,7 @@ public class CombineTransactionsNotifyRequest {
 		 * 字段名：加密算法类型
 		 * 变量名：algorithm
 		 * 是否必填：是
-		 * 类型：string(32)
+		 * 类型：string[1,32]
 		 * 描述：
 		 *  对开启结果数据进行加密的加密算法，目前只支持AEAD_AES_256_GCM 
 		 *  示例值：AEAD_AES_256_GCM 
@@ -143,7 +143,7 @@ public class CombineTransactionsNotifyRequest {
 		 * 字段名：数据密文
 		 * 变量名：ciphertext
 		 * 是否必填：是
-		 * 类型：string(1048576)
+		 * 类型：string[1,1048576]
 		 * 描述：
 		 *  Base64编码后的开启/停用结果数据密文
 		 *  示例值：sadsadsadsad 
@@ -157,7 +157,7 @@ public class CombineTransactionsNotifyRequest {
 		 * 字段名：附加数据
 		 * 变量名：associated_data
 		 * 是否必填：否
-		 * 类型：string(16)
+		 * 类型：string[1,16]
 		 * 描述：
 		 *  附加数据 
 		 *  示例值：fdasfwqewlkja484w 
@@ -171,7 +171,7 @@ public class CombineTransactionsNotifyRequest {
 		 * 字段名：随机串
 		 * 变量名：nonce
 		 * 是否必填：是
-		 * 类型：string(16)
+		 * 类型：string[1,16]
 		 * 描述：
 		 *  加密使用的随机串 
 		 *  示例值：fdasflkja484w 

@@ -212,7 +212,8 @@ public class ProfitsSharingServiceTest {
         List<ProfitSharingApplyRequest.Receivers> receiversList = new ArrayList<>();
         ProfitSharingApplyRequest.Receivers receivers = new ProfitSharingApplyRequest.Receivers();
         receivers.setAmount(1);
-        receivers.setReceiverMchid("1586045221");
+        receivers.setReceiverAccount("1586045221");
+        receivers.setType("PERSONAL_OPENID");
         receivers.setDescription("平台抽成");
         receiversList.add(receivers);
         sharingApplyRequest.setReceivers(receiversList);

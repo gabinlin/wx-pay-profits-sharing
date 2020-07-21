@@ -18,7 +18,7 @@ public class AmountDayEndOfPlatformRequest {
 	 * 字段名：账户类型
 	 * 变量名：account_type
 	 * 是否必填：是
-	 * 类型：string
+	 * 类型：string [1,16]
 	 * 描述：
 	 *  path 枚举值： 
 	 *  BASIC：基本账户 
@@ -36,9 +36,9 @@ public class AmountDayEndOfPlatformRequest {
 	 * 字段名：日期
 	 * 变量名：date
 	 * 是否必填：是
-	 * 类型：string（10）
+	 * 类型：string[1,10]
 	 * 描述：
-	 *  指定查询商户日终余额的日期 
+	 *  body 指定查询商户日终余额的日期 
 	 *  示例值：2019-08-17 
 	 * </pre>
 	 */

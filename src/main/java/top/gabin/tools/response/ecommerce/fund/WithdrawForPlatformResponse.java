@@ -29,7 +29,7 @@ public class WithdrawForPlatformResponse extends AbstractResponse {
 	 * 字段名：微信支付提现单号
 	 * 变量名：withdraw_id
 	 * 是否必填：否
-	 * 类型：string（128）
+	 * 类型：string[1,128]
 	 * 描述：
 	 *  微信支付系统生成的提现单号。 
 	 *  示例值：12321937198237912739132791732912793127931279317929791239112123 
@@ -43,7 +43,7 @@ public class WithdrawForPlatformResponse extends AbstractResponse {
 	 * 字段名：商户提现单号
 	 * 变量名：out_request_no
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  商户提现单号，由商户自定义生成。 
 	 *  示例值： 20190611222222222200000000012122 

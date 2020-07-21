@@ -23,7 +23,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：提现单状态
 	 * 变量名：status
 	 * 是否必填：否
-	 * 类型：string
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  枚举值： 
 	 *  CREATE_SUCCESS：受理成功 
@@ -43,7 +43,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：微信支付提现单号
 	 * 变量名：withdraw_id
 	 * 是否必填：否
-	 * 类型：string（128）
+	 * 类型：string[1,128]
 	 * 描述：
 	 *  微信支付系统生成的提现单号。 
 	 *  示例值：12321937198237912739132791732912793127931279317929791239112123 
@@ -57,7 +57,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：商户提现单号
 	 * 变量名：out_request_no
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  商户提现单号，由商户自定义生成。 
 	 *  示例值：20190611222222222200000000012122 
@@ -71,7 +71,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：提现金额
 	 * 变量名：amount
 	 * 是否必填：否
-	 * 类型：int
+	 * 类型：int64
 	 * 描述：
 	 *  提现金额，单位：分（RMB） 
 	 *  示例值：1 
@@ -85,7 +85,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：发起提现时间
 	 * 变量名：create_time
 	 * 是否必填：否
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  时间日期遵循rfc3339所定义的格式，入参不限制时区，出参统一使用北京时间（+08:00）。 
 	 *  示例值：2015-05-20T13:29:35.120+08:00 
@@ -99,7 +99,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：提现状态更新时间
 	 * 变量名：update_time
 	 * 是否必填：否
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  时间日期遵循rfc3339所定义的格式，入参不限制时区，出参统一使用北京时间（+08:00）。 
 	 *  示例值：2015-05-20T13:29:35.120+08:00 
@@ -113,7 +113,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：失败原因
 	 * 变量名：reason
 	 * 是否必填：否
-	 * 类型：string（255）
+	 * 类型：string[1,255]
 	 * 描述：
 	 *  提现失败原因 
 	 *  示例值：卡号错误 
@@ -127,7 +127,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：备注
 	 * 变量名：remark
 	 * 是否必填：否
-	 * 类型：string（255）
+	 * 类型：string[1,255]
 	 * 描述：
 	 *  商户对提现单的备注。 
 	 *  示例值：交易体现 
@@ -141,7 +141,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：银行附言
 	 * 变量名：bank_memo
 	 * 是否必填：否
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  展示在收款银行系统中的附言，由数字、字母、汉字组成（能否成功展示依赖银行系统支持）。
 	 *  示例值：xx平台提现 
@@ -155,7 +155,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：账户类型
 	 * 变量名：account_type
 	 * 是否必填：否
-	 * 类型：string
+	 * 类型：string [1,32]
 	 * 描述：
 	 *  枚举值： 
 	 *  BASIC：基本账户 
@@ -172,7 +172,7 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 * 字段名：解决方案
 	 * 变量名：solution
 	 * 是否必填：否
-	 * 类型：string（255）
+	 * 类型：string[1,255]
 	 * 描述：
 	 *  出错解决方案指引。 
 	 *  示例值：请修改结算银行卡信息 

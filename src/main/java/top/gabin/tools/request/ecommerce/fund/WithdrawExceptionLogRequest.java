@@ -18,7 +18,7 @@ public class WithdrawExceptionLogRequest {
 	 * 字段名：账单类型
 	 * 变量名：bill_type
 	 * 是否必填：是
-	 * 类型：string(8)
+	 * 类型：string[1,8]
 	 * 描述：
 	 *  path NO_SUCC：提现异常账单，包括提现失败和提现退票账单。 
 	 *  示例值：NO_SUCC 
@@ -33,9 +33,9 @@ public class WithdrawExceptionLogRequest {
 	 * 字段名：账单日期
 	 * 变量名：bill_date
 	 * 是否必填：是
-	 * 类型：string（10）
+	 * 类型：string[1,10]
 	 * 描述：
-	 *  path 表示所在日期的提现账单，格式为YYYY-MM-DD。 
+	 *   表示所在日期的提现账单，格式为YYYY-MM-DD。 
 	 *  例如：2008-01-01日发起的提现，2008-01-03日银行返回提现失败，则该提现数据将出现在bill_date为2008-01-03日的账单中。 
 	 *  示例值：2019-08-17 
 	 * </pre>
@@ -49,9 +49,9 @@ public class WithdrawExceptionLogRequest {
 	 * 字段名：压缩格式
 	 * 变量名：tar_type
 	 * 是否必填：否
-	 * 类型：enum
+	 * 类型：string[1,10]
 	 * 描述：
-	 *  path 不填则默认是数据流 
+	 *   不填则默认是数据流 
 	 *  枚举值： 
 	 *  GZIP：返回格式为.gzip的压缩包账单 
 	 *  示例值：GZIP 

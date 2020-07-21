@@ -18,7 +18,7 @@ public class AmountOnlineOfSubMchRequest {
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  path电商平台二级商户号，由微信支付生成并下发。 
 	 *  示例值： 1900000109 

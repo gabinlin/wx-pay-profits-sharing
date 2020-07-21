@@ -19,7 +19,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：直连商户号
 	 * 变量名：mchid
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  直连模式分账发起和出资商户。 
 	 *  示例值：1900000100 
@@ -33,7 +33,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：服务商商户号
 	 * 变量名：sp_mchid
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  服务商模式分账发起商户。 
 	 *  示例值：1900000100 
@@ -47,7 +47,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：子商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  服务商模式分账出资商户。 
 	 *  示例值：1900000100 
@@ -61,7 +61,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：微信订单号
 	 * 变量名：transaction_id
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  微信支付订单号。 
 	 *  示例值： 4200000000000000000000000000 
@@ -75,7 +75,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：微信分账/回退单号
 	 * 变量名：order_id
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  微信分账/回退单号。 
 	 *  示例值： 1217752501201407033233368018 
@@ -89,7 +89,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：商户分账/回退单号
 	 * 变量名：out_order_no
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  分账方系统内部的分账/回退单号。 
 	 *  示例值：P20150806125346 
@@ -115,7 +115,7 @@ public class ProfitSharingNotifyRequest1 {
 	 * 字段名：成功时间
 	 * 变量名：success_time
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  成功时间，遵循rfc3339标准 
 	 *  格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日 13点29分35秒。
@@ -196,7 +196,7 @@ public class ProfitSharingNotifyRequest1 {
 		 * 字段名：分账接收方类型
 		 * 变量名：type
 		 * 是否必填：是
-		 * 类型：string(32)
+		 * 类型：string[1,32]
 		 * 描述：
 		 *  分账接收方的类型，枚举值： 
 		 *  MERCHANT_ID：商户
@@ -212,7 +212,7 @@ public class ProfitSharingNotifyRequest1 {
 		 * 字段名：分账接收方帐号
 		 * 变量名：account
 		 * 是否必填：是
-		 * 类型：string(64)
+		 * 类型：string[1,64]
 		 * 描述：
 		 *  分账接收方的账号
 		 *  类型是MERCHANT_ID时，是商户号
@@ -242,7 +242,7 @@ public class ProfitSharingNotifyRequest1 {
 		 * 字段名：分账/回退描述
 		 * 变量名：description
 		 * 是否必填：是
-		 * 类型：string(80)
+		 * 类型：string[1,80]
 		 * 描述：
 		 *  分账/回退描述 
 		 *  示例值：运费/交易分账/及时奖励 

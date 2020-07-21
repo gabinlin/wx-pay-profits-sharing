@@ -18,10 +18,9 @@ public class ApplymentsSettlementStatusRequest {
 	 * 字段名：特约商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string(10)
+	 * 类型：string[8,10]
 	 * 描述：
 	 *  path 请输入本服务商进件、已签约的特约商户号。
-	 *  特殊规则：长度最小8个字节
 	 *  示例值：1900006491 
 	 * </pre>
 	 */

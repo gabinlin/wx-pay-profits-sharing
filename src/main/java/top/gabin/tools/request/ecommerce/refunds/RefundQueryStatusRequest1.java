@@ -18,7 +18,7 @@ public class RefundQueryStatusRequest1 {
 	 * 字段名：商户退款单号
 	 * 变量名：out_refund_no
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  path 商户系统内部的退款单号，商户系统内部唯一，同一退款单号多次请求只退一笔。 
 	 *  示例值： 1217752501201407033233368018 
@@ -33,13 +33,12 @@ public class RefundQueryStatusRequest1 {
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path微信支付分配给二级商户的商户号。 
+	 *   微信支付分配给二级商户的商户号。 
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -52,7 +51,6 @@ public class RefundQueryStatusRequest1 {
 		this.outRefundNo = outRefundNo;
 	}
 
-	@JsonIgnore
 	public String getSubMchid() {
 		return this.subMchid;
 	}

@@ -25,7 +25,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  电商平台二级商户号，由微信支付生成并下发。 
 	 *  示例值： 1900000109 
@@ -39,7 +39,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：电商平台商户号
 	 * 变量名：sp_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  电商平台商户号 
 	 *  示例值： 1800000123 
@@ -53,7 +53,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：提现单状态
 	 * 变量名：status
 	 * 是否必填：是
-	 * 类型：enum
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  提现状态，枚举值： 
 	 *  CREATE_SUCCESS：受理成功
@@ -72,7 +72,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：微信支付提现单号
 	 * 变量名：withdraw_id
 	 * 是否必填：是
-	 * 类型：string(128)
+	 * 类型：string[1,128]
 	 * 描述：
 	 *  电商平台提交二级商户提现申请后，由微信支付返回的申请单号，作为查询申请状态的唯一标识。 
 	 *  示例值： 12321937198237912739132791732912793127931279317929791239112123 
@@ -86,7 +86,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：商户提现单号
 	 * 变量名：out_request_no
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  商户提现单号 
 	 *  示例值： 1217752501201407033233368018 
@@ -114,7 +114,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：发起提现时间
 	 * 变量名：create_time
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  发起提现时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss:sss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss:sss表示时分秒毫秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日13点29分35秒。 
 	 *  示例值： 2015-05-20T13:29:35.120+08:00 
@@ -128,7 +128,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：提现状态更新时间
 	 * 变量名：update_time
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  提现状态更新时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss:sss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss:sss表示时分秒毫秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日13点29分35秒。 
 	 *  示例值： 2015-05-20T13:29:35.120+08:00 
@@ -142,7 +142,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：失败原因
 	 * 变量名：reason
 	 * 是否必填：否
-	 * 类型：（255)
+	 * 类型：string[1,255]
 	 * 描述：
 	 *  提现失败原因 
 	 *  示例值：卡号错误 
@@ -156,7 +156,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：提现备注
 	 * 变量名：remark
 	 * 是否必填：否
-	 * 类型：string(56)
+	 * 类型：string[1,56]
 	 * 描述：
 	 *  商户对提现单的备注。 
 	 *  示例值：交易提现 
@@ -170,7 +170,7 @@ public class WithdrawStatusForSubMchResponse extends AbstractResponse {
 	 * 字段名：银行备注
 	 * 变量名：bank_memo
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  展示在收款银行系统中的附言，由数字、字母、汉字组成（能否成功展示依赖银行系统支持）。 
 	 *  示例值：微信提现 

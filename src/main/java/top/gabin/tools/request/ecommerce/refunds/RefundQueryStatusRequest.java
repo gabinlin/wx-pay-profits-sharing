@@ -18,7 +18,7 @@ public class RefundQueryStatusRequest {
 	 * 字段名：微信退款单号
 	 * 变量名：refund_id
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  path 退款单的主键，唯一定义此资源的标识。 
 	 *  示例值： 50000000382019052709732678859 
@@ -33,9 +33,9 @@ public class RefundQueryStatusRequest {
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path 微信支付分配给二级商户的商户号。 
+	 *   微信支付分配给二级商户的商户号。 
 	 *  示例值：1900000109 
 	 * </pre>
 	 */

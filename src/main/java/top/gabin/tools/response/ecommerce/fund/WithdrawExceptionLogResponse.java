@@ -26,7 +26,7 @@ public class WithdrawExceptionLogResponse extends AbstractResponse {
 	 * 字段名：哈希类型
 	 * 变量名：hash_type
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  从download_url下载的文件的哈希类型，用于校验文件的完整性。 
 	 *  示例值：SHA1 
@@ -40,7 +40,7 @@ public class WithdrawExceptionLogResponse extends AbstractResponse {
 	 * 字段名：哈希值
 	 * 变量名：hash_value
 	 * 是否必填：是
-	 * 类型：string(1024)
+	 * 类型：string[1,1024]
 	 * 描述：
 	 *  从download_url下载的文件的哈希值，用于校验文件的完整性。 
 	 *  示例值：79bb0f45fc4c42234a918000b2668d689e2bde04 
@@ -54,7 +54,7 @@ public class WithdrawExceptionLogResponse extends AbstractResponse {
 	 * 字段名：账单下载地址
 	 * 变量名：download_url
 	 * 是否必填：是
-	 * 类型：string(2048)
+	 * 类型：string[1,2048]
 	 * 描述：
 	 *  供下一步请求账单文件的下载地址，该地址30s内有效。 
 	 *  示例值：https://api.mch.weixin.qq.com/v3/billdownload/file?token=xxx 

@@ -17,9 +17,9 @@ public class ProfitSharingRemoveReceiverRequest {
 	 * 字段名：公众账号ID
 	 * 变量名：appid
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
-	 *   微信分配的公众账号ID 
+	 *  body 微信分配的公众账号ID 
 	 *  示例值：wx8888888888888888 
 	 * </pre>
 	 */
@@ -31,9 +31,9 @@ public class ProfitSharingRemoveReceiverRequest {
 	 * 字段名：接收方类型
 	 * 变量名：type
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
-	 *   分账接收方的类型，枚举值： 
+	 *  body 分账接收方的类型，枚举值： 
 	 *  MERCHANT_ID：商户
 	 *  PERSONAL_OPENID：个人 
 	 *  示例值：MERCHANT_ID 
@@ -47,9 +47,9 @@ public class ProfitSharingRemoveReceiverRequest {
 	 * 字段名：接收方账号
 	 * 变量名：account
 	 * 是否必填：是
-	 * 类型：string（64）
+	 * 类型：string[1,64]
 	 * 描述：
-	 *   分账接收方的账号
+	 *  body 分账接收方的账号
 	 *  类型是MERCHANT_ID时，是商户号
 	 *  类型是PERSONAL_OPENID时，是个人openid，openid获取方法 
 	 *  示例值：190001001 

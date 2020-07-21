@@ -26,7 +26,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  分账出资的电商平台二级商户，填写微信支付分配的商户号。 
 	 *  示例值：1900000109 
@@ -40,7 +40,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：微信分账单号
 	 * 变量名：order_id
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  原发起分账请求时，微信返回的微信分账单号，与商户分账单号一一对应。 微信分账单号与商户分账单号二选一填写。 
 	 *  示例值： 3008450740201411110007820472 
@@ -54,7 +54,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：商户分账单号
 	 * 变量名：out_order_no
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  商户系统内部的分账单号，在商户系统内部唯一（单次分账、多次分账、完结分账应使用不同的商户分账单号），同一分账单号多次请求等同一次。 
 	 *  示例值：P20150806125346 
@@ -68,7 +68,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：商户回退单号
 	 * 变量名：out_return_no
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  此回退单号是商户在自己后台生成的一个新的回退单号，在商户后台唯一 只能是数字、大小写字母_-*@ ，同一回退单号多次请求等同一次。
 	 *  示例值：R20190516001 
@@ -82,7 +82,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：回退商户号
 	 * 变量名：return_mchid
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  只能对原分账请求中成功分给商户接收方进行回退。 
 	 *  示例值：86693852 
@@ -110,7 +110,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：微信回退单号
 	 * 变量名：return_no
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  微信分账回退单号，微信系统返回的唯一标识。 
 	 *  示例值： 3008450740201411110007820472 
@@ -124,7 +124,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：回退结果
 	 * 变量名：result
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  如果请求返回为处理中，则商户可以通过调用回退结果查询接口获取请求的最终处理结果，枚举值： 
 	 *  PROCESSING：处理中 
@@ -143,7 +143,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：失败原因
 	 * 变量名：fail_reason
 	 * 是否必填：否
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  回退失败的原因，此字段仅回退结果为FAIL时存在，枚举值： 
 	 *  ACCOUNT_ABNORMAL：分账接收方账户异常 
@@ -159,10 +159,10 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 * 字段名：完成时间
 	 * 变量名：finish_time
 	 * 是否必填：是
-	 * 类型：string(64)
+	 * 类型：string[1,64]
 	 * 描述：
 	 *  分账回退完成时间，遵循rfc3339标准格式 
-	 * 格式为YYYY-MM-DDTHH:mm:ss:sss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss:sss表示时分秒毫秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.120+08:00表示，北京时间2015年5月20日 13点29分35秒。
+	 * 格式为YYYY-MM-DDTHH:mm:ss.sss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss.sss表示时分秒毫秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.120+08:00表示，北京时间2015年5月20日 13点29分35秒。
 	 *  示例值：2015-05-20T13:29:35.120+08:00 
 	 * </pre>
 	 */

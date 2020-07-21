@@ -18,7 +18,7 @@ public class ApplymentsStatusRequest1 {
 	 * 字段名：业务申请编号
 	 * 变量名：out_request_no
 	 * 是否必填：是
-	 * 类型：string(124)
+	 * 类型：string[1,124]
 	 * 描述：
 	 *  path1、服务商自定义的商户唯一编号。
 	 *  2、每个编号对应一个申请单，每个申请单审核通过后会生成一个微信支付商户号。

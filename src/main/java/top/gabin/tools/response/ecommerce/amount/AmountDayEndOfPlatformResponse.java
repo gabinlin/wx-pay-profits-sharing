@@ -23,7 +23,7 @@ public class AmountDayEndOfPlatformResponse extends AbstractResponse {
 	 * 字段名：可用余额
 	 * 变量名：available_amount
 	 * 是否必填：是
-	 * 类型：int64
+	 * 类型：int
 	 * 描述：
 	 *  可用余额（单位：分），此余额可做提现操作。 
 	 *  示例值： 100 
@@ -37,7 +37,7 @@ public class AmountDayEndOfPlatformResponse extends AbstractResponse {
 	 * 字段名：不可用余额
 	 * 变量名：pending_amount
 	 * 是否必填：否
-	 * 类型：int64
+	 * 类型：int
 	 * 描述：
 	 *  不可用余额（单位：分）。 
 	 *  示例值： 100 

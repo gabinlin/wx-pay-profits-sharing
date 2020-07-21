@@ -18,7 +18,7 @@ public class WithdrawStatusForPlatformRequest {
 	 * 字段名：商户提现单号
 	 * 变量名：withdraw_id
 	 * 是否必填：是
-	 * 类型：string（128）
+	 * 类型：string[1,128]
 	 * 描述：
 	 *  path 微信支付系统生成的提现单号。 
 	 *  示例值：20190611222222222200000000012122 
@@ -33,9 +33,9 @@ public class WithdrawStatusForPlatformRequest {
 	 * 字段名：电商平台特约商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string（32）
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path 电商平台特约商户号，由微信支付生成并下发。 
+	 *   电商平台特约商户号，由微信支付生成并下发。 
 	 *  示例值：200000000012122 
 	 * </pre>
 	 */

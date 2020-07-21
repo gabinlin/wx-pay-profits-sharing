@@ -18,7 +18,7 @@ public class CombineTransactionsStatusRequest {
 	 * 字段名：合单商户订单号
 	 * 变量名：combine_out_trade_no
 	 * 是否必填：是
-	 * 类型：string(32)
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  path 合单支付总订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一 。
 	 *  示例值：P20150806125346 

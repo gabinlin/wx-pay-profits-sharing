@@ -18,7 +18,7 @@ public class AmountOnlineOfPlatformRequest {
 	 * 字段名：账户类型
 	 * 变量名：account_type
 	 * 是否必填：是
-	 * 类型：string
+	 * 类型：string[1,16]
 	 * 描述：
 	 *  path 枚举值： 
 	 *  BASIC：基本账户 
