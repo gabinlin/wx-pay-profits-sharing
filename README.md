@@ -50,6 +50,7 @@ libraryDependencies += "top.gabin" % "wx-pay-profits-sharing" % "1.5.7"
 - Http-Client [java](https://github.com/wechatpay-apiv3/wechatpay-apache-httpclient) [php](https://github.com/wechatpay-apiv3/wechatpay-guzzle-middleware) 定制好的Http客户端，可以自动组装头信息
 ***
 ## 五、附录
+- lombok 由于项目使用了自动生成get和set方法，需要安装此lombok插件(在Idea中安装)，才不会出现报错信息
 - postman中使用的forge.js [API文档](https://www.npmjs.com/package/node-forge#cipher)
 - nodejs版 加解密 [示例（引用）](http://fangzhenqi.xin/art/nodejs/other/86.html)
 - [签名官方示例代码](https://wechatpay-api.gitbook.io/wechatpay-api-v3/qian-ming-zhi-nan-1/qian-ming-sheng-cheng)
