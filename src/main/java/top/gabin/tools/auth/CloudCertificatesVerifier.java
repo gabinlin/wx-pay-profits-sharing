@@ -15,7 +15,7 @@ public class CloudCertificatesVerifier implements Verifier {
 
     public static final String CACHE_KEY = "CLOUD_CERTIFICATES_CACHE";
 
-    private CacheService cacheService;
+    private final CacheService cacheService;
 
 
     public CloudCertificatesVerifier(CacheService cacheService) {
@@ -40,7 +40,7 @@ public class CloudCertificatesVerifier implements Verifier {
     @Override
     public boolean verify(String serialNumber, byte[] message, String signature) {
         BigInteger val = new BigInteger(serialNumber, 16);
-        Map<BigInteger, X509Certificate> certificates = cacheService.get(CACHE_KEY, Map.class);
+        Map<BigInteger, X509Certificate> certificates = cacheService.getMap(CACHE_KEY);
         return certificates.containsKey(val) && verify(certificates.get(val), message, signature);
     }
 }

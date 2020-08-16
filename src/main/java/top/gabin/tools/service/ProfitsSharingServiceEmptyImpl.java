@@ -264,7 +264,7 @@ public class ProfitsSharingServiceEmptyImpl implements ProfitsSharingService {
     }
 
     @Override
-    public Optional<ImageUploadResponse> uploadImage(File file) throws Exception {
+    public Optional<ImageUploadResponse> uploadImage(File file) {
         return Optional.empty();
     }
 }
