@@ -30,6 +30,7 @@ public class JsonUtils {
      */
     public static String bean2Json(Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         try {
             return objectMapper.writeValueAsString(object);

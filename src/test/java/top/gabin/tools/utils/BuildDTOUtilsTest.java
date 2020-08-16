@@ -1,17 +1,18 @@
 package top.gabin.tools.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class BuildDTOUtilsTest {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private BuilderDTOUtils builderDTOUtils;
     private String path = "src/main/java/top/gabin/tools/";
 
@@ -20,33 +21,14 @@ public class BuildDTOUtilsTest {
         builderDTOUtils = new BuilderDTOUtils();;
     }
 
+    @Data
+    @AllArgsConstructor
     class Params {
         private String url;
         private String className;
-
-        public Params(String url, String className) {
-            this.url = url;
-            this.className = className;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public void setClassName(String className) {
-            this.className = className;
-        }
     }
 
-//    @Test
+    @Test
     public void buildEntity() throws IOException {
         List<Params> params = new ArrayList<>();
         // 进件-二级分销商
