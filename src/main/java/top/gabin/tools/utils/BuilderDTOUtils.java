@@ -6,9 +6,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,22 +61,18 @@ public class BuilderDTOUtils {
             try {
                 String module = String.join("/", modules);
                 String sourcePath = path + (request ? "request/" : "response/") + module;
-                File file = new File(sourcePath);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                FileWriter fileWriter = new FileWriter(sourcePath + "/" + newFileName + ".java");
-                fileWriter.write("package " + sourcePath.replaceAll("src/main/java/", "").replaceAll("/", ".") + ";\n\n");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("package " + sourcePath.replaceAll("src/main/java/", "").replaceAll("/", ".") + ";\n\n");
 
                 if (containsPathParams) {
-                    fileWriter.write("import com.fasterxml.jackson.annotation.JsonIgnore;\n");
+                    stringBuilder.append("import com.fasterxml.jackson.annotation.JsonIgnore;\n");
                 }
-                fileWriter.write("import lombok.Data;\n" +
+                stringBuilder.append("import lombok.Data;\n" +
                         "import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
                         "import com.fasterxml.jackson.annotation.JsonProperty;\n\n");
 
                 if (response) {
-                    fileWriter.write("import top.gabin.tools.response.AbstractResponse;\n\n");
+                    stringBuilder.append("import top.gabin.tools.response.AbstractResponse;\n\n");
                 }
                 List<DTO> tempList = list;
                 outer:
@@ -83,7 +80,7 @@ public class BuilderDTOUtils {
                     List<DTO> temp = new ArrayList<>();
                     for (DTO dto : tempList) {
                         if (dto.getType().equals("array")) {
-                            fileWriter.write("import java.util.List;\n\n");
+                            stringBuilder.append("import java.util.List;\n\n");
                             break outer;
                         }
                         List<DTO> childList = dto.getChildList();
@@ -93,41 +90,33 @@ public class BuilderDTOUtils {
                     }
                     tempList = temp;
                 }
-                fileWriter.write("\n");
+                stringBuilder.append("\n");
 
                 String classFunc = table.parent().parent().parent().select(".overview p").eq(1).text();
-                fileWriter.write("/**\n" +
+                stringBuilder.append("/**\n" +
                         " * <pre>\n" +
                         " * " + classFunc + "\n");
-                fileWriter.write(String.format(" * 文档地址:%s\n", url));
+                stringBuilder.append(String.format(" * 文档地址:%s\n", url));
                 if (response) {
                     tables.stream().filter(element -> element.select("tbody tr").eq(0).select("td").size() == 4).findFirst().ifPresent(codeTable -> {
-                        try {
-                            fileWriter.write(String.format(" * %s\t%s\t%s\t%s\n", "状态码", "错误码", "描述", "解决方案"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        stringBuilder.append(String.format(" * %s\t%s\t%s\t%s\n", "状态码", "错误码", "描述", "解决方案"));
                         codeTable.select("tbody tr").forEach(tr -> {
                             Elements tds = tr.select("td");
-                            try {
-                                fileWriter.write(String.format(" * %s\t%s\t%s\t%s\n",
-                                        getText(tds, 0),
-                                        getText(tds, 1),
-                                        getText(tds, 2),
-                                        getText(tds, 3)
-                                ));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            stringBuilder.append(String.format(" * %s\t%s\t%s\t%s\n",
+                                    getText(tds, 0),
+                                    getText(tds, 1),
+                                    getText(tds, 2),
+                                    getText(tds, 3)
+                            ));
                         });
                     });
                 }
-                fileWriter.write(" * </pre>\n */\n");
+                stringBuilder.append(" * </pre>\n */\n");
                 String ignoreFields = getIgnoreFields(list);
-                fileWriter.write("@Data\n" +
+                stringBuilder.append("@Data\n" +
                         "@JsonIgnoreProperties(" + ignoreFields + ")\n" +
                         "public class " + newFileName + (response ? " extends AbstractResponse" : "") + " {");
-                fileWriter.write("\n");
+                stringBuilder.append("\n");
                 for (DTO dto : list) {
                     if (dto == null) {
                         continue;
@@ -135,40 +124,32 @@ public class BuilderDTOUtils {
                     String content = "\t/**\n\t * <pre>\n\t * 字段名：%s\n\t * 变量名：%s\n\t * 是否必填：%s\n\t * 类型：%s\n\t * 描述：%s \n\t * </pre>\n\t */\n";
                     String field = dto.getField();
                     content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
-                    fileWriter.write(content);
+                    stringBuilder.append(content);
                     if (isPathParams(dto)) {
-                        fileWriter.write("\t@JsonIgnore\n");
+                        stringBuilder.append("\t@JsonIgnore\n");
                     }
-                    fileWriter.write(String.format("\t@JsonProperty(value = \"%s\")\n", field));
-                    fileWriter.write("\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
+                    stringBuilder.append(String.format("\t@JsonProperty(value = \"%s\")\n", field));
+                    stringBuilder.append("\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
                 }
                 List<DTO> objectDTOList = new ArrayList<>();
                 for (DTO dto : list) {
                     if (dto == null) {
                         continue;
                     }
-                    // 使用@Data注解，不再自己写get和set方法
-//                    String sourceField = dto.getField();
-//                    String field = getTopUppercaseField(sourceField);
-//                    String param = getField(sourceField);
-//                    if (isPathParams(dto)) {
-//                        fileWriter.write("\t@JsonIgnore\n");
-//                    }
-//                    String getString = String.format("\tpublic %s get%s() {\n\t\treturn this.%s;\n\t}\n\n", getType(dto), field, param);
-//                    String setString = String.format("\tpublic void set%s(%s %s) {\n\t\tthis.%s = %s;\n\t}\n\n", field, getType(dto), param, param, param);
-//                    fileWriter.write(getString);
-//                    fileWriter.write(setString);
                     List<DTO> childList = dto.getChildList();
                     if (!childList.isEmpty()) {
                         objectDTOList.add(dto);
                     }
                 }
                 while (!objectDTOList.isEmpty()) {
-                    objectDTOList = buildObject(fileWriter, objectDTOList);
+                    objectDTOList = buildObject(stringBuilder, objectDTOList);
                 }
-                fileWriter.write("}");
-                fileWriter.flush();
-                fileWriter.close();
+                stringBuilder.append("}");
+                Path file = Paths.get(sourcePath);
+                if (!Files.exists(file)) {
+                    Files.createDirectory(file);
+                }
+                Files.write(file.resolve(newFileName + ".java"), stringBuilder.toString().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -178,7 +159,7 @@ public class BuilderDTOUtils {
 
     private String getIgnoreFields(List<DTO> list) {
         Stream<String> stringStream = list.stream()
-                .filter(dto -> isPathParams(dto))
+                .filter(this::isPathParams)
                 .map(dto -> "\"" + getField(dto.getField()) + "\"");
         String collect = stringStream.collect(Collectors.joining(", "));
         if (collect.split(",").length > 1) {
@@ -216,41 +197,31 @@ public class BuilderDTOUtils {
         }
     }
 
-    private List<DTO> buildObject(FileWriter fileWriter, List<DTO> objectDTOList) throws IOException {
+    private List<DTO> buildObject(StringBuilder stringBuilder, List<DTO> objectDTOList) throws IOException {
         List<DTO> childDTOList = new ArrayList<>();
         for (DTO parentDTO : objectDTOList) {
             String uppercaseField = getTopUppercaseField(parentDTO.getField());
             List<DTO> childList = parentDTO.getChildList();
             String ignoreFields = getIgnoreFields(childList);
-            fileWriter.write("\t@Data\n\t@JsonIgnoreProperties(" + ignoreFields + ")\n\tpublic static class " + uppercaseField + " {\n");
+            stringBuilder.append("\t@Data\n\t@JsonIgnoreProperties(" + ignoreFields + ")\n\tpublic static class " + uppercaseField + " {\n");
             for (DTO dto : childList) {
                 String content = "\t\t/**\n\t\t * <pre>\n\t\t * 字段名：%s\n\t\t * 变量名：%s\n\t\t * 是否必填：%s\n\t\t * 类型：%s\n\t\t * 描述：%s \n\t\t * </pre>\n\t\t */\n";
                 String field = dto.getField();
                 content = String.format(content, dto.getName(), field, dto.getRequired(), dto.getType(), dto.getDesc());
-                fileWriter.write(content);
+                stringBuilder.append(content);
                 if (isPathParams(dto)) {
-                    fileWriter.write("\t\t@JsonIgnore\n");
+                    stringBuilder.append("\t\t@JsonIgnore\n");
                 }
-                fileWriter.write(String.format("\t\t@JsonProperty(value = \"%s\")\n", field));
-                fileWriter.write("\t\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
+                stringBuilder.append(String.format("\t\t@JsonProperty(value = \"%s\")\n", field));
+                stringBuilder.append("\t\tprivate " + getType(dto) + " " + getField(field) + ";\n\n");
             }
             for (DTO dto : childList) {
-//                String sourceField = dto.getField();
-//                String field = getTopUppercaseField(sourceField);
-//                String param = getField(sourceField);
-//                if (isPathParams(dto)) {
-//                    fileWriter.write("\t\t@JsonIgnore\n");
-//                }
-//                String getString = String.format("\t\tpublic %s get%s() {\n\t\t\treturn this.%s;\n\t\t}\n\n", getType(dto), field, param);
-//                String setString = String.format("\t\tpublic void set%s(%s %s) {\n\t\t\tthis.%s = %s;\n\t\t}\n\n", field, getType(dto), param, param, param);
-//                fileWriter.write(getString);
-//                fileWriter.write(setString);
                 List<DTO> childList1 = dto.getChildList();
                 if (!childList1.isEmpty()) {
                     childDTOList.add(dto);
                 }
             }
-            fileWriter.write("\t}\n\n");
+            stringBuilder.append("\t}\n\n");
         }
         return childDTOList;
     }
