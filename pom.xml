@@ -18,7 +18,9 @@
             <distribution>repo,manual</distribution>
         </license>
     </licenses>
-
+    <properties>
+        <argLine>-Dfile.encoding=UTF-8</argLine>
+    </properties>
     <developers>
         <developer>
             <name>Gabin Lin</name>
