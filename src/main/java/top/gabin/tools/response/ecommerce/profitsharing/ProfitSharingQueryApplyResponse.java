@@ -1,11 +1,10 @@
 package top.gabin.tools.response.ecommerce.profitsharing;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.gabin.tools.response.AbstractResponse;
-
 import java.util.List;
 
 
@@ -21,6 +20,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	/**
@@ -152,6 +152,7 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	@JsonProperty(value = "finish_description")
 	private String finishDescription;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class Receivers {

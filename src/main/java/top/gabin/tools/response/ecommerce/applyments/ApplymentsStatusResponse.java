@@ -1,11 +1,10 @@
 package top.gabin.tools.response.ecommerce.applyments;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.gabin.tools.response.AbstractResponse;
-
 import java.util.List;
 
 
@@ -23,6 +22,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ApplymentsStatusResponse extends AbstractResponse {
 	/**
@@ -157,6 +157,7 @@ public class ApplymentsStatusResponse extends AbstractResponse {
 	@JsonProperty(value = "applyment_id")
 	private String applymentId;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class AccountValidation {
@@ -288,6 +289,7 @@ public class ApplymentsStatusResponse extends AbstractResponse {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class AuditDetail {

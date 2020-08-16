@@ -1,10 +1,10 @@
 package top.gabin.tools.request.pay.combine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.util.List;
 
 
@@ -15,6 +15,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties("combineOutTradeNo")
 public class CombineTransactionsCloseRequest {
 	/**
@@ -60,6 +61,7 @@ public class CombineTransactionsCloseRequest {
 	@JsonProperty(value = "sub_orders")
 	private List<SubOrders> subOrders;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class SubOrders {

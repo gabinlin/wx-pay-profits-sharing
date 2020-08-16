@@ -1,11 +1,10 @@
 package top.gabin.tools.response.ecommerce.fund;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.gabin.tools.response.AbstractResponse;
-
 
 /**
  * <pre>
@@ -21,6 +20,7 @@ import top.gabin.tools.response.AbstractResponse;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class WithdrawExceptionLogResponse extends AbstractResponse {
 	/**

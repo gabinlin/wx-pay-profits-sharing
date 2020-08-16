@@ -114,6 +114,7 @@ public class BuilderDTOUtils {
                 stringBuilder.append(" * </pre>\n */\n");
                 String ignoreFields = getIgnoreFields(list);
                 stringBuilder.append("@Data\n" +
+                        "@EqualsAndHashCode\n" +
                         "@JsonIgnoreProperties(" + ignoreFields + ")\n" +
                         "public class " + newFileName + (response ? " extends AbstractResponse" : "") + " {");
                 stringBuilder.append("\n");
@@ -203,7 +204,7 @@ public class BuilderDTOUtils {
             String uppercaseField = getTopUppercaseField(parentDTO.getField());
             List<DTO> childList = parentDTO.getChildList();
             String ignoreFields = getIgnoreFields(childList);
-            stringBuilder.append("\t@Data\n\t@JsonIgnoreProperties(" + ignoreFields + ")\n\tpublic static class " + uppercaseField + " {\n");
+            stringBuilder.append("\t@EqualsAndHashCode\n\t@Data\n\t@JsonIgnoreProperties(" + ignoreFields + ")\n\tpublic static class " + uppercaseField + " {\n");
             for (DTO dto : childList) {
                 String content = "\t\t/**\n\t\t * <pre>\n\t\t * 字段名：%s\n\t\t * 变量名：%s\n\t\t * 是否必填：%s\n\t\t * 类型：%s\n\t\t * 描述：%s \n\t\t * </pre>\n\t\t */\n";
                 String field = dto.getField();

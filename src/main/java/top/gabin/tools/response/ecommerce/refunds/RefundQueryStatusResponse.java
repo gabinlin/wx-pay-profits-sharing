@@ -1,11 +1,10 @@
 package top.gabin.tools.response.ecommerce.refunds;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.gabin.tools.response.AbstractResponse;
-
 import java.util.List;
 
 
@@ -26,6 +25,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class RefundQueryStatusResponse extends AbstractResponse {
 	/**
@@ -190,6 +190,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 	@JsonProperty(value = "promotion_detail")
 	private List<PromotionDetail> promotionDetail;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class Amount {
@@ -251,6 +252,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class PromotionDetail {

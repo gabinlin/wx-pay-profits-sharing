@@ -1,9 +1,9 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <pre>
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ApplymentsRequest {
 	/**
@@ -239,6 +240,7 @@ public class ApplymentsRequest {
 	@JsonProperty(value = "business_addition_desc")
 	private String businessAdditionDesc;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class BusinessLicenseInfo {
@@ -341,6 +343,7 @@ public class ApplymentsRequest {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class OrganizationCertInfo {
@@ -392,6 +395,7 @@ public class ApplymentsRequest {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class IdCardInfo {
@@ -473,6 +477,7 @@ public class ApplymentsRequest {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class IdDocInfo {
@@ -537,6 +542,7 @@ public class ApplymentsRequest {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class AccountInfo {
@@ -648,6 +654,7 @@ public class ApplymentsRequest {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class ContactInfo {
@@ -734,6 +741,7 @@ public class ApplymentsRequest {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class SalesSceneInfo {

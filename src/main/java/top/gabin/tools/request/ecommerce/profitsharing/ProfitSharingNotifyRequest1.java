@@ -1,9 +1,9 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.util.List;
 
 
@@ -14,6 +14,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ProfitSharingNotifyRequest1 {
 	/**
@@ -127,6 +128,7 @@ public class ProfitSharingNotifyRequest1 {
 	@JsonProperty(value = "success_time")
 	private String successTime;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class Receivers {

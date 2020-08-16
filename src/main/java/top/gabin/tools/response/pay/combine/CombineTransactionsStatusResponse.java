@@ -1,11 +1,10 @@
 package top.gabin.tools.response.pay.combine;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.gabin.tools.response.AbstractResponse;
-
 import java.util.List;
 
 
@@ -37,6 +36,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class CombineTransactionsStatusResponse extends AbstractResponse {
 	/**
@@ -119,6 +119,7 @@ public class CombineTransactionsStatusResponse extends AbstractResponse {
 	@JsonProperty(value = "combine_payer_info")
 	private CombinePayerInfo combinePayerInfo;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class SceneInfo {
@@ -138,6 +139,7 @@ public class CombineTransactionsStatusResponse extends AbstractResponse {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class SubOrders {
@@ -292,6 +294,7 @@ public class CombineTransactionsStatusResponse extends AbstractResponse {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class CombinePayerInfo {
@@ -311,6 +314,7 @@ public class CombineTransactionsStatusResponse extends AbstractResponse {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class Amount {

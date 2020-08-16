@@ -1,9 +1,9 @@
 package top.gabin.tools.request.pay.combine;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.util.List;
 
 
@@ -14,6 +14,7 @@ import java.util.List;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class CombineTransactionsNotifyRequest1 {
 	/**
@@ -96,6 +97,7 @@ public class CombineTransactionsNotifyRequest1 {
 	@JsonProperty(value = "combine_payer_info")
 	private CombinePayerInfo combinePayerInfo;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class SceneInfo {
@@ -116,6 +118,7 @@ public class CombineTransactionsNotifyRequest1 {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class SubOrders {
@@ -271,6 +274,7 @@ public class CombineTransactionsNotifyRequest1 {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class CombinePayerInfo {
@@ -290,6 +294,7 @@ public class CombineTransactionsNotifyRequest1 {
 
 	}
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class Amount {

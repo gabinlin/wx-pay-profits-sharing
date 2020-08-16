@@ -1,9 +1,9 @@
 package top.gabin.tools.request.ecommerce.refunds;
 
-import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <pre>
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  */
 @Data
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class RefundApplyRequest {
 	/**
@@ -137,6 +138,7 @@ public class RefundApplyRequest {
 	@JsonProperty(value = "notify_url")
 	private String notifyUrl;
 
+	@EqualsAndHashCode
 	@Data
 	@JsonIgnoreProperties()
 	public static class Amount {
