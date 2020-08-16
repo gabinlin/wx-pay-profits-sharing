@@ -67,12 +67,12 @@ public class BuilderDTOUtils {
                 if (containsPathParams) {
                     stringBuilder.append("import com.fasterxml.jackson.annotation.JsonIgnore;\n");
                 }
-                stringBuilder.append("import lombok.Data;\n" +
-                        "import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
-                        "import com.fasterxml.jackson.annotation.JsonProperty;\n\n");
-
+                stringBuilder.append("import com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n" +
+                        "import com.fasterxml.jackson.annotation.JsonProperty;\n" +
+                        "import lombok.Data;\n" +
+                        "import lombok.EqualsAndHashCode;\n");
                 if (response) {
-                    stringBuilder.append("import top.gabin.tools.response.AbstractResponse;\n\n");
+                    stringBuilder.append("import top.gabin.tools.response.AbstractResponse;\n");
                 }
                 List<DTO> tempList = list;
                 outer:
