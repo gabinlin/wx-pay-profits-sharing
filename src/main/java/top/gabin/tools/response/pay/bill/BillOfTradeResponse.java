@@ -1,5 +1,6 @@
 package top.gabin.tools.response.pay.bill;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,7 +26,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 403	NO_AUTH	权限异常	请检查本次请求的商户是否与第一步申请账单API的请求商户一致
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class BillOfTradeResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -68,29 +70,5 @@ public class BillOfTradeResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "download_url")
 	private String downloadUrl;
-
-	public String getHashType() {
-		return this.hashType;
-	}
-
-	public void setHashType(String hashType) {
-		this.hashType = hashType;
-	}
-
-	public String getHashValue() {
-		return this.hashValue;
-	}
-
-	public void setHashValue(String hashValue) {
-		this.hashValue = hashValue;
-	}
-
-	public String getDownloadUrl() {
-		return this.downloadUrl;
-	}
-
-	public void setDownloadUrl(String downloadUrl) {
-		this.downloadUrl = downloadUrl;
-	}
 
 }

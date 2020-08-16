@@ -58,7 +58,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService = new ProfitsSharingServiceImpl(config, null);
     }
 
-        @Test
+    @Test
     public void testApplyments() {
 
     }
@@ -183,7 +183,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.subsidiesCreate(request).ifPresent(this::logger);
     }
 
-//    @Test
+    //    @Test
     public void subsidiesRefund() {
         SubsidiesRefundRequest request = new SubsidiesRefundRequest();
         request.setRefundId("50300704052020042200213151461");
@@ -242,7 +242,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.queryProfitSharingStatus(request);
     }
 
-        @Test
+    @Test
     public void testUploadImage() throws Exception {
         Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpg"));
         imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
@@ -272,7 +272,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.queryDayEndAmount(AccountType.BASIC, new Date()).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
     }
 
-        @Test
+    @Test
     public void testWithdraw() {
         WithdrawForSubMchRequest request = new WithdrawForSubMchRequest();
         request.setAmount(1);

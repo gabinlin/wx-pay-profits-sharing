@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +13,8 @@ import java.util.List;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_1.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingApplyRequest {
 	/**
 	 * <pre>
@@ -98,55 +100,8 @@ public class ProfitSharingApplyRequest {
 	@JsonProperty(value = "finish")
 	private Boolean finish;
 
-	public String getAppid() {
-		return this.appid;
-	}
-
-	public void setAppid(String appid) {
-		this.appid = appid;
-	}
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getTransactionId() {
-		return this.transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public String getOutOrderNo() {
-		return this.outOrderNo;
-	}
-
-	public void setOutOrderNo(String outOrderNo) {
-		this.outOrderNo = outOrderNo;
-	}
-
-	public List<Receivers> getReceivers() {
-		return this.receivers;
-	}
-
-	public void setReceivers(List<Receivers> receivers) {
-		this.receivers = receivers;
-	}
-
-	public Boolean getFinish() {
-		return this.finish;
-	}
-
-	public void setFinish(Boolean finish) {
-		this.finish = finish;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Receivers {
 		/**
 		 * <pre>
@@ -208,37 +163,23 @@ public class ProfitSharingApplyRequest {
 		@JsonProperty(value = "description")
 		private String description;
 
-		public String getType() {
-			return this.type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
-		}
-
-		public String getReceiverAccount() {
-			return this.receiverAccount;
-		}
-
-		public void setReceiverAccount(String receiverAccount) {
-			this.receiverAccount = receiverAccount;
-		}
-
-		public Integer getAmount() {
-			return this.amount;
-		}
-
-		public void setAmount(Integer amount) {
-			this.amount = amount;
-		}
-
-		public String getDescription() {
-			return this.description;
-		}
-
-		public void setDescription(String description) {
-			this.description = description;
-		}
+		/**
+		 * <pre>
+		 * 字段名：分账个姓名
+		 * 变量名：receiver_name
+		 * 是否必填：条件选填
+		 * 类型：string[1, 10240]
+		 * 描述：
+		 *  可选项，在接收方类型为个人的时可选填，若有值，会检查与 receiver_name 是否实名匹配，不匹配会拒绝分账请求 
+		 *  1、分账接收方类型是PERSONAL_OPENID时，是个人姓名的密文（选传，传则校验） 此字段的加密方法详见：敏感信息加密说明 
+		 *  2、使用微信支付平台证书中的公钥 
+		 *  3、使用RSAES-OAEP算法进行加密 
+		 *  4、将请求中HTTP头部的Wechatpay-Serial设置为证书序列号 
+		 *  示例值：hu89ohu89ohu89o 
+		 * </pre>
+		 */
+		@JsonProperty(value = "receiver_name")
+		private String receiverName;
 
 	}
 

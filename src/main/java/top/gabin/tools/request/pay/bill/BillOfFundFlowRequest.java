@@ -1,6 +1,6 @@
 package top.gabin.tools.request.pay.bill;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/bill/chapter3_2.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class BillOfFundFlowRequest {
 	/**
 	 * <pre>
@@ -25,7 +26,6 @@ public class BillOfFundFlowRequest {
 	 *  示例值：2019-06-11 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "bill_date")
 	private String billDate;
 
@@ -44,7 +44,6 @@ public class BillOfFundFlowRequest {
 	 *  示例值：BASIC 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "account_type")
 	private String accountType;
 
@@ -61,35 +60,7 @@ public class BillOfFundFlowRequest {
 	 *  示例值：GZIP 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "tar_type")
 	private String tarType;
-
-	@JsonIgnore
-	public String getBillDate() {
-		return this.billDate;
-	}
-
-	public void setBillDate(String billDate) {
-		this.billDate = billDate;
-	}
-
-	@JsonIgnore
-	public String getAccountType() {
-		return this.accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-	@JsonIgnore
-	public String getTarType() {
-		return this.tarType;
-	}
-
-	public void setTarType(String tarType) {
-		this.tarType = tarType;
-	}
 
 }

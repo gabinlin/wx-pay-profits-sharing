@@ -1,6 +1,7 @@
 package top.gabin.tools.request.ecommerce.refunds;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_2.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("outRefundNo")
 public class RefundQueryStatusRequest1 {
 	/**
 	 * <pre>
@@ -41,22 +43,5 @@ public class RefundQueryStatusRequest1 {
 	 */
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
-
-	@JsonIgnore
-	public String getOutRefundNo() {
-		return this.outRefundNo;
-	}
-
-	public void setOutRefundNo(String outRefundNo) {
-		this.outRefundNo = outRefundNo;
-	}
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
 
 }

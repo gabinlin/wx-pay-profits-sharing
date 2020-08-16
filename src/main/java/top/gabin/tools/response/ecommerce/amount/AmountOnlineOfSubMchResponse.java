@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.amount;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,7 +26,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 403	ACCOUNT_ERROR	二级商户未绑卡	二级商户号没有绑定结算银行卡，绑定后重试
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class AmountOnlineOfSubMchResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -68,29 +70,5 @@ public class AmountOnlineOfSubMchResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "pending_amount")
 	private Integer pendingAmount;
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public Integer getAvailableAmount() {
-		return this.availableAmount;
-	}
-
-	public void setAvailableAmount(Integer availableAmount) {
-		this.availableAmount = availableAmount;
-	}
-
-	public Integer getPendingAmount() {
-		return this.pendingAmount;
-	}
-
-	public void setPendingAmount(Integer pendingAmount) {
-		this.pendingAmount = pendingAmount;
-	}
 
 }

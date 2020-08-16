@@ -1,6 +1,7 @@
 package top.gabin.tools.request.pay.combine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,7 +14,8 @@ import java.util.List;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_4.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("combineOutTradeNo")
 public class CombineTransactionsCloseRequest {
 	/**
 	 * <pre>
@@ -58,32 +60,8 @@ public class CombineTransactionsCloseRequest {
 	@JsonProperty(value = "sub_orders")
 	private List<SubOrders> subOrders;
 
-	public String getCombineAppid() {
-		return this.combineAppid;
-	}
-
-	public void setCombineAppid(String combineAppid) {
-		this.combineAppid = combineAppid;
-	}
-
-	@JsonIgnore
-	public String getCombineOutTradeNo() {
-		return this.combineOutTradeNo;
-	}
-
-	public void setCombineOutTradeNo(String combineOutTradeNo) {
-		this.combineOutTradeNo = combineOutTradeNo;
-	}
-
-	public List<SubOrders> getSubOrders() {
-		return this.subOrders;
-	}
-
-	public void setSubOrders(List<SubOrders> subOrders) {
-		this.subOrders = subOrders;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SubOrders {
 		/**
 		 * <pre>
@@ -127,30 +105,6 @@ public class CombineTransactionsCloseRequest {
 		 */
 		@JsonProperty(value = "sub_mchid")
 		private String subMchid;
-
-		public String getMchid() {
-			return this.mchid;
-		}
-
-		public void setMchid(String mchid) {
-			this.mchid = mchid;
-		}
-
-		public String getOutTradeNo() {
-			return this.outTradeNo;
-		}
-
-		public void setOutTradeNo(String outTradeNo) {
-			this.outTradeNo = outTradeNo;
-		}
-
-		public String getSubMchid() {
-			return this.subMchid;
-		}
-
-		public void setSubMchid(String subMchid) {
-			this.subMchid = subMchid;
-		}
 
 	}
 

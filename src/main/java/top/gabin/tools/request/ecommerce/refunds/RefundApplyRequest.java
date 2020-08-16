@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.refunds;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_1.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class RefundApplyRequest {
 	/**
 	 * <pre>
@@ -58,7 +60,7 @@ public class RefundApplyRequest {
 	 * <pre>
 	 * 字段名：微信订单号
 	 * 变量名：transaction_id
-	 * 是否必填：否
+	 * 是否必填：二选一
 	 * 类型：string[1,32]
 	 * 描述：
 	 *  body 原支付交易对应的微信订单号。 
@@ -72,11 +74,9 @@ public class RefundApplyRequest {
 	 * <pre>
 	 * 字段名：商户订单号
 	 * 变量名：out_trade_no
-	 * 是否必填：否
+	 * 是否必填：body 原支付交易对应的商户订单号。 示例值：1217752501201407033233368018
 	 * 类型：string[1,32]
-	 * 描述：
-	 *  body 原支付交易对应的商户订单号。
-	 *  示例值：1217752501201407033233368018 
+	 * 描述： 
 	 * </pre>
 	 */
 	@JsonProperty(value = "out_trade_no")
@@ -137,79 +137,8 @@ public class RefundApplyRequest {
 	@JsonProperty(value = "notify_url")
 	private String notifyUrl;
 
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getSpAppid() {
-		return this.spAppid;
-	}
-
-	public void setSpAppid(String spAppid) {
-		this.spAppid = spAppid;
-	}
-
-	public String getSubAppid() {
-		return this.subAppid;
-	}
-
-	public void setSubAppid(String subAppid) {
-		this.subAppid = subAppid;
-	}
-
-	public String getTransactionId() {
-		return this.transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public String getOutTradeNo() {
-		return this.outTradeNo;
-	}
-
-	public void setOutTradeNo(String outTradeNo) {
-		this.outTradeNo = outTradeNo;
-	}
-
-	public String getOutRefundNo() {
-		return this.outRefundNo;
-	}
-
-	public void setOutRefundNo(String outRefundNo) {
-		this.outRefundNo = outRefundNo;
-	}
-
-	public String getReason() {
-		return this.reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public Amount getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Amount amount) {
-		this.amount = amount;
-	}
-
-	public String getNotifyUrl() {
-		return this.notifyUrl;
-	}
-
-	public void setNotifyUrl(String notifyUrl) {
-		this.notifyUrl = notifyUrl;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Amount {
 		/**
 		 * <pre>
@@ -252,30 +181,6 @@ public class RefundApplyRequest {
 		 */
 		@JsonProperty(value = "currency")
 		private String currency;
-
-		public Integer getRefund() {
-			return this.refund;
-		}
-
-		public void setRefund(Integer refund) {
-			this.refund = refund;
-		}
-
-		public Integer getTotal() {
-			return this.total;
-		}
-
-		public void setTotal(Integer total) {
-			this.total = total;
-		}
-
-		public String getCurrency() {
-			return this.currency;
-		}
-
-		public void setCurrency(String currency) {
-			this.currency = currency;
-		}
 
 	}
 

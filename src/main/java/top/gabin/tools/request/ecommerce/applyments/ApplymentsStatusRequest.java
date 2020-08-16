@@ -1,6 +1,7 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_2.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("applymentId")
 public class ApplymentsStatusRequest {
 	/**
 	 * <pre>
@@ -27,14 +29,5 @@ public class ApplymentsStatusRequest {
 	@JsonIgnore
 	@JsonProperty(value = "applyment_id")
 	private String applymentId;
-
-	@JsonIgnore
-	public String getApplymentId() {
-		return this.applymentId;
-	}
-
-	public void setApplymentId(String applymentId) {
-		this.applymentId = applymentId;
-	}
 
 }

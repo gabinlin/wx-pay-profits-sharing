@@ -1,6 +1,7 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_4.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("subMchid")
 public class ApplymentsModifySettlementRequest {
 	/**
 	 * <pre>
@@ -109,62 +111,5 @@ public class ApplymentsModifySettlementRequest {
 	 */
 	@JsonProperty(value = "account_number")
 	private String accountNumber;
-
-	@JsonIgnore
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getAccountType() {
-		return this.accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-	public String getAccountBank() {
-		return this.accountBank;
-	}
-
-	public void setAccountBank(String accountBank) {
-		this.accountBank = accountBank;
-	}
-
-	public String getBankAddressCode() {
-		return this.bankAddressCode;
-	}
-
-	public void setBankAddressCode(String bankAddressCode) {
-		this.bankAddressCode = bankAddressCode;
-	}
-
-	public String getBankName() {
-		return this.bankName;
-	}
-
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-
-	public String getBankBranchId() {
-		return this.bankBranchId;
-	}
-
-	public void setBankBranchId(String bankBranchId) {
-		this.bankBranchId = bankBranchId;
-	}
-
-	public String getAccountNumber() {
-		return this.accountNumber;
-	}
-
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
 
 }

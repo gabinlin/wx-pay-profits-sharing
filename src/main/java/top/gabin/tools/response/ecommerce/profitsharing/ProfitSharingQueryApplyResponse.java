@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,7 +20,8 @@ import java.util.List;
  * 404	RESOURCE_NOT_EXISTS	记录不存在	请检查请求的单号是否正确
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -150,79 +152,8 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	@JsonProperty(value = "finish_description")
 	private String finishDescription;
 
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getTransactionId() {
-		return this.transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public String getOutOrderNo() {
-		return this.outOrderNo;
-	}
-
-	public void setOutOrderNo(String outOrderNo) {
-		this.outOrderNo = outOrderNo;
-	}
-
-	public String getOrderId() {
-		return this.orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<Receivers> getReceivers() {
-		return this.receivers;
-	}
-
-	public void setReceivers(List<Receivers> receivers) {
-		this.receivers = receivers;
-	}
-
-	public String getCloseReason() {
-		return this.closeReason;
-	}
-
-	public void setCloseReason(String closeReason) {
-		this.closeReason = closeReason;
-	}
-
-	public Integer getFinishAmount() {
-		return this.finishAmount;
-	}
-
-	public void setFinishAmount(Integer finishAmount) {
-		this.finishAmount = finishAmount;
-	}
-
-	public String getFinishDescription() {
-		return this.finishDescription;
-	}
-
-	public void setFinishDescription(String finishDescription) {
-		this.finishDescription = finishDescription;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Receivers {
 		/**
 		 * <pre>
@@ -347,70 +278,6 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		 */
 		@JsonProperty(value = "receiver_account")
 		private String receiverAccount;
-
-		public String getReceiverMchid() {
-			return this.receiverMchid;
-		}
-
-		public void setReceiverMchid(String receiverMchid) {
-			this.receiverMchid = receiverMchid;
-		}
-
-		public Integer getAmount() {
-			return this.amount;
-		}
-
-		public void setAmount(Integer amount) {
-			this.amount = amount;
-		}
-
-		public String getDescription() {
-			return this.description;
-		}
-
-		public void setDescription(String description) {
-			this.description = description;
-		}
-
-		public String getResult() {
-			return this.result;
-		}
-
-		public void setResult(String result) {
-			this.result = result;
-		}
-
-		public String getFinishTime() {
-			return this.finishTime;
-		}
-
-		public void setFinishTime(String finishTime) {
-			this.finishTime = finishTime;
-		}
-
-		public String getFailReason() {
-			return this.failReason;
-		}
-
-		public void setFailReason(String failReason) {
-			this.failReason = failReason;
-		}
-
-		public String getType() {
-			return this.type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
-		}
-
-		public String getReceiverAccount() {
-			return this.receiverAccount;
-		}
-
-		public void setReceiverAccount(String receiverAccount) {
-			this.receiverAccount = receiverAccount;
-		}
 
 	}
 

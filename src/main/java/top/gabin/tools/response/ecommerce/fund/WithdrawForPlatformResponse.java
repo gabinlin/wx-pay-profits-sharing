@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.fund;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +23,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 提交相同商户单号的请求但参数和历史提交的参数不一致			
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class WithdrawForPlatformResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -51,21 +53,5 @@ public class WithdrawForPlatformResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
-
-	public String getWithdrawId() {
-		return this.withdrawId;
-	}
-
-	public void setWithdrawId(String withdrawId) {
-		this.withdrawId = withdrawId;
-	}
-
-	public String getOutRequestNo() {
-		return this.outRequestNo;
-	}
-
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
-	}
 
 }

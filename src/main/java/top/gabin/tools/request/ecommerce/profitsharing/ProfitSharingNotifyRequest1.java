@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +13,8 @@ import java.util.List;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_6.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingNotifyRequest1 {
 	/**
 	 * <pre>
@@ -125,71 +127,8 @@ public class ProfitSharingNotifyRequest1 {
 	@JsonProperty(value = "success_time")
 	private String successTime;
 
-	public String getMchid() {
-		return this.mchid;
-	}
-
-	public void setMchid(String mchid) {
-		this.mchid = mchid;
-	}
-
-	public String getSpMchid() {
-		return this.spMchid;
-	}
-
-	public void setSpMchid(String spMchid) {
-		this.spMchid = spMchid;
-	}
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getTransactionId() {
-		return this.transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public String getOrderId() {
-		return this.orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getOutOrderNo() {
-		return this.outOrderNo;
-	}
-
-	public void setOutOrderNo(String outOrderNo) {
-		this.outOrderNo = outOrderNo;
-	}
-
-	public List<Receivers> getReceivers() {
-		return this.receivers;
-	}
-
-	public void setReceivers(List<Receivers> receivers) {
-		this.receivers = receivers;
-	}
-
-	public String getSuccessTime() {
-		return this.successTime;
-	}
-
-	public void setSuccessTime(String successTime) {
-		this.successTime = successTime;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Receivers {
 		/**
 		 * <pre>
@@ -250,38 +189,6 @@ public class ProfitSharingNotifyRequest1 {
 		 */
 		@JsonProperty(value = "description")
 		private String description;
-
-		public String getType() {
-			return this.type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
-		}
-
-		public String getAccount() {
-			return this.account;
-		}
-
-		public void setAccount(String account) {
-			this.account = account;
-		}
-
-		public Integer getAmount() {
-			return this.amount;
-		}
-
-		public void setAmount(Integer amount) {
-			this.amount = amount;
-		}
-
-		public String getDescription() {
-			return this.description;
-		}
-
-		public void setDescription(String description) {
-			this.description = description;
-		}
 
 	}
 

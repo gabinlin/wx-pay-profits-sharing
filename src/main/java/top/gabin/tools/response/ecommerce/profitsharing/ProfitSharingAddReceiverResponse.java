@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,7 +19,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 429	FREQUENCY_LIMITED	添加接收方频率过高	请降低频率后重试
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingAddReceiverResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -51,21 +53,5 @@ public class ProfitSharingAddReceiverResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "account")
 	private String account;
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getAccount() {
-		return this.account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
 
 }

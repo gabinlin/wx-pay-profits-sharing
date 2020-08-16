@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.applyments;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,7 +20,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 404	RESOURCE_NOT_EXISTS	申请单不存在	确认入参，传入正确的申请单编号
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ApplymentsResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -48,21 +50,5 @@ public class ApplymentsResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
-
-	public String getApplymentId() {
-		return this.applymentId;
-	}
-
-	public void setApplymentId(String applymentId) {
-		this.applymentId = applymentId;
-	}
-
-	public String getOutRequestNo() {
-		return this.outRequestNo;
-	}
-
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
-	}
 
 }

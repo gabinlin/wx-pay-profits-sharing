@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.fund;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,7 +20,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class WithdrawExceptionLogResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -62,29 +64,5 @@ public class WithdrawExceptionLogResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "download_url")
 	private String downloadUrl;
-
-	public String getHashType() {
-		return this.hashType;
-	}
-
-	public void setHashType(String hashType) {
-		this.hashType = hashType;
-	}
-
-	public String getHashValue() {
-		return this.hashValue;
-	}
-
-	public void setHashValue(String hashValue) {
-		this.hashValue = hashValue;
-	}
-
-	public String getDownloadUrl() {
-		return this.downloadUrl;
-	}
-
-	public void setDownloadUrl(String downloadUrl) {
-		this.downloadUrl = downloadUrl;
-	}
 
 }

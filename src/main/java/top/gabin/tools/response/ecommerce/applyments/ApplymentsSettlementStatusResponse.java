@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.applyments;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +13,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_5.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ApplymentsSettlementStatusResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -97,53 +99,5 @@ public class ApplymentsSettlementStatusResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "verify_result")
 	private String verifyResult;
-
-	public String getAccountType() {
-		return this.accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-	public String getAccountBank() {
-		return this.accountBank;
-	}
-
-	public void setAccountBank(String accountBank) {
-		this.accountBank = accountBank;
-	}
-
-	public String getBankName() {
-		return this.bankName;
-	}
-
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-
-	public String getBankBranchId() {
-		return this.bankBranchId;
-	}
-
-	public void setBankBranchId(String bankBranchId) {
-		this.bankBranchId = bankBranchId;
-	}
-
-	public String getAccountNumber() {
-		return this.accountNumber;
-	}
-
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-
-	public String getVerifyResult() {
-		return this.verifyResult;
-	}
-
-	public void setVerifyResult(String verifyResult) {
-		this.verifyResult = verifyResult;
-	}
 
 }

@@ -1,5 +1,6 @@
 package top.gabin.tools.response.tool;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,14 +24,15 @@ import top.gabin.tools.response.AbstractResponse;
  * 403	NO_AUTH	商户权限异常	请确认是否已经开通相关权限
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ImageUploadResponse extends AbstractResponse {
 	/**
 	 * <pre>
 	 * 字段名：媒体文件标识 Id
 	 * 变量名：media_id
 	 * 是否必填：是
-	 * 类型：string(512)
+	 * 类型：string[1,512]
 	 * 描述：
 	 *  微信返回的媒体文件标识Id。
 	 *  示例值：6uqyGjGrCf2GtyXP8bxrbuH9-aAoTjH-rKeSl3Lf4_So6kdkQu4w8BYVP3bzLtvR38lxt4PjtCDXsQpzqge_hQEovHzOhsLleGFQVRF-U_0 
@@ -38,13 +40,5 @@ public class ImageUploadResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "media_id")
 	private String mediaId;
-
-	public String getMediaId() {
-		return this.mediaId;
-	}
-
-	public void setMediaId(String mediaId) {
-		this.mediaId = mediaId;
-	}
 
 }

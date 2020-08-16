@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.fund;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +17,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 404	ORDER_NOT_EXIST	该提现单号不存在	请检查订单号是否正确
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -180,93 +182,5 @@ public class WithdrawStatusForPlatformResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "solution")
 	private String solution;
-
-	public String getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getWithdrawId() {
-		return this.withdrawId;
-	}
-
-	public void setWithdrawId(String withdrawId) {
-		this.withdrawId = withdrawId;
-	}
-
-	public String getOutRequestNo() {
-		return this.outRequestNo;
-	}
-
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
-	}
-
-	public Integer getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public String getCreateTime() {
-		return this.createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getUpdateTime() {
-		return this.updateTime;
-	}
-
-	public void setUpdateTime(String updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public String getReason() {
-		return this.reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public String getRemark() {
-		return this.remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	public String getBankMemo() {
-		return this.bankMemo;
-	}
-
-	public void setBankMemo(String bankMemo) {
-		this.bankMemo = bankMemo;
-	}
-
-	public String getAccountType() {
-		return this.accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-	public String getSolution() {
-		return this.solution;
-	}
-
-	public void setSolution(String solution) {
-		this.solution = solution;
-	}
 
 }

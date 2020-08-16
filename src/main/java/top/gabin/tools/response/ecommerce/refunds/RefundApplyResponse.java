@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.refunds;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,7 +27,8 @@ import java.util.List;
  * 403	REQUEST_BLOCKED	请求受阻	此状态代表退款申请失败，商户可根据具体的错误提示做相应的处理。
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class RefundApplyResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -96,47 +98,8 @@ public class RefundApplyResponse extends AbstractResponse {
 	@JsonProperty(value = "promotion_detail")
 	private List<PromotionDetail> promotionDetail;
 
-	public String getRefundId() {
-		return this.refundId;
-	}
-
-	public void setRefundId(String refundId) {
-		this.refundId = refundId;
-	}
-
-	public String getOutRefundNo() {
-		return this.outRefundNo;
-	}
-
-	public void setOutRefundNo(String outRefundNo) {
-		this.outRefundNo = outRefundNo;
-	}
-
-	public String getCreateTime() {
-		return this.createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public Amount getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Amount amount) {
-		this.amount = amount;
-	}
-
-	public List<PromotionDetail> getPromotionDetail() {
-		return this.promotionDetail;
-	}
-
-	public void setPromotionDetail(List<PromotionDetail> promotionDetail) {
-		this.promotionDetail = promotionDetail;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Amount {
 		/**
 		 * <pre>
@@ -194,41 +157,10 @@ public class RefundApplyResponse extends AbstractResponse {
 		@JsonProperty(value = "currency")
 		private String currency;
 
-		public Integer getRefund() {
-			return this.refund;
-		}
-
-		public void setRefund(Integer refund) {
-			this.refund = refund;
-		}
-
-		public Integer getPayerRefund() {
-			return this.payerRefund;
-		}
-
-		public void setPayerRefund(Integer payerRefund) {
-			this.payerRefund = payerRefund;
-		}
-
-		public Integer getDiscountRefund() {
-			return this.discountRefund;
-		}
-
-		public void setDiscountRefund(Integer discountRefund) {
-			this.discountRefund = discountRefund;
-		}
-
-		public String getCurrency() {
-			return this.currency;
-		}
-
-		public void setCurrency(String currency) {
-			this.currency = currency;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class PromotionDetail {
 		/**
 		 * <pre>
@@ -303,46 +235,6 @@ public class RefundApplyResponse extends AbstractResponse {
 		 */
 		@JsonProperty(value = "refund_amount")
 		private Integer refundAmount;
-
-		public String getPromotionId() {
-			return this.promotionId;
-		}
-
-		public void setPromotionId(String promotionId) {
-			this.promotionId = promotionId;
-		}
-
-		public String getScope() {
-			return this.scope;
-		}
-
-		public void setScope(String scope) {
-			this.scope = scope;
-		}
-
-		public String getType() {
-			return this.type;
-		}
-
-		public void setType(String type) {
-			this.type = type;
-		}
-
-		public Integer getAmount() {
-			return this.amount;
-		}
-
-		public void setAmount(Integer amount) {
-			this.amount = amount;
-		}
-
-		public Integer getRefundAmount() {
-			return this.refundAmount;
-		}
-
-		public void setRefundAmount(Integer refundAmount) {
-			this.refundAmount = refundAmount;
-		}
 
 	}
 

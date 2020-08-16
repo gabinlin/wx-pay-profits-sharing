@@ -1,5 +1,6 @@
 package top.gabin.tools.request.pay.combine;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_7.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class CombineTransactionsNotifyRequest {
 	/**
 	 * <pre>
@@ -82,47 +84,8 @@ public class CombineTransactionsNotifyRequest {
 	@JsonProperty(value = "resource")
 	private Resource resource;
 
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getCreateTime() {
-		return this.createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getEventType() {
-		return this.eventType;
-	}
-
-	public void setEventType(String eventType) {
-		this.eventType = eventType;
-	}
-
-	public String getResourceType() {
-		return this.resourceType;
-	}
-
-	public void setResourceType(String resourceType) {
-		this.resourceType = resourceType;
-	}
-
-	public Resource getResource() {
-		return this.resource;
-	}
-
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Resource {
 		/**
 		 * <pre>
@@ -179,38 +142,6 @@ public class CombineTransactionsNotifyRequest {
 		 */
 		@JsonProperty(value = "nonce")
 		private String nonce;
-
-		public String getAlgorithm() {
-			return this.algorithm;
-		}
-
-		public void setAlgorithm(String algorithm) {
-			this.algorithm = algorithm;
-		}
-
-		public String getCiphertext() {
-			return this.ciphertext;
-		}
-
-		public void setCiphertext(String ciphertext) {
-			this.ciphertext = ciphertext;
-		}
-
-		public String getAssociatedData() {
-			return this.associatedData;
-		}
-
-		public void setAssociatedData(String associatedData) {
-			this.associatedData = associatedData;
-		}
-
-		public String getNonce() {
-			return this.nonce;
-		}
-
-		public void setNonce(String nonce) {
-			this.nonce = nonce;
-		}
 
 	}
 

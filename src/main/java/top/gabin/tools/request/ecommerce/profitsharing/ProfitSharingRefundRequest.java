@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_3.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingRefundRequest {
 	/**
 	 * <pre>
@@ -107,61 +109,5 @@ public class ProfitSharingRefundRequest {
 	 */
 	@JsonProperty(value = "description")
 	private String description;
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getOrderId() {
-		return this.orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getOutOrderNo() {
-		return this.outOrderNo;
-	}
-
-	public void setOutOrderNo(String outOrderNo) {
-		this.outOrderNo = outOrderNo;
-	}
-
-	public String getOutReturnNo() {
-		return this.outReturnNo;
-	}
-
-	public void setOutReturnNo(String outReturnNo) {
-		this.outReturnNo = outReturnNo;
-	}
-
-	public String getReturnMchid() {
-		return this.returnMchid;
-	}
-
-	public void setReturnMchid(String returnMchid) {
-		this.returnMchid = returnMchid;
-	}
-
-	public Integer getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 }

@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.fund;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,7 +26,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 403	ACCOUNT_ERROR	二级商户未绑卡	二级商户号没有绑定结算银行卡，绑定后重试
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class WithdrawForSubMchResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -68,29 +70,5 @@ public class WithdrawForSubMchResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "out_request_no")
 	private String outRequestNo;
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getWithdrawId() {
-		return this.withdrawId;
-	}
-
-	public void setWithdrawId(String withdrawId) {
-		this.withdrawId = withdrawId;
-	}
-
-	public String getOutRequestNo() {
-		return this.outRequestNo;
-	}
-
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
-	}
 
 }

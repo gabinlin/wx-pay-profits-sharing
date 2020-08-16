@@ -1,6 +1,7 @@
 package top.gabin.tools.request.ecommerce.amount;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_4.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("accountType")
 public class AmountDayEndOfPlatformRequest {
 	/**
 	 * <pre>
@@ -44,22 +46,5 @@ public class AmountDayEndOfPlatformRequest {
 	 */
 	@JsonProperty(value = "date")
 	private String date;
-
-	@JsonIgnore
-	public String getAccountType() {
-		return this.accountType;
-	}
-
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
-	public String getDate() {
-		return this.date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
 
 }

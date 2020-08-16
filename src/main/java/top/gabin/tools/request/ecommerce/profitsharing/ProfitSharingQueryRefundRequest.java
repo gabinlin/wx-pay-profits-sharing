@@ -1,6 +1,6 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_4.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingQueryRefundRequest {
 	/**
 	 * <pre>
@@ -24,7 +25,6 @@ public class ProfitSharingQueryRefundRequest {
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -39,7 +39,6 @@ public class ProfitSharingQueryRefundRequest {
 	 *  示例值： 3008450740201411110007820472 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "order_id")
 	private String orderId;
 
@@ -52,7 +51,6 @@ public class ProfitSharingQueryRefundRequest {
 	 * 描述： 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "out_order_no")
 	private String outOrderNo;
 
@@ -67,44 +65,7 @@ public class ProfitSharingQueryRefundRequest {
 	 *  示例值：R20190516001 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "out_return_no")
 	private String outReturnNo;
-
-	@JsonIgnore
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	@JsonIgnore
-	public String getOrderId() {
-		return this.orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	@JsonIgnore
-	public String getOutOrderNo() {
-		return this.outOrderNo;
-	}
-
-	public void setOutOrderNo(String outOrderNo) {
-		this.outOrderNo = outOrderNo;
-	}
-
-	@JsonIgnore
-	public String getOutReturnNo() {
-		return this.outReturnNo;
-	}
-
-	public void setOutReturnNo(String outReturnNo) {
-		this.outReturnNo = outReturnNo;
-	}
 
 }

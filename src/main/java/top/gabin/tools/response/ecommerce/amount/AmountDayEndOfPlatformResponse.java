@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.amount;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +17,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class AmountDayEndOfPlatformResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -45,21 +47,5 @@ public class AmountDayEndOfPlatformResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "pending_amount")
 	private Integer pendingAmount;
-
-	public Integer getAvailableAmount() {
-		return this.availableAmount;
-	}
-
-	public void setAvailableAmount(Integer availableAmount) {
-		this.availableAmount = availableAmount;
-	}
-
-	public Integer getPendingAmount() {
-		return this.pendingAmount;
-	}
-
-	public void setPendingAmount(Integer pendingAmount) {
-		this.pendingAmount = pendingAmount;
-	}
 
 }

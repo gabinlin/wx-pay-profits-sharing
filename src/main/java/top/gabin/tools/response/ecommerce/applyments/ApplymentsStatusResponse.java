@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.applyments;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -21,7 +22,8 @@ import java.util.List;
  * 404	RESOURCE_NOT_EXISTS	申请单不存在	确认入参，传入正确的申请单编号
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ApplymentsStatusResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -155,79 +157,8 @@ public class ApplymentsStatusResponse extends AbstractResponse {
 	@JsonProperty(value = "applyment_id")
 	private String applymentId;
 
-	public String getApplymentState() {
-		return this.applymentState;
-	}
-
-	public void setApplymentState(String applymentState) {
-		this.applymentState = applymentState;
-	}
-
-	public String getApplymentStateDesc() {
-		return this.applymentStateDesc;
-	}
-
-	public void setApplymentStateDesc(String applymentStateDesc) {
-		this.applymentStateDesc = applymentStateDesc;
-	}
-
-	public String getSignUrl() {
-		return this.signUrl;
-	}
-
-	public void setSignUrl(String signUrl) {
-		this.signUrl = signUrl;
-	}
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public AccountValidation getAccountValidation() {
-		return this.accountValidation;
-	}
-
-	public void setAccountValidation(AccountValidation accountValidation) {
-		this.accountValidation = accountValidation;
-	}
-
-	public List<AuditDetail> getAuditDetail() {
-		return this.auditDetail;
-	}
-
-	public void setAuditDetail(List<AuditDetail> auditDetail) {
-		this.auditDetail = auditDetail;
-	}
-
-	public String getLegalValidationUrl() {
-		return this.legalValidationUrl;
-	}
-
-	public void setLegalValidationUrl(String legalValidationUrl) {
-		this.legalValidationUrl = legalValidationUrl;
-	}
-
-	public String getOutRequestNo() {
-		return this.outRequestNo;
-	}
-
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
-	}
-
-	public String getApplymentId() {
-		return this.applymentId;
-	}
-
-	public void setApplymentId(String applymentId) {
-		this.applymentId = applymentId;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class AccountValidation {
 		/**
 		 * <pre>
@@ -355,81 +286,10 @@ public class ApplymentsStatusResponse extends AbstractResponse {
 		@JsonProperty(value = "deadline")
 		private String deadline;
 
-		public String getAccountName() {
-			return this.accountName;
-		}
-
-		public void setAccountName(String accountName) {
-			this.accountName = accountName;
-		}
-
-		public String getAccountNo() {
-			return this.accountNo;
-		}
-
-		public void setAccountNo(String accountNo) {
-			this.accountNo = accountNo;
-		}
-
-		public String getPayAmount() {
-			return this.payAmount;
-		}
-
-		public void setPayAmount(String payAmount) {
-			this.payAmount = payAmount;
-		}
-
-		public String getDestinationAccountNumber() {
-			return this.destinationAccountNumber;
-		}
-
-		public void setDestinationAccountNumber(String destinationAccountNumber) {
-			this.destinationAccountNumber = destinationAccountNumber;
-		}
-
-		public String getDestinationAccountName() {
-			return this.destinationAccountName;
-		}
-
-		public void setDestinationAccountName(String destinationAccountName) {
-			this.destinationAccountName = destinationAccountName;
-		}
-
-		public String getDestinationAccountBank() {
-			return this.destinationAccountBank;
-		}
-
-		public void setDestinationAccountBank(String destinationAccountBank) {
-			this.destinationAccountBank = destinationAccountBank;
-		}
-
-		public String getCity() {
-			return this.city;
-		}
-
-		public void setCity(String city) {
-			this.city = city;
-		}
-
-		public String getRemark() {
-			return this.remark;
-		}
-
-		public void setRemark(String remark) {
-			this.remark = remark;
-		}
-
-		public String getDeadline() {
-			return this.deadline;
-		}
-
-		public void setDeadline(String deadline) {
-			this.deadline = deadline;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class AuditDetail {
 		/**
 		 * <pre>
@@ -458,22 +318,6 @@ public class ApplymentsStatusResponse extends AbstractResponse {
 		 */
 		@JsonProperty(value = "reject_reason")
 		private String rejectReason;
-
-		public String getParamName() {
-			return this.paramName;
-		}
-
-		public void setParamName(String paramName) {
-			this.paramName = paramName;
-		}
-
-		public String getRejectReason() {
-			return this.rejectReason;
-		}
-
-		public void setRejectReason(String rejectReason) {
-			this.rejectReason = rejectReason;
-		}
 
 	}
 

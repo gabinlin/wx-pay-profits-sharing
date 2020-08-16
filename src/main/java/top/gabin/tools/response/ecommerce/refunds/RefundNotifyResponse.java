@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.refunds;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +13,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_3.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class RefundNotifyResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -41,21 +43,5 @@ public class RefundNotifyResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "message")
 	private String message;
-
-	public String getCode() {
-		return this.code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getMessage() {
-		return this.message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 }

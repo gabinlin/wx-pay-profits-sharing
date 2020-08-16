@@ -1,5 +1,6 @@
 package top.gabin.tools.response.pay.combine;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -33,7 +34,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 			
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class CombineTransactionsAppResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -48,13 +50,5 @@ public class CombineTransactionsAppResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "prepay_id")
 	private String prepayId;
-
-	public String getPrepayId() {
-		return this.prepayId;
-	}
-
-	public void setPrepayId(String prepayId) {
-		this.prepayId = prepayId;
-	}
 
 }

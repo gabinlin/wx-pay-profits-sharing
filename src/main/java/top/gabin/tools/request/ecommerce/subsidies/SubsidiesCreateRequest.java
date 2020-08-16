@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.subsidies;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/subsidies/chapter3_1.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class SubsidiesCreateRequest {
 	/**
 	 * <pre>
@@ -48,6 +50,7 @@ public class SubsidiesCreateRequest {
 	 * 类型：int
 	 * 描述：
 	 *  body 补差金额，单位为分，只能为整数，不能超过下单时候的最大补差金额。 
+	 *  注意：单笔订单最高补差金额为5000元
 	 *  示例值：10 
 	 * </pre>
 	 */
@@ -81,45 +84,5 @@ public class SubsidiesCreateRequest {
 	 */
 	@JsonProperty(value = "refund_id")
 	private String refundId;
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getTransactionId() {
-		return this.transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public Integer getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getRefundId() {
-		return this.refundId;
-	}
-
-	public void setRefundId(String refundId) {
-		this.refundId = refundId;
-	}
 
 }

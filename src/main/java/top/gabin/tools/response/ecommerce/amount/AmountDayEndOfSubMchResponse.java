@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.amount;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +17,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 400	INVALID_REQUEST	该账户在指定时间不存在	请检查商户号是否正确
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class AmountDayEndOfSubMchResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -59,29 +61,5 @@ public class AmountDayEndOfSubMchResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "pending_amount")
 	private Integer pendingAmount;
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public Integer getAvailableAmount() {
-		return this.availableAmount;
-	}
-
-	public void setAvailableAmount(Integer availableAmount) {
-		this.availableAmount = availableAmount;
-	}
-
-	public Integer getPendingAmount() {
-		return this.pendingAmount;
-	}
-
-	public void setPendingAmount(Integer pendingAmount) {
-		this.pendingAmount = pendingAmount;
-	}
 
 }

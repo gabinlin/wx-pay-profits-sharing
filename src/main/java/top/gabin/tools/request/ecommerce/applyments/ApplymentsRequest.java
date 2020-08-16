@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.applyments;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_1.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ApplymentsRequest {
 	/**
 	 * <pre>
@@ -237,127 +239,8 @@ public class ApplymentsRequest {
 	@JsonProperty(value = "business_addition_desc")
 	private String businessAdditionDesc;
 
-	public String getOutRequestNo() {
-		return this.outRequestNo;
-	}
-
-	public void setOutRequestNo(String outRequestNo) {
-		this.outRequestNo = outRequestNo;
-	}
-
-	public String getOrganizationType() {
-		return this.organizationType;
-	}
-
-	public void setOrganizationType(String organizationType) {
-		this.organizationType = organizationType;
-	}
-
-	public BusinessLicenseInfo getBusinessLicenseInfo() {
-		return this.businessLicenseInfo;
-	}
-
-	public void setBusinessLicenseInfo(BusinessLicenseInfo businessLicenseInfo) {
-		this.businessLicenseInfo = businessLicenseInfo;
-	}
-
-	public OrganizationCertInfo getOrganizationCertInfo() {
-		return this.organizationCertInfo;
-	}
-
-	public void setOrganizationCertInfo(OrganizationCertInfo organizationCertInfo) {
-		this.organizationCertInfo = organizationCertInfo;
-	}
-
-	public String getIdDocType() {
-		return this.idDocType;
-	}
-
-	public void setIdDocType(String idDocType) {
-		this.idDocType = idDocType;
-	}
-
-	public IdCardInfo getIdCardInfo() {
-		return this.idCardInfo;
-	}
-
-	public void setIdCardInfo(IdCardInfo idCardInfo) {
-		this.idCardInfo = idCardInfo;
-	}
-
-	public IdDocInfo getIdDocInfo() {
-		return this.idDocInfo;
-	}
-
-	public void setIdDocInfo(IdDocInfo idDocInfo) {
-		this.idDocInfo = idDocInfo;
-	}
-
-	public Boolean getNeedAccountInfo() {
-		return this.needAccountInfo;
-	}
-
-	public void setNeedAccountInfo(Boolean needAccountInfo) {
-		this.needAccountInfo = needAccountInfo;
-	}
-
-	public AccountInfo getAccountInfo() {
-		return this.accountInfo;
-	}
-
-	public void setAccountInfo(AccountInfo accountInfo) {
-		this.accountInfo = accountInfo;
-	}
-
-	public ContactInfo getContactInfo() {
-		return this.contactInfo;
-	}
-
-	public void setContactInfo(ContactInfo contactInfo) {
-		this.contactInfo = contactInfo;
-	}
-
-	public SalesSceneInfo getSalesSceneInfo() {
-		return this.salesSceneInfo;
-	}
-
-	public void setSalesSceneInfo(SalesSceneInfo salesSceneInfo) {
-		this.salesSceneInfo = salesSceneInfo;
-	}
-
-	public String getMerchantShortname() {
-		return this.merchantShortname;
-	}
-
-	public void setMerchantShortname(String merchantShortname) {
-		this.merchantShortname = merchantShortname;
-	}
-
-	public String getQualifications() {
-		return this.qualifications;
-	}
-
-	public void setQualifications(String qualifications) {
-		this.qualifications = qualifications;
-	}
-
-	public String getBusinessAdditionPics() {
-		return this.businessAdditionPics;
-	}
-
-	public void setBusinessAdditionPics(String businessAdditionPics) {
-		this.businessAdditionPics = businessAdditionPics;
-	}
-
-	public String getBusinessAdditionDesc() {
-		return this.businessAdditionDesc;
-	}
-
-	public void setBusinessAdditionDesc(String businessAdditionDesc) {
-		this.businessAdditionDesc = businessAdditionDesc;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class BusinessLicenseInfo {
 		/**
 		 * <pre>
@@ -456,57 +339,10 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "business_time")
 		private String businessTime;
 
-		public String getBusinessLicenseCopy() {
-			return this.businessLicenseCopy;
-		}
-
-		public void setBusinessLicenseCopy(String businessLicenseCopy) {
-			this.businessLicenseCopy = businessLicenseCopy;
-		}
-
-		public String getBusinessLicenseNumber() {
-			return this.businessLicenseNumber;
-		}
-
-		public void setBusinessLicenseNumber(String businessLicenseNumber) {
-			this.businessLicenseNumber = businessLicenseNumber;
-		}
-
-		public String getMerchantName() {
-			return this.merchantName;
-		}
-
-		public void setMerchantName(String merchantName) {
-			this.merchantName = merchantName;
-		}
-
-		public String getLegalPerson() {
-			return this.legalPerson;
-		}
-
-		public void setLegalPerson(String legalPerson) {
-			this.legalPerson = legalPerson;
-		}
-
-		public String getCompanyAddress() {
-			return this.companyAddress;
-		}
-
-		public void setCompanyAddress(String companyAddress) {
-			this.companyAddress = companyAddress;
-		}
-
-		public String getBusinessTime() {
-			return this.businessTime;
-		}
-
-		public void setBusinessTime(String businessTime) {
-			this.businessTime = businessTime;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class OrganizationCertInfo {
 		/**
 		 * <pre>
@@ -554,33 +390,10 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "organization_time")
 		private String organizationTime;
 
-		public String getOrganizationCopy() {
-			return this.organizationCopy;
-		}
-
-		public void setOrganizationCopy(String organizationCopy) {
-			this.organizationCopy = organizationCopy;
-		}
-
-		public String getOrganizationNumber() {
-			return this.organizationNumber;
-		}
-
-		public void setOrganizationNumber(String organizationNumber) {
-			this.organizationNumber = organizationNumber;
-		}
-
-		public String getOrganizationTime() {
-			return this.organizationTime;
-		}
-
-		public void setOrganizationTime(String organizationTime) {
-			this.organizationTime = organizationTime;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class IdCardInfo {
 		/**
 		 * <pre>
@@ -658,49 +471,10 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "id_card_valid_time")
 		private String idCardValidTime;
 
-		public String getIdCardCopy() {
-			return this.idCardCopy;
-		}
-
-		public void setIdCardCopy(String idCardCopy) {
-			this.idCardCopy = idCardCopy;
-		}
-
-		public String getIdCardNational() {
-			return this.idCardNational;
-		}
-
-		public void setIdCardNational(String idCardNational) {
-			this.idCardNational = idCardNational;
-		}
-
-		public String getIdCardName() {
-			return this.idCardName;
-		}
-
-		public void setIdCardName(String idCardName) {
-			this.idCardName = idCardName;
-		}
-
-		public String getIdCardNumber() {
-			return this.idCardNumber;
-		}
-
-		public void setIdCardNumber(String idCardNumber) {
-			this.idCardNumber = idCardNumber;
-		}
-
-		public String getIdCardValidTime() {
-			return this.idCardValidTime;
-		}
-
-		public void setIdCardValidTime(String idCardValidTime) {
-			this.idCardValidTime = idCardValidTime;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class IdDocInfo {
 		/**
 		 * <pre>
@@ -761,41 +535,10 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "doc_period_end")
 		private String docPeriodEnd;
 
-		public String getIdDocName() {
-			return this.idDocName;
-		}
-
-		public void setIdDocName(String idDocName) {
-			this.idDocName = idDocName;
-		}
-
-		public String getIdDocNumber() {
-			return this.idDocNumber;
-		}
-
-		public void setIdDocNumber(String idDocNumber) {
-			this.idDocNumber = idDocNumber;
-		}
-
-		public String getIdDocCopy() {
-			return this.idDocCopy;
-		}
-
-		public void setIdDocCopy(String idDocCopy) {
-			this.idDocCopy = idDocCopy;
-		}
-
-		public String getDocPeriodEnd() {
-			return this.docPeriodEnd;
-		}
-
-		public void setDocPeriodEnd(String docPeriodEnd) {
-			this.docPeriodEnd = docPeriodEnd;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class AccountInfo {
 		/**
 		 * <pre>
@@ -903,65 +646,10 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "account_number")
 		private String accountNumber;
 
-		public String getBankAccountType() {
-			return this.bankAccountType;
-		}
-
-		public void setBankAccountType(String bankAccountType) {
-			this.bankAccountType = bankAccountType;
-		}
-
-		public String getAccountBank() {
-			return this.accountBank;
-		}
-
-		public void setAccountBank(String accountBank) {
-			this.accountBank = accountBank;
-		}
-
-		public String getAccountName() {
-			return this.accountName;
-		}
-
-		public void setAccountName(String accountName) {
-			this.accountName = accountName;
-		}
-
-		public String getBankAddressCode() {
-			return this.bankAddressCode;
-		}
-
-		public void setBankAddressCode(String bankAddressCode) {
-			this.bankAddressCode = bankAddressCode;
-		}
-
-		public String getBankBranchId() {
-			return this.bankBranchId;
-		}
-
-		public void setBankBranchId(String bankBranchId) {
-			this.bankBranchId = bankBranchId;
-		}
-
-		public String getBankName() {
-			return this.bankName;
-		}
-
-		public void setBankName(String bankName) {
-			this.bankName = bankName;
-		}
-
-		public String getAccountNumber() {
-			return this.accountNumber;
-		}
-
-		public void setAccountNumber(String accountNumber) {
-			this.accountNumber = accountNumber;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class ContactInfo {
 		/**
 		 * <pre>
@@ -1044,49 +732,10 @@ public class ApplymentsRequest {
 		@JsonProperty(value = "contact_email")
 		private String contactEmail;
 
-		public String getContactType() {
-			return this.contactType;
-		}
-
-		public void setContactType(String contactType) {
-			this.contactType = contactType;
-		}
-
-		public String getContactName() {
-			return this.contactName;
-		}
-
-		public void setContactName(String contactName) {
-			this.contactName = contactName;
-		}
-
-		public String getContactIdCardNumber() {
-			return this.contactIdCardNumber;
-		}
-
-		public void setContactIdCardNumber(String contactIdCardNumber) {
-			this.contactIdCardNumber = contactIdCardNumber;
-		}
-
-		public String getMobilePhone() {
-			return this.mobilePhone;
-		}
-
-		public void setMobilePhone(String mobilePhone) {
-			this.mobilePhone = mobilePhone;
-		}
-
-		public String getContactEmail() {
-			return this.contactEmail;
-		}
-
-		public void setContactEmail(String contactEmail) {
-			this.contactEmail = contactEmail;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SalesSceneInfo {
 		/**
 		 * <pre>
@@ -1143,38 +792,6 @@ public class ApplymentsRequest {
 		 */
 		@JsonProperty(value = "mini_program_sub_appid")
 		private String miniProgramSubAppid;
-
-		public String getStoreName() {
-			return this.storeName;
-		}
-
-		public void setStoreName(String storeName) {
-			this.storeName = storeName;
-		}
-
-		public String getStoreUrl() {
-			return this.storeUrl;
-		}
-
-		public void setStoreUrl(String storeUrl) {
-			this.storeUrl = storeUrl;
-		}
-
-		public String getStoreQrCode() {
-			return this.storeQrCode;
-		}
-
-		public void setStoreQrCode(String storeQrCode) {
-			this.storeQrCode = storeQrCode;
-		}
-
-		public String getMiniProgramSubAppid() {
-			return this.miniProgramSubAppid;
-		}
-
-		public void setMiniProgramSubAppid(String miniProgramSubAppid) {
-			this.miniProgramSubAppid = miniProgramSubAppid;
-		}
 
 	}
 

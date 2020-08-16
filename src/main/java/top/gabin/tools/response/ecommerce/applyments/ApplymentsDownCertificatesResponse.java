@@ -1,8 +1,7 @@
 package top.gabin.tools.response.ecommerce.applyments;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import lombok.Data;
 import top.gabin.tools.response.AbstractResponse;
 
 import java.util.List;
@@ -21,20 +20,12 @@ import java.util.List;
  * 404	RESOURCE_NOT_EXISTS	申请单不存在	确认入参，传入正确的申请单编号
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
 public class ApplymentsDownCertificatesResponse extends AbstractResponse {
 	@JsonProperty(value = "data")
 	private List<Data> data;
 
-	public List<Data> getData() {
-		return data;
-	}
-
-	public void setData(List<Data> data) {
-		this.data = data;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@lombok.Data
 	public static class Data {
 		/**
 		 * <pre>
@@ -59,60 +50,13 @@ public class ApplymentsDownCertificatesResponse extends AbstractResponse {
 		 */
 		@JsonProperty(value = "encrypt_certificate")
 		private EncryptCertificate encryptCertificate;
-
-		public String getSerialNo() {
-			return serialNo;
-		}
-
-		public void setSerialNo(String serialNo) {
-			this.serialNo = serialNo;
-		}
-
-		public EncryptCertificate getEncryptCertificate() {
-			return encryptCertificate;
-		}
-
-		public void EncryptCertificate(EncryptCertificate encryptCertificate) {
-			this.encryptCertificate = encryptCertificate;
-		}
 	}
 
+	@lombok.Data
 	public static class EncryptCertificate {
 		private String algorithm;
 		private String nonce;
 		private String associated_data;
 		private String ciphertext;
-
-		public String getAlgorithm() {
-			return algorithm;
-		}
-
-		public void setAlgorithm(String algorithm) {
-			this.algorithm = algorithm;
-		}
-
-		public String getNonce() {
-			return nonce;
-		}
-
-		public void setNonce(String nonce) {
-			this.nonce = nonce;
-		}
-
-		public String getAssociated_data() {
-			return associated_data;
-		}
-
-		public void setAssociated_data(String associated_data) {
-			this.associated_data = associated_data;
-		}
-
-		public String getCiphertext() {
-			return ciphertext;
-		}
-
-		public void setCiphertext(String ciphertext) {
-			this.ciphertext = ciphertext;
-		}
 	}
 }

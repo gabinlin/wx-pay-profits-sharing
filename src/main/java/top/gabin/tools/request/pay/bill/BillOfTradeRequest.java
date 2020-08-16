@@ -1,6 +1,6 @@
 package top.gabin.tools.request.pay.bill;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/bill/chapter3_1.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class BillOfTradeRequest {
 	/**
 	 * <pre>
@@ -25,7 +26,6 @@ public class BillOfTradeRequest {
 	 *  示例值：2019-06-11 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "bill_date")
 	private String billDate;
 
@@ -45,7 +45,6 @@ public class BillOfTradeRequest {
 	 *  示例值：1900000001 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
@@ -64,7 +63,6 @@ public class BillOfTradeRequest {
 	 *  示例值：ALL 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "bill_type")
 	private String billType;
 
@@ -81,44 +79,7 @@ public class BillOfTradeRequest {
 	 *  示例值：GZIP 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "tar_type")
 	private String tarType;
-
-	@JsonIgnore
-	public String getBillDate() {
-		return this.billDate;
-	}
-
-	public void setBillDate(String billDate) {
-		this.billDate = billDate;
-	}
-
-	@JsonIgnore
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	@JsonIgnore
-	public String getBillType() {
-		return this.billType;
-	}
-
-	public void setBillType(String billType) {
-		this.billType = billType;
-	}
-
-	@JsonIgnore
-	public String getTarType() {
-		return this.tarType;
-	}
-
-	public void setTarType(String tarType) {
-		this.tarType = tarType;
-	}
 
 }

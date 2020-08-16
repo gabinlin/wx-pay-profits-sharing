@@ -1,5 +1,6 @@
 package top.gabin.tools.request.pay.combine;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +13,8 @@ import java.util.List;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_7.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class CombineTransactionsNotifyRequest1 {
 	/**
 	 * <pre>
@@ -94,55 +96,8 @@ public class CombineTransactionsNotifyRequest1 {
 	@JsonProperty(value = "combine_payer_info")
 	private CombinePayerInfo combinePayerInfo;
 
-	public String getCombineAppid() {
-		return this.combineAppid;
-	}
-
-	public void setCombineAppid(String combineAppid) {
-		this.combineAppid = combineAppid;
-	}
-
-	public String getCombineMchid() {
-		return this.combineMchid;
-	}
-
-	public void setCombineMchid(String combineMchid) {
-		this.combineMchid = combineMchid;
-	}
-
-	public String getCombineOutTradeNo() {
-		return this.combineOutTradeNo;
-	}
-
-	public void setCombineOutTradeNo(String combineOutTradeNo) {
-		this.combineOutTradeNo = combineOutTradeNo;
-	}
-
-	public SceneInfo getSceneInfo() {
-		return this.sceneInfo;
-	}
-
-	public void setSceneInfo(SceneInfo sceneInfo) {
-		this.sceneInfo = sceneInfo;
-	}
-
-	public List<SubOrders> getSubOrders() {
-		return this.subOrders;
-	}
-
-	public void setSubOrders(List<SubOrders> subOrders) {
-		this.subOrders = subOrders;
-	}
-
-	public CombinePayerInfo getCombinePayerInfo() {
-		return this.combinePayerInfo;
-	}
-
-	public void setCombinePayerInfo(CombinePayerInfo combinePayerInfo) {
-		this.combinePayerInfo = combinePayerInfo;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SceneInfo {
 		/**
 		 * <pre>
@@ -159,17 +114,10 @@ public class CombineTransactionsNotifyRequest1 {
 		@JsonProperty(value = "device_id")
 		private String deviceId;
 
-		public String getDeviceId() {
-			return this.deviceId;
-		}
-
-		public void setDeviceId(String deviceId) {
-			this.deviceId = deviceId;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SubOrders {
 		/**
 		 * <pre>
@@ -321,89 +269,10 @@ public class CombineTransactionsNotifyRequest1 {
 		@JsonProperty(value = "amount")
 		private Amount amount;
 
-		public String getMchid() {
-			return this.mchid;
-		}
-
-		public void setMchid(String mchid) {
-			this.mchid = mchid;
-		}
-
-		public String getTradeType() {
-			return this.tradeType;
-		}
-
-		public void setTradeType(String tradeType) {
-			this.tradeType = tradeType;
-		}
-
-		public String getTradeState() {
-			return this.tradeState;
-		}
-
-		public void setTradeState(String tradeState) {
-			this.tradeState = tradeState;
-		}
-
-		public String getBankType() {
-			return this.bankType;
-		}
-
-		public void setBankType(String bankType) {
-			this.bankType = bankType;
-		}
-
-		public String getAttach() {
-			return this.attach;
-		}
-
-		public void setAttach(String attach) {
-			this.attach = attach;
-		}
-
-		public String getSuccessTime() {
-			return this.successTime;
-		}
-
-		public void setSuccessTime(String successTime) {
-			this.successTime = successTime;
-		}
-
-		public String getTransactionId() {
-			return this.transactionId;
-		}
-
-		public void setTransactionId(String transactionId) {
-			this.transactionId = transactionId;
-		}
-
-		public String getOutTradeNo() {
-			return this.outTradeNo;
-		}
-
-		public void setOutTradeNo(String outTradeNo) {
-			this.outTradeNo = outTradeNo;
-		}
-
-		public String getSubMchid() {
-			return this.subMchid;
-		}
-
-		public void setSubMchid(String subMchid) {
-			this.subMchid = subMchid;
-		}
-
-		public Amount getAmount() {
-			return this.amount;
-		}
-
-		public void setAmount(Amount amount) {
-			this.amount = amount;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class CombinePayerInfo {
 		/**
 		 * <pre>
@@ -419,17 +288,10 @@ public class CombineTransactionsNotifyRequest1 {
 		@JsonProperty(value = "openid")
 		private String openid;
 
-		public String getOpenid() {
-			return this.openid;
-		}
-
-		public void setOpenid(String openid) {
-			this.openid = openid;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Amount {
 		/**
 		 * <pre>
@@ -486,38 +348,6 @@ public class CombineTransactionsNotifyRequest1 {
 		 */
 		@JsonProperty(value = "payer_currency")
 		private String payerCurrency;
-
-		public Integer getTotalAmount() {
-			return this.totalAmount;
-		}
-
-		public void setTotalAmount(Integer totalAmount) {
-			this.totalAmount = totalAmount;
-		}
-
-		public String getCurrency() {
-			return this.currency;
-		}
-
-		public void setCurrency(String currency) {
-			this.currency = currency;
-		}
-
-		public Integer getPayerAmount() {
-			return this.payerAmount;
-		}
-
-		public void setPayerAmount(Integer payerAmount) {
-			this.payerAmount = payerAmount;
-		}
-
-		public String getPayerCurrency() {
-			return this.payerCurrency;
-		}
-
-		public void setPayerCurrency(String payerCurrency) {
-			this.payerCurrency = payerCurrency;
-		}
 
 	}
 

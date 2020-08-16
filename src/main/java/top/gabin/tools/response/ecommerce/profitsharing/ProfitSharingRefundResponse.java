@@ -1,5 +1,6 @@
 package top.gabin.tools.response.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,7 +20,8 @@ import top.gabin.tools.response.AbstractResponse;
  * 403	NO_AUTH	回退方未开通分账回退功能	请先让回退方开通分账回退功能
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingRefundResponse extends AbstractResponse {
 	/**
 	 * <pre>
@@ -168,85 +170,5 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "finish_time")
 	private String finishTime;
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getOrderId() {
-		return this.orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getOutOrderNo() {
-		return this.outOrderNo;
-	}
-
-	public void setOutOrderNo(String outOrderNo) {
-		this.outOrderNo = outOrderNo;
-	}
-
-	public String getOutReturnNo() {
-		return this.outReturnNo;
-	}
-
-	public void setOutReturnNo(String outReturnNo) {
-		this.outReturnNo = outReturnNo;
-	}
-
-	public String getReturnMchid() {
-		return this.returnMchid;
-	}
-
-	public void setReturnMchid(String returnMchid) {
-		this.returnMchid = returnMchid;
-	}
-
-	public Integer getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public String getReturnNo() {
-		return this.returnNo;
-	}
-
-	public void setReturnNo(String returnNo) {
-		this.returnNo = returnNo;
-	}
-
-	public String getResult() {
-		return this.result;
-	}
-
-	public void setResult(String result) {
-		this.result = result;
-	}
-
-	public String getFailReason() {
-		return this.failReason;
-	}
-
-	public void setFailReason(String failReason) {
-		this.failReason = failReason;
-	}
-
-	public String getFinishTime() {
-		return this.finishTime;
-	}
-
-	public void setFinishTime(String finishTime) {
-		this.finishTime = finishTime;
-	}
 
 }

@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.profitsharing;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/profitsharing/chapter3_7.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class ProfitSharingAddReceiverRequest {
 	/**
 	 * <pre>
@@ -110,53 +112,5 @@ public class ProfitSharingAddReceiverRequest {
 	 */
 	@JsonProperty(value = "relation_type")
 	private String relationType;
-
-	public String getAppid() {
-		return this.appid;
-	}
-
-	public void setAppid(String appid) {
-		this.appid = appid;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getAccount() {
-		return this.account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEncryptedName() {
-		return this.encryptedName;
-	}
-
-	public void setEncryptedName(String encryptedName) {
-		this.encryptedName = encryptedName;
-	}
-
-	public String getRelationType() {
-		return this.relationType;
-	}
-
-	public void setRelationType(String relationType) {
-		this.relationType = relationType;
-	}
 
 }

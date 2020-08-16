@@ -1,5 +1,6 @@
 package top.gabin.tools.request.pay.combine;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +13,8 @@ import java.util.List;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_1.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class CombineTransactionsAppRequest {
 	/**
 	 * <pre>
@@ -137,79 +139,8 @@ public class CombineTransactionsAppRequest {
 	@JsonProperty(value = "notify_url")
 	private String notifyUrl;
 
-	public String getCombineAppid() {
-		return this.combineAppid;
-	}
-
-	public void setCombineAppid(String combineAppid) {
-		this.combineAppid = combineAppid;
-	}
-
-	public String getCombineMchid() {
-		return this.combineMchid;
-	}
-
-	public void setCombineMchid(String combineMchid) {
-		this.combineMchid = combineMchid;
-	}
-
-	public String getCombineOutTradeNo() {
-		return this.combineOutTradeNo;
-	}
-
-	public void setCombineOutTradeNo(String combineOutTradeNo) {
-		this.combineOutTradeNo = combineOutTradeNo;
-	}
-
-	public SceneInfo getSceneInfo() {
-		return this.sceneInfo;
-	}
-
-	public void setSceneInfo(SceneInfo sceneInfo) {
-		this.sceneInfo = sceneInfo;
-	}
-
-	public List<SubOrders> getSubOrders() {
-		return this.subOrders;
-	}
-
-	public void setSubOrders(List<SubOrders> subOrders) {
-		this.subOrders = subOrders;
-	}
-
-	public CombinePayerInfo getCombinePayerInfo() {
-		return this.combinePayerInfo;
-	}
-
-	public void setCombinePayerInfo(CombinePayerInfo combinePayerInfo) {
-		this.combinePayerInfo = combinePayerInfo;
-	}
-
-	public String getTimeStart() {
-		return this.timeStart;
-	}
-
-	public void setTimeStart(String timeStart) {
-		this.timeStart = timeStart;
-	}
-
-	public String getTimeExpire() {
-		return this.timeExpire;
-	}
-
-	public void setTimeExpire(String timeExpire) {
-		this.timeExpire = timeExpire;
-	}
-
-	public String getNotifyUrl() {
-		return this.notifyUrl;
-	}
-
-	public void setNotifyUrl(String notifyUrl) {
-		this.notifyUrl = notifyUrl;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SceneInfo {
 		/**
 		 * <pre>
@@ -240,25 +171,10 @@ public class CombineTransactionsAppRequest {
 		@JsonProperty(value = "payer_client_ip")
 		private String payerClientIp;
 
-		public String getDeviceId() {
-			return this.deviceId;
-		}
-
-		public void setDeviceId(String deviceId) {
-			this.deviceId = deviceId;
-		}
-
-		public String getPayerClientIp() {
-			return this.payerClientIp;
-		}
-
-		public void setPayerClientIp(String payerClientIp) {
-			this.payerClientIp = payerClientIp;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SubOrders {
 		/**
 		 * <pre>
@@ -355,65 +271,10 @@ public class CombineTransactionsAppRequest {
 		@JsonProperty(value = "settle_info")
 		private SettleInfo settleInfo;
 
-		public String getMchid() {
-			return this.mchid;
-		}
-
-		public void setMchid(String mchid) {
-			this.mchid = mchid;
-		}
-
-		public String getAttach() {
-			return this.attach;
-		}
-
-		public void setAttach(String attach) {
-			this.attach = attach;
-		}
-
-		public Amount getAmount() {
-			return this.amount;
-		}
-
-		public void setAmount(Amount amount) {
-			this.amount = amount;
-		}
-
-		public String getOutTradeNo() {
-			return this.outTradeNo;
-		}
-
-		public void setOutTradeNo(String outTradeNo) {
-			this.outTradeNo = outTradeNo;
-		}
-
-		public String getSubMchid() {
-			return this.subMchid;
-		}
-
-		public void setSubMchid(String subMchid) {
-			this.subMchid = subMchid;
-		}
-
-		public String getDescription() {
-			return this.description;
-		}
-
-		public void setDescription(String description) {
-			this.description = description;
-		}
-
-		public SettleInfo getSettleInfo() {
-			return this.settleInfo;
-		}
-
-		public void setSettleInfo(SettleInfo settleInfo) {
-			this.settleInfo = settleInfo;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class CombinePayerInfo {
 		/**
 		 * <pre>
@@ -429,17 +290,10 @@ public class CombineTransactionsAppRequest {
 		@JsonProperty(value = "openid")
 		private String openid;
 
-		public String getOpenid() {
-			return this.openid;
-		}
-
-		public void setOpenid(String openid) {
-			this.openid = openid;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Amount {
 		/**
 		 * <pre>
@@ -470,25 +324,10 @@ public class CombineTransactionsAppRequest {
 		@JsonProperty(value = "currency")
 		private String currency;
 
-		public Integer getTotalAmount() {
-			return this.totalAmount;
-		}
-
-		public void setTotalAmount(Integer totalAmount) {
-			this.totalAmount = totalAmount;
-		}
-
-		public String getCurrency() {
-			return this.currency;
-		}
-
-		public void setCurrency(String currency) {
-			this.currency = currency;
-		}
-
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class SettleInfo {
 		/**
 		 * <pre>
@@ -514,27 +353,12 @@ public class CombineTransactionsAppRequest {
 		 * 类型：int64
 		 * 描述：
 		 *  SettleInfo.profit_sharing为true时，该金额才生效。 
+		 *  注意：单笔订单最高补差金额为5000元
 		 *  示例值：10 
 		 * </pre>
 		 */
 		@JsonProperty(value = "subsidy_amount")
 		private Integer subsidyAmount;
-
-		public Boolean getProfitSharing() {
-			return this.profitSharing;
-		}
-
-		public void setProfitSharing(Boolean profitSharing) {
-			this.profitSharing = profitSharing;
-		}
-
-		public Integer getSubsidyAmount() {
-			return this.subsidyAmount;
-		}
-
-		public void setSubsidyAmount(Integer subsidyAmount) {
-			this.subsidyAmount = subsidyAmount;
-		}
 
 	}
 

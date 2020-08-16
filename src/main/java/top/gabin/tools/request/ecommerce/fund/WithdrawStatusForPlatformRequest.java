@@ -1,6 +1,7 @@
 package top.gabin.tools.request.ecommerce.fund;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/fund/chapter3_6.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("withdrawId")
 public class WithdrawStatusForPlatformRequest {
 	/**
 	 * <pre>
@@ -39,26 +41,7 @@ public class WithdrawStatusForPlatformRequest {
 	 *  示例值：200000000012122 
 	 * </pre>
 	 */
-	@JsonIgnore
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
-
-	@JsonIgnore
-	public String getWithdrawId() {
-		return this.withdrawId;
-	}
-
-	public void setWithdrawId(String withdrawId) {
-		this.withdrawId = withdrawId;
-	}
-
-	@JsonIgnore
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
 
 }

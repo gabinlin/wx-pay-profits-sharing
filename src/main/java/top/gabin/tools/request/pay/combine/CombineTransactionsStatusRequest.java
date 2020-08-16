@@ -1,6 +1,7 @@
 package top.gabin.tools.request.pay.combine;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_3.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties("combineOutTradeNo")
 public class CombineTransactionsStatusRequest {
 	/**
 	 * <pre>
@@ -27,14 +29,5 @@ public class CombineTransactionsStatusRequest {
 	@JsonIgnore
 	@JsonProperty(value = "combine_out_trade_no")
 	private String combineOutTradeNo;
-
-	@JsonIgnore
-	public String getCombineOutTradeNo() {
-		return this.combineOutTradeNo;
-	}
-
-	public void setCombineOutTradeNo(String combineOutTradeNo) {
-		this.combineOutTradeNo = combineOutTradeNo;
-	}
 
 }

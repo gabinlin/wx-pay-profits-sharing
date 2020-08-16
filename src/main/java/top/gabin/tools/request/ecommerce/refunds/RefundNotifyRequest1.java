@@ -1,5 +1,6 @@
 package top.gabin.tools.request.ecommerce.refunds;
 
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_3.shtml
  * </pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@JsonIgnoreProperties()
 public class RefundNotifyRequest1 {
 	/**
 	 * <pre>
@@ -158,87 +160,8 @@ public class RefundNotifyRequest1 {
 	@JsonProperty(value = "amount")
 	private Amount amount;
 
-	public String getSpMchid() {
-		return this.spMchid;
-	}
-
-	public void setSpMchid(String spMchid) {
-		this.spMchid = spMchid;
-	}
-
-	public String getSubMchid() {
-		return this.subMchid;
-	}
-
-	public void setSubMchid(String subMchid) {
-		this.subMchid = subMchid;
-	}
-
-	public String getOutTradeNo() {
-		return this.outTradeNo;
-	}
-
-	public void setOutTradeNo(String outTradeNo) {
-		this.outTradeNo = outTradeNo;
-	}
-
-	public String getTransactionId() {
-		return this.transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
-	}
-
-	public String getOutRefundNo() {
-		return this.outRefundNo;
-	}
-
-	public void setOutRefundNo(String outRefundNo) {
-		this.outRefundNo = outRefundNo;
-	}
-
-	public String getRefundId() {
-		return this.refundId;
-	}
-
-	public void setRefundId(String refundId) {
-		this.refundId = refundId;
-	}
-
-	public String getRefundStatus() {
-		return this.refundStatus;
-	}
-
-	public void setRefundStatus(String refundStatus) {
-		this.refundStatus = refundStatus;
-	}
-
-	public String getSuccessTime() {
-		return this.successTime;
-	}
-
-	public void setSuccessTime(String successTime) {
-		this.successTime = successTime;
-	}
-
-	public String getUserReceivedAccount() {
-		return this.userReceivedAccount;
-	}
-
-	public void setUserReceivedAccount(String userReceivedAccount) {
-		this.userReceivedAccount = userReceivedAccount;
-	}
-
-	public Amount getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(Amount amount) {
-		this.amount = amount;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	@JsonIgnoreProperties()
 	public static class Amount {
 		/**
 		 * <pre>
@@ -295,38 +218,6 @@ public class RefundNotifyRequest1 {
 		 */
 		@JsonProperty(value = "payer_refund")
 		private Integer payerRefund;
-
-		public Integer getTotal() {
-			return this.total;
-		}
-
-		public void setTotal(Integer total) {
-			this.total = total;
-		}
-
-		public Integer getRefund() {
-			return this.refund;
-		}
-
-		public void setRefund(Integer refund) {
-			this.refund = refund;
-		}
-
-		public Integer getPayerTotal() {
-			return this.payerTotal;
-		}
-
-		public void setPayerTotal(Integer payerTotal) {
-			this.payerTotal = payerTotal;
-		}
-
-		public Integer getPayerRefund() {
-			return this.payerRefund;
-		}
-
-		public void setPayerRefund(Integer payerRefund) {
-			this.payerRefund = payerRefund;
-		}
 
 	}
 
