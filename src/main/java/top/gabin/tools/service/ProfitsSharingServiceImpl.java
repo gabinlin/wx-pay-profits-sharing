@@ -1,6 +1,7 @@
 package top.gabin.tools.service;
 
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -14,15 +15,14 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import top.gabin.tools.auth.CacheService;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsRequest;
-import top.gabin.tools.request.ecommerce.applyments.ApplymentsSettlementStatusRequest;
-import top.gabin.tools.request.ecommerce.fund.*;
+import top.gabin.tools.request.ecommerce.fund.WithdrawExceptionLogRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawForPlatformRequest;
+import top.gabin.tools.request.ecommerce.fund.WithdrawForSubMchRequest;
 import top.gabin.tools.request.ecommerce.profitsharing.*;
 import top.gabin.tools.request.ecommerce.refunds.RefundApplyRequest;
 import top.gabin.tools.request.ecommerce.refunds.RefundNotifyRequest;
@@ -69,9 +69,8 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class ProfitsSharingServiceImpl implements ProfitsSharingService {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ProfitsSharingConfig config;
     private final HttpUtils httpUtils;
@@ -123,11 +122,11 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, x509Cert.getPublicKey());
 
-            byte[] data = message.getBytes("utf-8");
+            byte[] data = message.getBytes(StandardCharsets.UTF_8);
             byte[] cipherdata = cipher.doFinal(data);
             return Base64.getEncoder().encodeToString(cipherdata);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -254,12 +253,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     @Override
     public boolean verifyNotifySign(String timeStamp, String nonce, String body, String signed, String serialNo) {
         String beforeSign = timeStamp + "\n" + nonce + "\n" + body + "\n";
-        try {
-            return httpUtils.getVerifier().verify(serialNo, beforeSign.getBytes("utf-8"), signed);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return httpUtils.getVerifier().verify(serialNo, beforeSign.getBytes(StandardCharsets.UTF_8), signed);
     }
 
     @Override
@@ -272,7 +266,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 CombineTransactionsNotifyRequest1 request1 = JsonUtils.json2Bean(CombineTransactionsNotifyRequest1.class, json);
                 return Optional.ofNullable(request1);
             } catch (GeneralSecurityException | IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
         return Optional.empty();
@@ -354,7 +348,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 ProfitSharingNotifyRequest1 request1 = JsonUtils.json2Bean(ProfitSharingNotifyRequest1.class, json);
                 return Optional.ofNullable(request1);
             } catch (GeneralSecurityException | IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
         return Optional.empty();
@@ -387,7 +381,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 RefundNotifyRequest1 request1 = JsonUtils.json2Bean(RefundNotifyRequest1.class, json);
                 return Optional.ofNullable(request1);
             } catch (GeneralSecurityException | IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
         return Optional.empty();
@@ -557,7 +551,7 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
                 imageUploadResponse.setHttpStatusCode(response.getStatusLine().getStatusCode());
                 return Optional.of(imageUploadResponse);
             } else {
-                logger.info("签名验证失败");
+                log.info("签名验证失败");
             }
         }
         return Optional.empty();

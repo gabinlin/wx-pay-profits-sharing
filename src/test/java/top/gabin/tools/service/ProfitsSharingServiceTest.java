@@ -1,6 +1,7 @@
 package top.gabin.tools.service;
 
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -37,8 +38,8 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
+@Slf4j
 public class ProfitsSharingServiceTest {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     ProfitsSharingService profitsSharingService;
     X509Certificate certificate;
@@ -66,19 +67,19 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testQueryApplyments() {
         Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus("2000002140061723");
-        applymentsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        applymentsStatusResponse.ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
     public void testQueryApplyments1() {
         Optional<ApplymentsStatusResponse> applymentsStatusResponse = profitsSharingService.queryApplymentsStatus("20200420054724");
-        applymentsStatusResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        applymentsStatusResponse.ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
     public void testDownCert() {
         List<X509Certificate> certificateList = profitsSharingService.downloadCertificates();
-        logger.info("证书数量：" + certificateList.size());
+        log.info("证书数量：" + certificateList.size());
     }
 
     @Test
@@ -245,31 +246,31 @@ public class ProfitsSharingServiceTest {
     @Test
     public void testUploadImage() throws Exception {
         Optional<ImageUploadResponse> imageUploadResponse = profitsSharingService.uploadImage(new File("/Users/linjiabin/Downloads/IMG_1116.jpg"));
-        imageUploadResponse.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        imageUploadResponse.ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
     public void testQueryOnlineBalance() {
         Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount(getSubMchid());
-        response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
+        response.ifPresent(amountOnlineOfSubMchResponse -> log.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
     }
 
     @Test
     public void testQueryOnlineBalanceForPlatform() {
-        profitsSharingService.queryOnlineAmount(AccountType.BASIC).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
-        profitsSharingService.queryOnlineAmount(AccountType.FEES).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
-//        profitsSharingService.queryOnlineAmount(AccountType.OPERATION).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        profitsSharingService.queryOnlineAmount(AccountType.BASIC).ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
+        profitsSharingService.queryOnlineAmount(AccountType.FEES).ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
+//        profitsSharingService.queryOnlineAmount(AccountType.OPERATION).ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
     public void testQueryDayEndBalance() {
         Optional<AmountOnlineOfSubMchResponse> response = profitsSharingService.queryOnlineAmount(getSubMchid());
-        response.ifPresent(amountOnlineOfSubMchResponse -> logger.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
+        response.ifPresent(amountOnlineOfSubMchResponse -> log.info(JsonUtils.bean2Json(amountOnlineOfSubMchResponse)));
     }
 
     @Test
     public void testQueryDayEndBalanceForPlatform() {
-        profitsSharingService.queryDayEndAmount(AccountType.BASIC, new Date()).ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        profitsSharingService.queryDayEndAmount(AccountType.BASIC, new Date()).ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
@@ -281,13 +282,13 @@ public class ProfitsSharingServiceTest {
         request.setSubMchid(getSubMchid());
         request.setRemark("我要提现");
         Optional<WithdrawForSubMchResponse> withdraw = profitsSharingService.withdraw(request);
-        withdraw.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        withdraw.ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
     public void testQueryWithdraw() {
         Optional<WithdrawStatusForSubMchResponse> responseOptional = profitsSharingService.queryWithdrawStatus(getSubMchid(), "209000120133995202004211781163170");
-        responseOptional.ifPresent(response -> logger.info(JsonUtils.bean2Json(response)));
+        responseOptional.ifPresent(response -> log.info(JsonUtils.bean2Json(response)));
     }
 
     @Test
@@ -305,7 +306,7 @@ public class ProfitsSharingServiceTest {
         amount.setRefund(2);
         request.setAmount(amount);
         request.setOutRefundNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
-        profitsSharingService.refundApply(request).ifPresent(refundApplyResponse -> logger.info(JsonUtils.bean2Json(refundApplyResponse)));
+        profitsSharingService.refundApply(request).ifPresent(refundApplyResponse -> log.info(JsonUtils.bean2Json(refundApplyResponse)));
     }
 
     @Test
@@ -341,7 +342,7 @@ public class ProfitsSharingServiceTest {
                         off += count;
                         out.write(bytes, 0, count);
                     }
-                    logger.info(sb.toString());
+                    log.info(sb.toString());
                     gzipInputStream.close();
                     out.close();
                 } catch (IOException e) {
@@ -361,7 +362,7 @@ public class ProfitsSharingServiceTest {
                         writer.write(content);
                         sb.append(content);
                     }
-                    logger.info(sb.toString());
+                    log.info(sb.toString());
                     inputStream.close();
                     writer.close();
                 } catch (IOException e) {
@@ -377,7 +378,7 @@ public class ProfitsSharingServiceTest {
     }
 
     private void logger(Object obj) {
-        logger.info(JsonUtils.bean2Json(obj));
+        log.info(JsonUtils.bean2Json(obj));
     }
 
 

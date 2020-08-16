@@ -9,16 +9,16 @@ import com.wechat.pay.contrib.apache.httpclient.auth.Verifier;
 import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Validator;
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
@@ -34,14 +34,13 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 在原有CertificatesVerifier基础上，增加自动更新证书功能
  */
+@Slf4j
 public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
-
-    private static final Logger log = LoggerFactory.getLogger(AutoUpdateInCloudCertificatesVerifier.class);
 
     private boolean cloud;
 
-    private final String UPDATE_TIME_CACHE_KEY = "UPDATE_TIME_CACHE_KEY";;
-    private final String NEW_CREDENTIALS_CACHE_KEY = "NEW_CREDENTIALS_CACHE_KEY";;
+    private final String UPDATE_TIME_CACHE_KEY = "UPDATE_TIME_CACHE_KEY";
+    private final String NEW_CREDENTIALS_CACHE_KEY = "NEW_CREDENTIALS_CACHE_KEY";
 
     private CacheService cacheService;
 
@@ -52,22 +51,17 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
     private volatile Instant instant;
 
     //证书更新间隔时间，单位为分钟
-    private int minutesInterval;
+    private final int minutesInterval;
 
     private Verifier verifier;
 
-    private Credentials credentials;
+    private final Credentials credentials;
 
-    private byte[] apiV3Key;
+    private final byte[] apiV3Key;
 
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private List<X509Certificate> certificateList;
-
-    public String getSerialNo() {
-
-        return null;
-    }
 
     public List<X509Certificate> getLastCertificateList() {
         List<X509Certificate> certificateList = getCertificateList();
@@ -84,18 +78,20 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
     }
 
     private List<X509Certificate> getCertificateList() {
-        if (cloud) {
-            return cacheService.get(NEW_CREDENTIALS_CACHE_KEY, List.class);
-        } else {
+        if (cloud) return cacheService.getList(NEW_CREDENTIALS_CACHE_KEY);
+        else {
             return certificateList;
         }
     }
 
     //时间间隔枚举，支持一小时、六小时以及十二小时
     public enum TimeInterval {
-        OneHour(60), SixHours(60 * 6), TwelveHours(60 * 12);
+        OneHour(60),
+//        SixHours(60 * 6),
+//        TwelveHours(60 * 12)
+        ;
 
-        private int minutes;
+        private final int minutes;
 
         TimeInterval(int minutes) {
             this.minutes = minutes;
@@ -104,10 +100,6 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
         public int getMinutes() {
             return minutes;
         }
-    }
-
-    public AutoUpdateInCloudCertificatesVerifier(Credentials credentials, byte[] apiV3Key) {
-        this(credentials, apiV3Key, TimeInterval.OneHour.getMinutes(), null);
     }
 
     public AutoUpdateInCloudCertificatesVerifier(Credentials credentials, byte[] apiV3Key, CacheService cacheService) {
@@ -143,10 +135,6 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
         } else {
             this.instant = instant;
         }
-    }
-
-    public CacheService getCacheService() {
-        return cacheService;
     }
 
     public void setCacheService(CacheService cacheService) {
@@ -229,13 +217,13 @@ public class AutoUpdateInCloudCertificatesVerifier implements Verifier {
                 //解密
                 String cert = decryptor.decryptToString(
                         encryptCertificateNode.get("associated_data").toString().replaceAll("\"", "")
-                                .getBytes("utf-8"),
+                                .getBytes(StandardCharsets.UTF_8),
                         encryptCertificateNode.get("nonce").toString().replaceAll("\"", "")
-                                .getBytes("utf-8"),
+                                .getBytes(StandardCharsets.UTF_8),
                         encryptCertificateNode.get("ciphertext").toString().replaceAll("\"", ""));
 
                 X509Certificate x509Cert = PemUtil
-                        .loadCertificate(new ByteArrayInputStream(cert.getBytes("utf-8")));
+                        .loadCertificate(new ByteArrayInputStream(cert.getBytes(StandardCharsets.UTF_8)));
                 try {
                     x509Cert.checkValidity();
                 } catch (CertificateExpiredException | CertificateNotYetValidException e) {
