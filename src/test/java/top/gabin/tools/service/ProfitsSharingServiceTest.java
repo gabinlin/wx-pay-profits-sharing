@@ -7,8 +7,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import top.gabin.tools.config.ProfitsSharingConfig;
 import top.gabin.tools.constant.AccountType;
 import top.gabin.tools.request.ecommerce.applyments.ApplymentsModifySettlementRequest;
@@ -184,7 +182,7 @@ public class ProfitsSharingServiceTest {
         profitsSharingService.subsidiesCreate(request).ifPresent(this::logger);
     }
 
-    //    @Test
+    @Test
     public void subsidiesRefund() {
         SubsidiesRefundRequest request = new SubsidiesRefundRequest();
         request.setRefundId("50300704052020042200213151461");
@@ -336,7 +334,7 @@ public class ProfitsSharingServiceTest {
 //                    GZIPOutputStream writer = new GZIPOutputStream(out);
                     byte[] bytes = new byte[1024];
                     int off = 0;
-                    int count = 0;
+                    int count;
                     while ((count = gzipInputStream.read(bytes, off, bytes.length)) != -1) {
                         sb.append(new String(bytes));
                         off += count;
@@ -348,7 +346,6 @@ public class ProfitsSharingServiceTest {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return;
             } else {
                 InputStream inputStream = profitsSharingService.downloadBillFile(url);
                 File file = new File("/Users/linjiabin/data/bill/" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".csv");
