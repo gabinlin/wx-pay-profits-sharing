@@ -20,7 +20,7 @@ import java.util.List;
  * </pre>
  */
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties()
 public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	/**

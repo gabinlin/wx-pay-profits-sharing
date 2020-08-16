@@ -2,6 +2,7 @@ package top.gabin.tools.response.ecommerce.applyments;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.gabin.tools.response.AbstractResponse;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  * 404	RESOURCE_NOT_EXISTS	申请单不存在	确认入参，传入正确的申请单编号
  * </pre>
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ApplymentsDownCertificatesResponse extends AbstractResponse {
 	@JsonProperty(value = "data")

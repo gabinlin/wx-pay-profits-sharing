@@ -34,7 +34,7 @@ import top.gabin.tools.response.AbstractResponse;
  * </pre>
  */
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties()
 public class CombineTransactionsAppResponse extends AbstractResponse {
 	/**

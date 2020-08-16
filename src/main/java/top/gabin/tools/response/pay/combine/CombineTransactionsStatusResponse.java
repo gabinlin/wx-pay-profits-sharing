@@ -36,7 +36,7 @@ import java.util.List;
  * </pre>
  */
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties()
 public class CombineTransactionsStatusResponse extends AbstractResponse {
 	/**
