@@ -99,5 +99,19 @@ public class ApplymentsSettlementStatusResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "verify_result")
 	private String verifyResult;
+	
+	/**
+	 * <pre>
+	 * 字段名：汇款验证失败原因
+	 * 变量名：verify_fail_reason
+	 * 是否必填：是
+	 * 类型：string[1, 1024]
+	 * 描述：
+	 *  如果汇款验证成功为空，汇款验证失败为具体原因.
+	 *  示例值: 用户姓名/证件/手机不匹配，请核对后重试
+	 * </pre>
+	 */
+	@JsonProperty(value = "verify_fail_reason")
+	private String verifyFailReason;
 
 }
