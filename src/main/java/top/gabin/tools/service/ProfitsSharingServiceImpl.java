@@ -462,7 +462,6 @@ public class ProfitsSharingServiceImpl implements ProfitsSharingService {
     public Optional<String> downloadTradeBill(BillOfTradeRequest request) {
         Map<String, String> query = new HashMap<>();
         query.put("bill_date", request.getBillDate());
-        query.put("sub_mchid", request.getSubMchid());
         query.put("bill_type", request.getBillType());
         query.put("tar_type", request.getTarType());
         Optional<BillOfTradeResponse> response = get(BillOfTradeResponse.class, "https://api.mch.weixin.qq.com/v3/bill/tradebill", query);
