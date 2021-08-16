@@ -21,10 +21,11 @@ public class ProfitSharingNotifyRequest1 {
 	 * <pre>
 	 * 字段名：直连商户号
 	 * 变量名：mchid
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
 	 *  直连模式分账发起和出资商户。 
+	 *  注意：适用于直联商户模式
 	 *  示例值：1900000100 
 	 * </pre>
 	 */
@@ -35,10 +36,11 @@ public class ProfitSharingNotifyRequest1 {
 	 * <pre>
 	 * 字段名：服务商商户号
 	 * 变量名：sp_mchid
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
 	 *  服务商模式分账发起商户。 
+	 *  注意：适用于电商服务商 服务商模式
 	 *  示例值：1900000100 
 	 * </pre>
 	 */
@@ -49,10 +51,11 @@ public class ProfitSharingNotifyRequest1 {
 	 * <pre>
 	 * 字段名：子商户号
 	 * 变量名：sub_mchid
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
 	 *  服务商模式分账出资商户。 
+	 *  注意：适用于电商服务商 服务商模式
 	 *  示例值：1900000100 
 	 * </pre>
 	 */
@@ -150,7 +153,7 @@ public class ProfitSharingNotifyRequest1 {
 
 		/**
 		 * <pre>
-		 * 字段名：分账接收方帐号
+		 * 字段名：分账接收方账号
 		 * 变量名：account
 		 * 是否必填：是
 		 * 类型：string[1,64]

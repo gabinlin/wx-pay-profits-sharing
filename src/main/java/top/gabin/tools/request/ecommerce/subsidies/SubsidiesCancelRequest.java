@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <pre>
- * 对带有补差标识的订单，如果不需要补差，可在发起发起分账前，可调用这个接口进行取消补差。
+ * 对带有补差标识的订单，如果不需要补差，可在发起分账前，可调用这个接口进行取消补差。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/subsidies/chapter3_3.shtml
  * </pre>
  */
@@ -28,20 +28,6 @@ public class SubsidiesCancelRequest {
 	 */
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
-
-	/**
-	 * <pre>
-	 * 字段名：微信退款单号
-	 * 变量名：refund_id
-	 * 是否必填：否
-	 * 类型：string[1,64]
-	 * 描述：
-	 *  body 微信退款单号，微信系统退款返回的唯一标识。 
-	 *  示例值：3008450740201411110007820472 
-	 * </pre>
-	 */
-	@JsonProperty(value = "refund_id")
-	private String refundId;
 
 	/**
 	 * <pre>

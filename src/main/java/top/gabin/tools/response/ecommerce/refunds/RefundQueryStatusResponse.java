@@ -25,7 +25,7 @@ import java.util.List;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class RefundQueryStatusResponse extends AbstractResponse {
 	/**
@@ -88,7 +88,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 	 * <pre>
 	 * 字段名：退款渠道
 	 * 变量名：channel
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：string[1,16]
 	 * 描述：
 	 *  ORIGINAL：原路退款
@@ -105,7 +105,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 	 * <pre>
 	 * 字段名：退款入账账户
 	 * 变量名：user_received_account
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：string[1,64]
 	 * 描述：
 	 *  取当前退款单的退款入账方。
@@ -126,7 +126,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 	 * 是否必填：否
 	 * 类型：string[1,64]
 	 * 描述：
-	 *  退款成功时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日13点29分35秒。
+	 *  退款成功时间，退款状态status为SUCCESS（退款成功）时，返回该字段。遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日13点29分35秒。
 	 *  示例值： 2018-06-08T10:34:56+08:00 
 	 * </pre>
 	 */
@@ -157,7 +157,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 	 * 描述：
 	 *  退款状态，枚举值：
 	 *  SUCCESS：退款成功
-	 *  REFUNDCLOSE：退款关闭 
+	 *  CLOSE：退款关闭 
 	 *  PROCESSING：退款处理中
 	 *  ABNORMAL：退款异常，退款到银行发现用户的卡作废或者冻结了，导致原路退款银行卡失败，可前往【服务商平台—>交易中心】，手动处理此笔退款 
 	 *  示例值：SUCCESS 
@@ -184,7 +184,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 	 * 变量名：promotion_detail
 	 * 是否必填：否
 	 * 类型：array
-	 * 描述：优惠退款信息 
+	 * 描述：优惠退款信息，discount_refund>0时，返回该字段 
 	 * </pre>
 	 */
 	@JsonProperty(value = "promotion_detail")
@@ -226,7 +226,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * <pre>
 		 * 字段名：优惠退款金额
 		 * 变量名：discount_refund
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：int
 		 * 描述：
 		 *  优惠券的退款金额，原支付单的优惠按比例退款。 
@@ -240,7 +240,7 @@ public class RefundQueryStatusResponse extends AbstractResponse {
 		 * <pre>
 		 * 字段名：退款币种
 		 * 变量名：currency
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：string[1,18]
 		 * 描述：
 		 *  符合ISO 4217标准的三位字母代码，目前只支持人民币：CNY 。

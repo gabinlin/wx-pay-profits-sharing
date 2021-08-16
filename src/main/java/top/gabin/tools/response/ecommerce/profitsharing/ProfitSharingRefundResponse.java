@@ -20,7 +20,7 @@ import top.gabin.tools.response.AbstractResponse;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ProfitSharingRefundResponse extends AbstractResponse {
 	/**
@@ -131,7 +131,7 @@ public class ProfitSharingRefundResponse extends AbstractResponse {
 	 *  如果请求返回为处理中，则商户可以通过调用回退结果查询接口获取请求的最终处理结果，枚举值： 
 	 *  PROCESSING：处理中 
 	 *  SUCCESS：已成功 
-	 *  FAIL：已失败 
+	 *  FAILED：已失败 
 	 *  
 	 *  注意：如果返回为处理中，请勿变更商户回退单号，使用相同的参数再次发起分账回退，否则会出现资金风险 在处理中状态的回退单如果5天没有成功，会因为超时被设置为已失败
 	 *  示例值：SUCCESS 

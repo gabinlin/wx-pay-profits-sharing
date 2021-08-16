@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <pre>
- * 普通服务商（支付机构、银行不可用），可使用本接口修改其进件、已签约的特约商户-结算账户信息。
+ * 服务商/电商平台（不包括支付机构、银行），可使用本接口，修改其进件且已签约特约商户/二级商户的结算银行账户。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/applyments/chapter3_4.shtml
  * </pre>
  */
@@ -53,7 +53,10 @@ public class ApplymentsModifySettlementRequest {
 	 * 是否必填：是
 	 * 类型：string[1,128]
 	 * 描述：
-	 *  body 请填写开户银行名称，详细参见《开户银行对照表》。 
+	 *  body 请填写开户银行名称，详细参见开户银行对照表。 
+	 *  注：
+	 *  17家直连银行，请根据开户银行对照表直接填写银行名 ;
+	 *  非17家直连银行，该参数请填写为“其他银行”
 	 *  示例值：工商银行 
 	 * </pre>
 	 */
@@ -67,7 +70,7 @@ public class ApplymentsModifySettlementRequest {
 	 * 是否必填：是
 	 * 类型：string[1,128]
 	 * 描述：
-	 *  body 需至少精确到市，详细参见《省市区编号对照表》。
+	 *  body 需至少精确到市，详细参见省市区编号对照表。
 	 *  示例值：110000 
 	 * </pre>
 	 */
@@ -92,7 +95,7 @@ public class ApplymentsModifySettlementRequest {
 	 * 变量名：bank_branch_id
 	 * 是否必填：否
 	 * 类型：string[1,128]
-	 * 描述：body 若开户银行为“其他银行”，则需二选一填写“开户银行全称（含支行）”或“开户银行联行号”。 填写银行联行号，详细参见《开户银行全称（含支行）对照表》。 示例值：402713354941 
+	 * 描述：body 若开户银行为“其他银行”，则需二选一填写“开户银行全称（含支行）”或“开户银行联行号”。 填写银行联行号，详细参见开户银行全称（含支行）对照表。 示例值：402713354941 
 	 * </pre>
 	 */
 	@JsonProperty(value = "bank_branch_id")
@@ -103,10 +106,10 @@ public class ApplymentsModifySettlementRequest {
 	 * 字段名：银行账号
 	 * 变量名：account_number
 	 * 是否必填：是
-	 * 类型：string[1,128]
+	 * 类型：string[1,1024]
 	 * 描述：
-	 *  body 1、数字，长度遵循系统支持的对公/对私卡号长度要求
-	 *  2、该字段需进行加密处理，加密方法详见《敏感信息加密说明》。(提醒：必须在HTTP头中上送Wechatpay-Serial) 
+	 *  body 1、数字，长度遵循系统支持的开户银行对照表中对公/对私卡号长度要求
+	 *  2、该字段需进行加密处理，加密方法详见敏感信息加密说明。(提醒：必须在HTTP头中上送Wechatpay-Serial) 
 	 *  示例值：d+xT+MQCvrLHUVDWv/8MR/dB7TkXM2YYZlokmXzFsWs35NXUot7C0NcxIrUF5FnxqCJHkNgKtxa6RxEYyba1+VBRLnqKG2fSy/Y5qDN08Ej9zHCwJjq52Wg1VG8MRugli9YMI1fI83KGBxhuXyemgS/hqFKsfYGiOkJqjTUpgY5VqjtL2N4l4z11T0ECB/aSyVXUysOFGLVfSrUxMPZy6jWWYGvT1+4P633f+R+ki1gT4WF/2KxZOYmli385ZgVhcR30mr4/G3HBcxi13zp7FnEeOsLlvBmI1PHN4C7Rsu3WL8sPndjXTd75kPkyjqnoMRrEEaYQE8ZRGYoeorwC+w== 
 	 * </pre>
 	 */

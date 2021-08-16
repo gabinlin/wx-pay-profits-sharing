@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <pre>
- * 当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，微信支付将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家帐号上。
+ * 当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，微信支付将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家账号上。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/refunds/chapter3_1.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEM_ERROR	接口返回错误	请不要更换商户退款单号，请使用相同参数再次调用API。
@@ -27,7 +27,7 @@ import java.util.List;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class RefundApplyResponse extends AbstractResponse {
 	/**
@@ -91,7 +91,7 @@ public class RefundApplyResponse extends AbstractResponse {
 	 * 是否必填：否
 	 * 类型：array
 	 * 描述：
-	 *  优惠退款功能信息 
+	 *  优惠退款功能信息，discount_refund>0时，返回该字段 
 	 *  示例值：见示例 
 	 * </pre>
 	 */
@@ -134,7 +134,7 @@ public class RefundApplyResponse extends AbstractResponse {
 		 * <pre>
 		 * 字段名：优惠退款金额
 		 * 变量名：discount_refund
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：int
 		 * 描述：
 		 *  优惠券的退款金额，原支付单的优惠按比例退款。 
@@ -148,7 +148,7 @@ public class RefundApplyResponse extends AbstractResponse {
 		 * <pre>
 		 * 字段名：退款币种
 		 * 变量名：currency
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：string[1,18]
 		 * 描述：
 		 *  符合ISO 4217标准的三位字母代码，目前只支持人民币：CNY 。

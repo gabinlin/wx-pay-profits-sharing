@@ -14,13 +14,14 @@ import top.gabin.tools.response.AbstractResponse;
  * 500	SYSTEM_ERROR	系统错误	系统异常，请使用相同参数稍后重新调用
  * 400	PARAM_ERROR	订单号格式不正确	请使用正确的参数重新调用
  * 400	INVALID_REQUEST	非分账订单不支持完结分账	请根据返回的错误信息确认违反的业务规则
+ * 订单处理中，请稍后重试	订单未正常结算（如余额不足等原因）		
  * 429	FREQUENCY_LIMITED	对同笔订单分账频率过高	请降低频率后重试
  * 403	NOT_ENOUGH	分账金额为0	分账已完成，无需再请求分账完结
  * 403	NO_AUTH	商户无权限	请开通商户号分账权限
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ProfitSharingFinishResponse extends AbstractResponse {
 	/**

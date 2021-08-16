@@ -22,7 +22,7 @@ public class ProfitSharingAddReceiverRequest {
 	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
-	 *  body 微信分配的公众账号ID 
+	 *  body 电商平台的appid（公众号APPID或者小程序APPID） 
 	 *  示例值：wx8888888888888888 
 	 * </pre>
 	 */

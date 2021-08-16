@@ -18,12 +18,12 @@ import lombok.EqualsAndHashCode;
 public class AmountDayEndOfSubMchRequest {
 	/**
 	 * <pre>
-	 * 字段名：电商特约商户商户号
+	 * 字段名：二级商户号
 	 * 变量名：sub_mchid
 	 * 是否必填：是
-	 * 类型：string[1,16]
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  path 电商特约商户的商户号，由微信支付生成并下发。 
+	 *  path 电商平台二级商户号，由微信支付生成并下发。 
 	 *  示例值：1222212222 
 	 * </pre>
 	 */
@@ -38,7 +38,7 @@ public class AmountDayEndOfSubMchRequest {
 	 * 是否必填：是
 	 * 类型：string[1,10]
 	 * 描述：
-	 *  body 指定查询商户日终余额的日期 
+	 *   指定查询商户日终余额的日期 
 	 *  示例值：2019-08-17 
 	 * </pre>
 	 */

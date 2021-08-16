@@ -24,7 +24,7 @@ public class ProfitSharingApplyRequest {
 	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
-	 *  body 微信分配的公众账号ID。 
+	 *  body 电商平台的appid（公众号APPID或者小程序APPID）。 
 	 *  示例值：wx8888888888888888 
 	 * </pre>
 	 */
@@ -109,7 +109,7 @@ public class ProfitSharingApplyRequest {
 		 * <pre>
 		 * 字段名：分账接收方类型
 		 * 变量名：type
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：string[1,32]
 		 * 描述：
 		 *  分账接收方类型，枚举值： 
@@ -129,7 +129,7 @@ public class ProfitSharingApplyRequest {
 		 * 类型：string[1,64]
 		 * 描述：
 		 *  分账接收方账号：
-		 *  类型是MERCHANT_ID时，是商户ID
+		 *  类型是MERCHANT_ID时，是商户号（mch_id或者sub_mch_id）
 		 *  类型是PERSONAL_OPENID时，是个人openid，openid获取方法 
 		 *  示例值：1900000109 
 		 * </pre>
@@ -167,7 +167,7 @@ public class ProfitSharingApplyRequest {
 
 		/**
 		 * <pre>
-		 * 字段名：分账个姓名
+		 * 字段名：分账个人姓名
 		 * 变量名：receiver_name
 		 * 是否必填：条件选填
 		 * 类型：string[1, 10240]

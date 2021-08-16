@@ -41,7 +41,7 @@ public class AmountDayEndOfPlatformRequest {
 	 * 是否必填：是
 	 * 类型：string[1,10]
 	 * 描述：
-	 *  body 指定查询商户日终余额的日期 
+	 *   指定查询商户日终余额的日期 
 	 *  示例值：2019-08-17 
 	 * </pre>
 	 */

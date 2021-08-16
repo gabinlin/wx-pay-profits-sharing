@@ -21,9 +21,9 @@ public class WithdrawStatusForPlatformRequest1 {
 	 * 字段名：商户提现单号
 	 * 变量名：out_request_no
 	 * 是否必填：是
-	 * 类型：string[1,32]
+	 * 类型：string[1, 32]
 	 * 描述：
-	 *  path 商户提现单号，由商户自定义生成。 
+	 *  path商户提现单号，由商户自定义生成。 
 	 *  示例值：20190611222222222200000000012122 
 	 * </pre>
 	 */

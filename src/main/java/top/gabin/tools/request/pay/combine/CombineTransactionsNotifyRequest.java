@@ -20,7 +20,7 @@ public class CombineTransactionsNotifyRequest {
 	 * 字段名：通知ID
 	 * 变量名：id
 	 * 是否必填：是
-	 * 类型：string[1,32]
+	 * 类型：string[1,36]
 	 * 描述：
 	 *  通知的唯一ID 
 	 *  示例值：EV-2018022511223320873 
@@ -34,10 +34,10 @@ public class CombineTransactionsNotifyRequest {
 	 * 字段名：通知创建时间
 	 * 变量名：create_time
 	 * 是否必填：是
-	 * 类型：string[1,16]
+	 * 类型：string[1,32]
 	 * 描述：
-	 *  通知创建的时间，格式为yyyyMMddHHmmss 
-	 *  示例值：20180225112233 
+	 *  通知创建的时间， 遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss.表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示北京时间2015年05月20日13点29分35秒。 
+	 *  示例值：2015-05-20T13:29:35+08:00 
 	 * </pre>
 	 */
 	@JsonProperty(value = "create_time")

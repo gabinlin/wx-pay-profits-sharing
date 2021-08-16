@@ -54,7 +54,7 @@ public class CombineTransactionsCloseRequest {
 	 * 是否必填：是
 	 * 类型：array
 	 * 描述：
-	 *  body 最多支持子单条数：50 
+	 *  body 最多支持子单条数：10 
 	 *  
 	 * </pre>
 	 */
@@ -92,21 +92,6 @@ public class CombineTransactionsCloseRequest {
 		 */
 		@JsonProperty(value = "out_trade_no")
 		private String outTradeNo;
-
-		/**
-		 * <pre>
-		 * 字段名：二级商户号
-		 * 变量名：sub_mchid
-		 * 是否必填：是
-		 * 类型：string[1,32]
-		 * 描述：
-		 *  二级商户商户号，由微信支付生成并下发。 
-		 *  注意：仅适用于电商平台 服务商
-		 *  示例值：1900000109 
-		 * </pre>
-		 */
-		@JsonProperty(value = "sub_mchid")
-		private String subMchid;
 
 	}
 

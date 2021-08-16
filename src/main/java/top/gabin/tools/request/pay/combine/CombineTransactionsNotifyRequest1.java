@@ -24,7 +24,7 @@ public class CombineTransactionsNotifyRequest1 {
 	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
-	 *  合单发起方的appid。（即电商平台appid）
+	 *  合单发起方的appid。
 	 *  示例值：wxd678efh567hg6787 
 	 * </pre>
 	 */
@@ -38,7 +38,7 @@ public class CombineTransactionsNotifyRequest1 {
 	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
-	 *  合单发起方商户号。（即电商平台mchid） 
+	 *  合单发起方商户号。
 	 *  示例值：1900000109 
 	 * </pre>
 	 */
@@ -78,7 +78,7 @@ public class CombineTransactionsNotifyRequest1 {
 	 * 是否必填：是
 	 * 类型：array
 	 * 描述：
-	 *  最多支持子单条数：50 
+	 *  最多支持子单条数：10 
 	 *  
 	 * </pre>
 	 */
@@ -89,7 +89,7 @@ public class CombineTransactionsNotifyRequest1 {
 	 * <pre>
 	 * 字段名：+支付者
 	 * 变量名：combine_payer_info
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：object
 	 * 描述：示例值：见请求示例 
 	 * </pre>
@@ -129,7 +129,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 * 是否必填：是
 		 * 类型：string[1,32]
 		 * 描述：
-		 *  子单发起方商户号，必须与发起方Appid有绑定关系。（即电商平台mchid）
+		 *  子单发起方商户号，必须与发起方Appid有绑定关系。
 		 *  示例值：1900000109 
 		 * </pre>
 		 */
@@ -178,10 +178,10 @@ public class CombineTransactionsNotifyRequest1 {
 		 * <pre>
 		 * 字段名：付款银行
 		 * 变量名：bank_type
-		 * 是否必填：否
+		 * 是否必填：是
 		 * 类型：string[1,16]
 		 * 描述：
-		 *  银行类型，采用字符串类型的银行标识。 
+		 *  银行类型，采用字符串类型的银行标识。银行标识请参考《银行类型对照表》 
 		 *  示例值：CMC 
 		 * </pre>
 		 */
@@ -207,7 +207,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 * 字段名：支付完成时间
 		 * 变量名：success_time
 		 * 是否必填：是
-		 * 类型：string[1,16]
+		 * 类型：string[1,32]
 		 * 描述：
 		 *  订单支付时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss:sss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss:sss表示时分秒毫秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35.120+08:00表示，北京时间2015年5月20日 13点29分35秒。 
 		 *  示例值：2015-05-20T13:29:35.120+08:00 
@@ -247,21 +247,6 @@ public class CombineTransactionsNotifyRequest1 {
 
 		/**
 		 * <pre>
-		 * 字段名：二级商户号
-		 * 变量名：sub_mchid
-		 * 是否必填：是
-		 * 类型：string[1,32]
-		 * 描述：
-		 *  二级商户商户号，由微信支付生成并下发。 
-		 *  注意：仅适用于电商平台 服务商
-		 *  示例值：1900000109 
-		 * </pre>
-		 */
-		@JsonProperty(value = "sub_mchid")
-		private String subMchid;
-
-		/**
-		 * <pre>
 		 * 字段名：+订单金额
 		 * 变量名：amount
 		 * 是否必填：是
@@ -271,6 +256,18 @@ public class CombineTransactionsNotifyRequest1 {
 		 */
 		@JsonProperty(value = "amount")
 		private Amount amount;
+
+		/**
+		 * <pre>
+		 * 字段名：+优惠功能
+		 * 变量名：promotion_detail
+		 * 是否必填：否
+		 * 类型：array
+		 * 描述：优惠功能，子单有核销优惠券时有返回 
+		 * </pre>
+		 */
+		@JsonProperty(value = "promotion_detail")
+		private List<PromotionDetail> promotionDetail;
 
 	}
 
@@ -317,7 +314,7 @@ public class CombineTransactionsNotifyRequest1 {
 		 * 字段名：标价币种
 		 * 变量名：currency
 		 * 是否必填：是
-		 * 类型：string[1,8]
+		 * 类型：string[1,16]
 		 * 描述：
 		 *  符合ISO 4217标准的三位字母代码，人民币：CNY。
 		 *  示例值：CNY 
@@ -353,6 +350,242 @@ public class CombineTransactionsNotifyRequest1 {
 		 */
 		@JsonProperty(value = "payer_currency")
 		private String payerCurrency;
+
+	}
+
+	@EqualsAndHashCode
+	@Data
+	@JsonIgnoreProperties()
+	public static class PromotionDetail {
+		/**
+		 * <pre>
+		 * 字段名：券ID
+		 * 变量名：coupon_id
+		 * 是否必填：是
+		 * 类型：string[1, 32]
+		 * 描述：
+		 *  券ID 
+		 *  示例值：109519 
+		 * </pre>
+		 */
+		@JsonProperty(value = "coupon_id")
+		private String couponId;
+
+		/**
+		 * <pre>
+		 * 字段名：优惠名称
+		 * 变量名：name
+		 * 是否必填：否
+		 * 类型：string[1, 64]
+		 * 描述：
+		 *  优惠名称 
+		 *  示例值：单品惠-6 
+		 * </pre>
+		 */
+		@JsonProperty(value = "name")
+		private String name;
+
+		/**
+		 * <pre>
+		 * 字段名：优惠范围
+		 * 变量名：scope
+		 * 是否必填：否
+		 * 类型：string[1, 32]
+		 * 描述：
+		 *  GLOBAL：全场代金券
+		 *  SINGLE：单品优惠 
+		 *  示例值：GLOBALSINGLE 
+		 * </pre>
+		 */
+		@JsonProperty(value = "scope")
+		private String scope;
+
+		/**
+		 * <pre>
+		 * 字段名：优惠类型
+		 * 变量名：type
+		 * 是否必填：否
+		 * 类型：string[1,8]
+		 * 描述：
+		 *  CASH- 代金券，需要走结算资金的预充值型代金券
+		 *  NOCASH- 优惠券，不走结算资金的免充值型优惠券
+		 *  示例值：CASH 
+		 * </pre>
+		 */
+		@JsonProperty(value = "type")
+		private String type;
+
+		/**
+		 * <pre>
+		 * 字段名：优惠券金额
+		 * 变量名：amount
+		 * 是否必填：是
+		 * 类型：int
+		 * 描述：
+		 *  当前子单中享受的优惠券金额 
+		 *  示例值：100 
+		 * </pre>
+		 */
+		@JsonProperty(value = "amount")
+		private Integer amount;
+
+		/**
+		 * <pre>
+		 * 字段名：活动ID
+		 * 变量名：stock_id
+		 * 是否必填：否
+		 * 类型：string[1, 32]
+		 * 描述：
+		 *  活动ID，批次ID 
+		 *  示例值：931386 
+		 * </pre>
+		 */
+		@JsonProperty(value = "stock_id")
+		private String stockId;
+
+		/**
+		 * <pre>
+		 * 字段名：微信出资
+		 * 变量名：wechatpay_contribute
+		 * 是否必填：否
+		 * 类型：int
+		 * 描述：
+		 *  单位为分 
+		 *  示例值：100 
+		 * </pre>
+		 */
+		@JsonProperty(value = "wechatpay_contribute")
+		private Integer wechatpayContribute;
+
+		/**
+		 * <pre>
+		 * 字段名：商户出资
+		 * 变量名：merchant_contribute
+		 * 是否必填：否
+		 * 类型：int
+		 * 描述：
+		 *  单位为分 
+		 *  示例值：100 
+		 * </pre>
+		 */
+		@JsonProperty(value = "merchant_contribute")
+		private Integer merchantContribute;
+
+		/**
+		 * <pre>
+		 * 字段名：其他出资
+		 * 变量名：other_contribute
+		 * 是否必填：否
+		 * 类型：int
+		 * 描述：
+		 *  单位为分 
+		 *  示例值：100 
+		 * </pre>
+		 */
+		@JsonProperty(value = "other_contribute")
+		private Integer otherContribute;
+
+		/**
+		 * <pre>
+		 * 字段名：优惠币种
+		 * 变量名：currency
+		 * 是否必填：否
+		 * 类型：string[1,16]
+		 * 描述：
+		 *  CNY：人民币，境内商户号仅支持人民币。 
+		 *  示例值：CNY 
+		 * </pre>
+		 */
+		@JsonProperty(value = "currency")
+		private String currency;
+
+		/**
+		 * <pre>
+		 * 字段名：+单品列表
+		 * 变量名：goods_detail
+		 * 是否必填：否
+		 * 类型：array
+		 * 描述：单品列表 
+		 * </pre>
+		 */
+		@JsonProperty(value = "goods_detail")
+		private List<GoodsDetail> goodsDetail;
+
+	}
+
+	@EqualsAndHashCode
+	@Data
+	@JsonIgnoreProperties()
+	public static class GoodsDetail {
+		/**
+		 * <pre>
+		 * 字段名：商品编码
+		 * 变量名：goods_id
+		 * 是否必填：是
+		 * 类型：string[1, 32]
+		 * 描述：
+		 *  商品编码 
+		 *  示例值：M1006 
+		 * </pre>
+		 */
+		@JsonProperty(value = "goods_id")
+		private String goodsId;
+
+		/**
+		 * <pre>
+		 * 字段名：商品数量
+		 * 变量名：quantity
+		 * 是否必填：是
+		 * 类型：int
+		 * 描述：
+		 *  商品数量 
+		 *  示例值：1 
+		 * </pre>
+		 */
+		@JsonProperty(value = "quantity")
+		private Integer quantity;
+
+		/**
+		 * <pre>
+		 * 字段名：商品价格
+		 * 变量名：unit_price
+		 * 是否必填：是
+		 * 类型：int
+		 * 描述：
+		 *  商品价格 
+		 *  示例值：100 
+		 * </pre>
+		 */
+		@JsonProperty(value = "unit_price")
+		private Integer unitPrice;
+
+		/**
+		 * <pre>
+		 * 字段名：商品优惠金额
+		 * 变量名：discount_amount
+		 * 是否必填：是
+		 * 类型：int
+		 * 描述：
+		 *  商品优惠金额 
+		 *  示例值：1 
+		 * </pre>
+		 */
+		@JsonProperty(value = "discount_amount")
+		private Integer discountAmount;
+
+		/**
+		 * <pre>
+		 * 字段名：商品备注
+		 * 变量名：goods_remark
+		 * 是否必填：否
+		 * 类型：string[1, 128]
+		 * 描述：
+		 *  商品备注 
+		 *  示例值：商品备注信息 
+		 * </pre>
+		 */
+		@JsonProperty(value = "goods_remark")
+		private String goodsRemark;
 
 	}
 

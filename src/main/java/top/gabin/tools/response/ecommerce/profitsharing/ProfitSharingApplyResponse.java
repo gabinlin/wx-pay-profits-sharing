@@ -16,12 +16,11 @@ import top.gabin.tools.response.AbstractResponse;
  * 400	INVALID_REQUEST	非分账订单不支持分账	请根据返回的错误信息确认违反的业务规则
  * 429	FREQUENCY_LIMITED	对同笔订单分账频率过高	请降低频率后重试
  * 403	RULE_LIMIT	分账金额超出最大分账比例	分账金额超出最大分账比例
- * 403	NOT_ENOUGH	分账金额不足	调整分账金额
  * 403	NO_AUTH	商户无权限	请开通商户号分账权限
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ProfitSharingApplyResponse extends AbstractResponse {
 	/**

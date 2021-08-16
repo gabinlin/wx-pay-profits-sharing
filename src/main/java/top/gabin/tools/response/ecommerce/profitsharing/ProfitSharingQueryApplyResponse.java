@@ -20,7 +20,7 @@ import java.util.List;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	/**
@@ -87,10 +87,8 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	 * 类型：string[1,32]
 	 * 描述：
 	 *  分账单状态，枚举值： 
-	 *  ACCEPTED：受理成功 
 	 *  PROCESSING：处理中 
-	 *  FINISHED：分账成功 
-	 *  CLOSED：处理失败，已关单 
+	 *  FINISHED：处理完成 
 	 *  示例值：FINISHED 
 	 * </pre>
 	 */
@@ -101,9 +99,9 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	 * <pre>
 	 * 字段名：+分账接收方列表
 	 * 变量名：receivers
-	 * 是否必填：是
+	 * 是否必填：否
 	 * 类型：array
-	 * 描述：分账接收方列表。 
+	 * 描述：分账接收方列表。当查询分账完结的执行结果时，不返回该字段 
 	 * </pre>
 	 */
 	@JsonProperty(value = "receivers")
@@ -116,7 +114,8 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 	 * 是否必填：否
 	 * 类型：string[1,32]
 	 * 描述：
-	 *  关单原因描述，枚举值： 
+	 *  关单原因描述，当分账单状态status为CLOSED（处理失败，已关单）时，返回该字段。
+	 *  枚举值： 
 	 *  NO_AUTH：分账授权已解除 
 	 *  示例值：NO_AUTH 
 	 * </pre>
@@ -208,9 +207,7 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		 *  分账结果，枚举值： 
 		 *  PENDING：待分账 
 		 *  SUCCESS：分账成功 
-		 *  ADJUST：分账失败待调账 
-		 *  RETURNED：已转回分账方 
-		 *  CLOSED：已关闭 
+		 *  CLOSED：分账失败已关闭 
 		 *  示例值：SUCCESS 
 		 * </pre>
 		 */
@@ -238,7 +235,8 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		 * 是否必填：否
 		 * 类型：string[1,32]
 		 * 描述：
-		 *  分账失败原因，枚举值：
+		 *  分账失败原因，当分账结果result为RETURNED（已转回分账方）或CLOSED（已关闭）时，返回该字段
+		 *  枚举值：
 		 *  ACCOUNT_ABNORMAL：分账接收账户异常 
 		 *  NO_RELATION：分账关系已解除 
 		 *  RECEIVER_HIGH_RISK：高风险接收方
@@ -272,7 +270,7 @@ public class ProfitSharingQueryApplyResponse extends AbstractResponse {
 		 * 类型：string[1,64]
 		 * 描述：
 		 *  分账接收方账号：
-		 *  类型是MERCHANT_ID时，是商户ID
+		 *  类型是MERCHANT_ID时，是商户号（mch_id或者sub_mch_id）
 		 *  类型是PERSONAL_OPENID时，是个人openid 
 		 *  示例值：1900000109 
 		 * </pre>

@@ -62,7 +62,7 @@ public class ProfitSharingQueryRefundRequest {
 	 * 是否必填：是
 	 * 类型：string[1,64]
 	 * 描述：
-	 *  此回退单号是商户在自己后台生成的一个新的回退单号，在商户后台唯一 。
+	 *  调用回退接口提供的商户系统内部的回退单号
 	 *  示例值：R20190516001 
 	 * </pre>
 	 */

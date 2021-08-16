@@ -8,7 +8,7 @@ import top.gabin.tools.response.AbstractResponse;
 
 /**
  * <pre>
- * 对带有补差标识的订单，如果不需要补差，可在发起发起分账前，可调用这个接口进行取消补差。
+ * 对带有补差标识的订单，如果不需要补差，可在发起分账前，可调用这个接口进行取消补差。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/subsidies/chapter3_3.shtml
  * 状态码	错误码	描述	解决方案
  * 500	SYSTEM_ERROR	系统错误	系统异常，请使用相同参数稍后重新调用
@@ -18,7 +18,7 @@ import top.gabin.tools.response.AbstractResponse;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class SubsidiesCancelResponse extends AbstractResponse {
 	/**
@@ -48,20 +48,6 @@ public class SubsidiesCancelResponse extends AbstractResponse {
 	 */
 	@JsonProperty(value = "transaction_id")
 	private String transactionId;
-
-	/**
-	 * <pre>
-	 * 字段名：微信退款单号
-	 * 变量名：refund_id
-	 * 是否必填：否
-	 * 类型：string[1,64]
-	 * 描述：
-	 *  微信退款单号，微信系统退款返回的唯一标识。 
-	 *  示例值：3008450740201411110007820472 
-	 * </pre>
-	 */
-	@JsonProperty(value = "refund_id")
-	private String refundId;
 
 	/**
 	 * <pre>

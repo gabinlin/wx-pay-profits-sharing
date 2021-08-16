@@ -11,13 +11,13 @@ import top.gabin.tools.response.AbstractResponse;
  * 通过此接口可以查询本商户号指定日期当天24点的账户余额。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_4.shtml
  * 状态码	错误码	描述	解决方案
- * 403	NO_AUTH	无接口权限	请确认是否已经开通相关权限
- * 400	INVALID_REQUEST	日终余额当日无数据	
+ * 403	NO_AUTH	当前商户号没有使用该接口的权限	请确认是否已经开通相关权限
+ * 400	INVALID_REQUEST	该账户在指定时间不存在	请检查account_type和date输入是否正确，修改后重新调用
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class AmountDayEndOfPlatformResponse extends AbstractResponse {
 	/**

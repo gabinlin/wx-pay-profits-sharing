@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +38,11 @@ public class BuilderDTOUtils {
     public void builder(String url, String path, String fileName) throws IOException {
         String[] modules = url.split("/wxpay/")[1].split("chapter")[0].split("/");
         Document document = Jsoup.connect(url).get();
+        String redirectUrl;
+        // 由于新的文档使用了js脚本转跳，所以需要递归去获取实际的文档地址
+        while ((redirectUrl = getRedirect(document)) != null) {
+            document = Jsoup.connect(redirectUrl).get();
+        }
         // 单页文档中有多个接口
         boolean mulEntity = document.select(".part").size() > 4;
         int[] is = new int[]{-1, -1};
@@ -151,6 +153,18 @@ public class BuilderDTOUtils {
             }
         }
 
+    }
+
+    private String getRedirect(Document document) {
+        Optional<Element> script = document.select("script").stream()
+                .filter(o -> o.html().startsWith("window.location.href=")).findFirst();
+        if (script.isPresent()) {
+            String url = script.get().html().replaceAll("window.location.href=", "").replaceAll("\"", "");
+            String baseUri = document.baseUri();
+            String uri = baseUri.substring(0, baseUri.indexOf("/", baseUri.indexOf("//") + 2));
+            return uri + url;
+        }
+        return null;
     }
 
     private boolean getCallSuper(List<DTO> list) {

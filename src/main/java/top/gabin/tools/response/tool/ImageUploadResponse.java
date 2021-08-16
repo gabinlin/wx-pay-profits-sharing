@@ -24,7 +24,7 @@ import top.gabin.tools.response.AbstractResponse;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class ImageUploadResponse extends AbstractResponse {
 	/**

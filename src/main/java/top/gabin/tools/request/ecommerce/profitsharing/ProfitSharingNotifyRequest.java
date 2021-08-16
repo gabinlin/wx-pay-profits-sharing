@@ -52,9 +52,9 @@ public class ProfitSharingNotifyRequest {
 	 * 类型：string[1,32]
 	 * 描述：
 	 *  通知的类型： 
-	 *  PROFITSHARING：分账 
-	 *  PROFITSHARING_RETURN：分账回退 
-	 *  示例值：PROFITSHARING 
+	 *  TRANSACTION.SUCCESS：分账
+	 *  TRANSACTION.SUCCESS：分账回退
+	 *  示例值：TRANSACTION.SUCCESS 
 	 * </pre>
 	 */
 	@JsonProperty(value = "event_type")
@@ -81,7 +81,7 @@ public class ProfitSharingNotifyRequest {
 	 * 是否必填：是
 	 * 类型：string[1,32]
 	 * 描述：
-	 *  通知的资源数据类型，支付成功通知为encrypt-resource 
+	 *  通知的资源数据类型，通知为encrypt-resource 
 	 *  示例值：encrypt-resource 
 	 * </pre>
 	 */

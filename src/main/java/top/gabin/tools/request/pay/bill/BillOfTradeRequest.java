@@ -32,25 +32,6 @@ public class BillOfTradeRequest {
 
 	/**
 	 * <pre>
-	 * 字段名：二级商户号
-	 * 变量名：sub_mchid
-	 * 是否必填：否
-	 * 类型：string[1,12]
-	 * 描述：
-	 *   1、若商户是直连商户：无需填写该字段。 
-	 *  2、若商户是服务商： 
-	 *  ● 不填则默认返回服务商下的交易或退款数据。 
-	 *  ● 如需下载某个子商户下的交易或退款数据，则该字段必填。 
-	 *  特殊规则：最小字符长度为8
-	 *  注意：仅适用于电商平台 服务商
-	 *  示例值：1900000001 
-	 * </pre>
-	 */
-	@JsonProperty(value = "sub_mchid")
-	private String subMchid;
-
-	/**
-	 * <pre>
 	 * 字段名：账单类型
 	 * 变量名：bill_type
 	 * 是否必填：否

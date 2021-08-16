@@ -11,13 +11,14 @@ import top.gabin.tools.response.AbstractResponse;
  * 电商服务商通过该接口可以查询二级商户指定日期当天24点的账户余额。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/ecommerce/amount/chapter3_2.shtml
  * 状态码	错误码	描述	解决方案
- * 403	NO_AUTH	无接口权限	请确认是否已经开通相关权限
+ * 403	NO_AUTH	你无权查询该商户余额	请确认电商平台商户号和二级商户商户号是否存在受理关系
+ * 403	NO_AUTH	你无接口权限	请确认是否已经开通相关权限
  * 400	PARAM_ERROR	参数错误	请使用正确的参数重新调用
- * 400	INVALID_REQUEST	该账户在指定时间不存在	请检查商户号是否正确
+ * 400	INVALID_REQUEST	该账户在指定时间不存在	请检查date输入是否正确，修改后重新调用
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class AmountDayEndOfSubMchResponse extends AbstractResponse {
 	/**

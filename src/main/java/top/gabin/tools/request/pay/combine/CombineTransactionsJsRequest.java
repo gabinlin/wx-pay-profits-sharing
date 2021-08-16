@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <pre>
- * 使用合单支付接口，用户只输入一次密码，即可完成多个订单的支付。目前最多一次可支持50笔订单进行合单支付。
+ * 使用合单支付接口，用户只输入一次密码，即可完成多个订单的支付。目前最少一次可支持2笔，最多一次10笔订单进行合单支付。
  * 文档地址:https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pay/combine/chapter3_2.shtml
  * </pre>
  */
@@ -78,7 +78,7 @@ public class CombineTransactionsJsRequest {
 	 * 是否必填：是
 	 * 类型：array
 	 * 描述：
-	 *  body 最多支持子单条数：50 
+	 *  body 最多支持子单条数：10 
 	 *  
 	 * </pre>
 	 */
@@ -102,10 +102,10 @@ public class CombineTransactionsJsRequest {
 	 * 字段名：交易起始时间
 	 * 变量名：time_start
 	 * 是否必填：否
-	 * 类型：string[1,14]
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  body 订单生成时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日 13点29分35秒。 
-	 *  示例值：2019-12-31T15:59:60+08:00 
+	 *  示例值：2019-12-31T15:59:59+08:00 
 	 * </pre>
 	 */
 	@JsonProperty(value = "time_start")
@@ -116,10 +116,10 @@ public class CombineTransactionsJsRequest {
 	 * 字段名：交易结束时间
 	 * 变量名：time_expire
 	 * 是否必填：否
-	 * 类型：string[1,14]
+	 * 类型：string[1,32]
 	 * 描述：
 	 *  body 订单失效时间，遵循rfc3339标准格式，格式为YYYY-MM-DDTHH:mm:ss+TIMEZONE，YYYY-MM-DD表示年月日，T出现在字符串中，表示time元素的开头，HH:mm:ss表示时分秒，TIMEZONE表示时区（+08:00表示东八区时间，领先UTC 8小时，即北京时间）。例如：2015-05-20T13:29:35+08:00表示，北京时间2015年5月20日 13点29分35秒。 
-	 *  示例值：2019-12-31T15:59:60+08:00 
+	 *  示例值：2019-12-31T15:59:59+08:00 
 	 * </pre>
 	 */
 	@JsonProperty(value = "time_expire")
@@ -152,7 +152,7 @@ public class CombineTransactionsJsRequest {
 		 * 类型：string[7,16]
 		 * 描述：
 		 *  终端设备号（门店号或收银设备ID）。 
-		 *  示例值：POS1:1 
+		 *  示例值：POS1:123 
 		 * </pre>
 		 */
 		@JsonProperty(value = "device_id")
@@ -165,7 +165,7 @@ public class CombineTransactionsJsRequest {
 		 * 是否必填：是
 		 * 类型：string[1,45]
 		 * 描述：
-		 *  用户端实际ip 
+		 *  用户的客户端IP，支持IPv4和IPv6两种格式的IP地址。 
 		 *  格式: ip(ipv4+ipv6) 
 		 *  示例值：14.17.22.32 
 		 * </pre>
@@ -186,7 +186,7 @@ public class CombineTransactionsJsRequest {
 		 * 是否必填：是
 		 * 类型：string[1,32]
 		 * 描述：
-		 *  子单发起方商户号，必须与发起方appid有绑定关系。 
+		 *  子单发起方商户号即合单参与方商户号，必须与发起方appid有绑定关系。
 		 *  示例值：1900000109 
 		 * </pre>
 		 */
@@ -213,7 +213,7 @@ public class CombineTransactionsJsRequest {
 		 * 变量名：amount
 		 * 是否必填：是
 		 * 类型：object
-		 * 描述： 
+		 * 描述：订单金额 
 		 * </pre>
 		 */
 		@JsonProperty(value = "amount")
@@ -232,21 +232,6 @@ public class CombineTransactionsJsRequest {
 		 */
 		@JsonProperty(value = "out_trade_no")
 		private String outTradeNo;
-
-		/**
-		 * <pre>
-		 * 字段名：二级商户号
-		 * 变量名：sub_mchid
-		 * 是否必填：是
-		 * 类型：string[1,32]
-		 * 描述：
-		 *  二级商户商户号，由微信支付生成并下发。 
-		 *  注意：仅适用于电商平台 服务商
-		 *  示例值：1900000109 
-		 * </pre>
-		 */
-		@JsonProperty(value = "sub_mchid")
-		private String subMchid;
 
 		/**
 		 * <pre>

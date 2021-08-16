@@ -31,4 +31,21 @@ public class AmountOnlineOfSubMchRequest {
 	@JsonProperty(value = "sub_mchid")
 	private String subMchid;
 
+	/**
+	 * <pre>
+	 * 字段名：账户类型
+	 * 变量名：account_type
+	 * 是否必填：否
+	 * 类型：string[1,16]
+	 * 描述：
+	 *  枚举值：
+	 *  BASIC：基本账户
+	 *  OPERATION：运营账户
+	 *  FEES：手续费账户
+	 *  示例值： BASIC 
+	 * </pre>
+	 */
+	@JsonProperty(value = "account_type")
+	private String accountType;
+
 }

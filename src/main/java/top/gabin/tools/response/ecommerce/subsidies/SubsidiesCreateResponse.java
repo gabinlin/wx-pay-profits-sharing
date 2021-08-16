@@ -18,7 +18,7 @@ import top.gabin.tools.response.AbstractResponse;
  * </pre>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @JsonIgnoreProperties()
 public class SubsidiesCreateResponse extends AbstractResponse {
 	/**
@@ -81,7 +81,7 @@ public class SubsidiesCreateResponse extends AbstractResponse {
 	 * <pre>
 	 * 字段名：补差金额
 	 * 变量名：amount
-	 * 是否必填：否
+	 * 是否必填：是
 	 * 类型：int
 	 * 描述：
 	 *  补差金额 
